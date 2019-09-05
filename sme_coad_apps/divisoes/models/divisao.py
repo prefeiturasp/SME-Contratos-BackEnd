@@ -1,9 +1,9 @@
 from django.db import models
 
-from sme_coad_apps.core.models_abstracts import Nomeavel, Ativavel, Descritivel
+from sme_coad_apps.core.models_abstracts import Nomeavel, Ativavel, Descritivel, TemChaveExterna
 
 
-class Divisao(Nomeavel, Descritivel, Ativavel):
+class Divisao(TemChaveExterna, Nomeavel, Descritivel, Ativavel):
     sigla = models.CharField('Sigla', max_length=15)
 
     def __str__(self):
