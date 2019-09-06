@@ -1,7 +1,8 @@
 """
 Base settings to build other settings files upon.
 """
-
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 import environ
 
 ROOT_DIR = (
@@ -318,3 +319,8 @@ CACHES = {
         }
     }
 }
+
+sentry_sdk.init(
+    dsn="http://be9af8cd63c54786831e245153fa258f@localhost:9000/1",
+    integrations=[DjangoIntegration()]
+)
