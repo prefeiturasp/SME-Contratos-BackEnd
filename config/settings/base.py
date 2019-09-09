@@ -80,9 +80,9 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
-    "rest_framework_swagger",
     "django_celery_beat",
     "django_celery_results",
+    "rest_framework_swagger",
 ]
 
 LOCAL_APPS = [
@@ -107,9 +107,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
+# LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+# LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -316,11 +316,14 @@ CACHES = {
         "LOCATION": env('REDIS_LOCATION'),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # Mimicing memcache behavior.
+            # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
+            'IGNORE_EXCEPTIONS': True,
         }
     }
 }
 
 sentry_sdk.init(
-    dsn="http://be9af8cd63c54786831e245153fa258f@localhost:9000/1",
+    dsn=env('DSN_SENTRY'),
     integrations=[DjangoIntegration()]
 )
