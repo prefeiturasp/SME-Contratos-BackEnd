@@ -13,6 +13,7 @@ schema_view = get_swagger_view(title='API SME COAD')
 urlpatterns = [
     path("docs/", schema_view),
     path("api-token-auth/", obtain_jwt_token),
+    path('metrics/', include('django_prometheus.urls')),
     # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     # path(
     #     "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
