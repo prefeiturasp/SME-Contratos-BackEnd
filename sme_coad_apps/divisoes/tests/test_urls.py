@@ -4,11 +4,11 @@ from rest_framework import status
 pytestmark = pytest.mark.django_db
 
 
-def test_redirect(client):
-    response = client.get('/usuarios/')
+def test_url_unauthorizade(client):
+    response = client.get('/divisao/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_redirect_authenticated(authencticated_client):
-    response = authencticated_client.get('/usuarios/')
+def test_url_authorized(authorizade_client):
+    response = authorizade_client.get('/divisao/')
     assert response.status_code == status.HTTP_200_OK

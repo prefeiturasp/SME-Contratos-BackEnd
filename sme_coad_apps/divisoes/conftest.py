@@ -1,12 +1,11 @@
 import pytest
-from model_mommy import mommy
-import faker
-from model_mommy import mommy
+from faker import Faker
 
 
-def divisao():
-    pass
-
-
-def nucleo():
-    pass
+@pytest.fixture
+def authorizade_client(client, django_user_model):
+    username = Faker().user_name()
+    password = Faker().text()
+    django_user_model.objects.create_user(username=username, password=password)
+    client.login(username=username, password=password)
+    return client
