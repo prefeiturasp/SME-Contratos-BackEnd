@@ -16,12 +16,14 @@ django-model-utils==3.2.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.39.1  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.10.0  # https://github.com/niwinz/django-redis
-django-rest-swagger==2.2.0 #https://django-rest-swagger.readthedocs.io/en/latest/
-djangorestframework-jwt==1.11.0 #http://jpadilla.github.io/django-rest-framework-jwt/
-django-celery-results==1.1.2 #https://github.com/celery/django-celery-results
-django-debug-toolbar==2.0 #https://github.com/jazzband/django-debug-toolbar
-django-extensions==2.2.1 #https://github.com/django-extensions/django-extensions
-prometheus-client==0.7.1 #https://github.com/korfuri/django-prometheus
+django-rest-swagger==2.2.0  # https://django-rest-swagger.readthedocs.io/en/latest/
+djangorestframework-jwt==1.11.0  # http://jpadilla.github.io/django-rest-framework-jwt/
+django-celery-beat==1.5.0 # https://github.com/celery
+django-celery-results==1.1.2  # https://github.com/celery/django-celery-results
+django-debug-toolbar==2.0  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==2.2.1  # https://github.com/django-extensions/django-extensions
+prometheus-client==0.7.1  # https://github.com/korfuri/django-prometheus
+django-prometheus==1.0.15  # https://github.com/korfuri/django-prometheus
 
 # Django REST Framework
 djangorestframework==3.10.2  # https://github.com/encode/django-rest-framework

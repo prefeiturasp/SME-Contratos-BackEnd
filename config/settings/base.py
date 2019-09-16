@@ -45,7 +45,7 @@ LOCALE_PATHS = [ROOT_DIR.path("locale")]
 
 DATABASES = {
     "default": {
-        'ENGINE': 'django_prometheus.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('POSTGRES_DB'),
         'USER': env('POSTGRES_USER'),
         'PASSWORD': env('POSTGRES_PASSWORD'),
@@ -315,7 +315,7 @@ REST_FRAMEWORK = {
 
 CACHES = {
     "default": {
-        "BACKEND": "django_prometheus.cache.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": env('REDIS_LOCATION'),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",

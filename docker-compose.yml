@@ -3,7 +3,7 @@ services:
 
   nginx:
     container_name: coad-nginx
-    build: .
+    build: ..
     ports:
       - 80:80
     depends_on:
@@ -19,7 +19,7 @@ services:
     env_file:
       - .env
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ../pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -28,7 +28,7 @@ services:
     container_name: coad-pgadmin4
     restart: always
     volumes:
-      - pgadmindata:/var/lib/pgadmin/storage/
+      - ../bkp:/var/lib/pgadmin/storage/
     ports:
       - 9090:80
     env_file:
@@ -37,8 +37,9 @@ services:
       - db
 
   backend:
-    image: coad-backend:latest
-    container_name: backend_api
+#    image: coad/backend:latest
+    build: .
+    container_name: coad-backend
     # http://docs.gunicorn.org/en/latest/design.html#how-many-workers
     # http://docs.gunicorn.org/en/latest/settings.html#worker-class
     command: "gunicorn config.wsgi:application --bind=0.0.0.0:8000 -w 8"
