@@ -1,5 +1,5 @@
 exclude_patterns:
-  - "**/**/__tests__/"
+  - "**/**/tests__/"
   - "**/**/migrations/**"
   - "utility/*"
   - "**/**/urls.py"
@@ -7,3 +7,4 @@ exclude_patterns:
   - "**/**/**/viewsets.py"
   - "config/settings/*"
   - "**/**/admin.py"
+  - "**/**/models/__init__.py"
