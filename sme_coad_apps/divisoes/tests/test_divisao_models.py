@@ -28,3 +28,4 @@ def test_meta_modelo():
     model = mommy.make('Divisao')
     assert model._meta.verbose_name == 'Divisão'
     assert model._meta.verbose_name_plural == 'Divisões'
+    assert isinstance(model._meta.verbose_name, str)
