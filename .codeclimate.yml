@@ -1,0 +1,10 @@
+exclude_patterns:
+  - "**/**/tests/"
+  - "**/**/migrations/**"
+  - "utility/*"
+  - "**/**/urls.py"
+  - "**/**/**/serializers/serializer*"
+  - "**/**/**/viewsets/*"
+  - "config/settings/*"
+  - "**/**/admin.py"
+  - "**/**/models/__init__.py"
