@@ -1,3 +1,4 @@
+import uuid as uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
@@ -7,6 +8,7 @@ from sme_coad_apps.divisoes.models import Divisao
 
 class User(AbstractUser):
 
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=160)
     username = models.CharField('Registro Funcional', max_length=30, unique=True)
     celular = models.CharField('Celular', max_length=20, blank=True, null=True)

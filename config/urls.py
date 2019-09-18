@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework_swagger.views import get_swagger_view
 from sme_coad_apps.divisoes.urls import urlpatterns as divisao_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
@@ -13,6 +13,8 @@ schema_view = get_swagger_view(title='API SME COAD')
 urlpatterns = [
     path("docs/", schema_view),
     path("api-token-auth/", obtain_jwt_token),
+    path("api-token-refresh/", refresh_jwt_token),
+    path("api-token-verify/", verify_jwt_token),
     path('metrics/', include('django_prometheus.urls')),
     # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     # path(
