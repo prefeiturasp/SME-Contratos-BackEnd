@@ -1,5 +1,5 @@
 exclude_patterns:
-  - "**/**/tests__/"
+  - "**/**/tests/"
   - "**/**/migrations/**"
   - "utility/*"
   - "**/**/urls.py"

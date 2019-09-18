@@ -19,7 +19,7 @@ def test_redirect_authenticated(authencticated_client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_login_jwt_error(client, django_user_model):
+def test_login_jwt(client, django_user_model):
     u = django_user_model.objects.create_user(username=username, password=password)
     u.is_active = False
     u.save()
