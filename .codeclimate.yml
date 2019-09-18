@@ -4,7 +4,7 @@ exclude_patterns:
   - "utility/*"
   - "**/**/urls.py"
   - "**/**/**/serializers/serializer*"
-  - "**/**/**/viewsets.py"
+  - "**/**/**/viewsets/*"
   - "config/settings/*"
   - "**/**/admin.py"
   - "**/**/models/__init__.py"
