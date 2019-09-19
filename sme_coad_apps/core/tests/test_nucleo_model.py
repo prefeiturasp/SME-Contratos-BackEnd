@@ -1,6 +1,8 @@
 import pytest
+from django.contrib import admin
 from model_mommy import mommy
 
+from ..admin import NucleoAdmin
 from ..models import Nucleo, Divisao
 
 pytestmark = pytest.mark.django_db
@@ -24,3 +26,12 @@ def test_meta_model():
     model = mommy.make(Nucleo)
     assert model._meta.verbose_name == 'Núcleo'
     assert model._meta.verbose_name_plural == 'Núcleos'
+
+
+def test_admin():
+    model_admin = NucleoAdmin(Divisao, admin.site)
+    # pylint: disable=W0212
+    assert admin.site._registry[Nucleo]
+    assert model_admin.list_display == ('divisao', 'sigla', 'nome')
+    assert model_admin.ordering == ('divisao__nome', 'sigla', 'nome')
+    assert model_admin.search_fields == ('sigla', 'nome')
