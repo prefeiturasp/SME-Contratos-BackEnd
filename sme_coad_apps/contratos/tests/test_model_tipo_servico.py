@@ -1,7 +1,5 @@
 import pytest
-
 from model_mommy import mommy
-from faker import Faker
 
 from ..models import TipoServico
 
@@ -23,4 +21,3 @@ def test_meta_modelo():
     model = mommy.make('TipoServico')
     assert model._meta.verbose_name == 'Tipo de Serviço'
     assert model._meta.verbose_name_plural == 'Tipos de Serviço'
-
