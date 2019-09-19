@@ -1,4 +1,5 @@
 import uuid as uuid
+
 from django.db import models
 
 
@@ -45,6 +46,5 @@ class TemChaveExterna(models.Model):
 
 
 class ModeloBase(TemChaveExterna, TemCriadoEm, TemAlteradoEm):
-
     class Meta:
         abstract = True
