@@ -88,6 +88,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "sme_coad_apps.users.apps.UsersConfig",
+    "sme_coad_apps.core",
     "sme_coad_apps.divisoes",
     "sme_coad_apps.contratos"
 ]
