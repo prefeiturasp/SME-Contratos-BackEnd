@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
 from ..serializers.nucleo_serializer import NucleoSerializer
-from ....divisoes.models.nucleo import Nucleo
+from ...models import Nucleo
 
 
 class NucleoViewSet(viewsets.ModelViewSet):

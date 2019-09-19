@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
-from sme_coad_apps.divisoes.models import Divisao
+from sme_coad_apps.core.models import Divisao
 
 
 class User(AbstractUser):

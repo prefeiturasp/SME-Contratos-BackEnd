@@ -1,15 +1,15 @@
 from rest_framework import serializers
 
-from sme_coad_apps.divisoes.models import Nucleo
+from ...models import Nucleo
 
 
 class NucleoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nucleo
-        exclude = ('id',)
+        fields = '__all__'
 
 
 class NucleoSerializerCreator(serializers.ModelSerializer):
     class Meta:
         model = Nucleo
-        exclude = ('id',)
+        fields = '__all__'

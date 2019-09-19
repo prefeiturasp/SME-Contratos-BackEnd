@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from sme_coad_apps.divisoes.models import Divisao
+from ...models import Divisao
 
 
 class DivisaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Divisao
-        exclude = ('id', 'descricao')
+        fields = '__all__'
 
 
 class DivisaoSerializerCreator(serializers.ModelSerializer):
