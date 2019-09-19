@@ -14,4 +14,3 @@ class Nucleo(ModeloBase, TemNome):
     class Meta:
         verbose_name = 'Núcleo'
         verbose_name_plural = 'Núcleos'
-
