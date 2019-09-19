@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from sme_coad_apps.divisoes.api.serializers.divisao_serializer import DivisaoSerializer
+from sme_coad_apps.core.api.serializers.divisao_serializer import DivisaoSerializer
 from ...models import User
 
 

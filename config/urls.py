@@ -5,7 +5,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework_swagger.views import get_swagger_view
-from sme_coad_apps.divisoes.urls import urlpatterns as divisao_urls
+from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
 
 schema_view = get_swagger_view(title='API SME COAD')
@@ -29,7 +29,7 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # ADDING URLS FROM APPS
-urlpatterns += divisao_urls
+urlpatterns += core_urls
 urlpatterns += usuario_url
 
 if settings.DEBUG:
