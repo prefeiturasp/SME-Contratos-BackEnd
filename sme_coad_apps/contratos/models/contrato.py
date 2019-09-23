@@ -42,7 +42,9 @@ class Contrato(ModeloBase):
 
     @property
     def data_encerramento(self):
-        return self.data_ordem_inicio + relativedelta(months=+self.vigencia_em_meses)
+        if self.vigencia_em_meses and self.data_ordem_inicio:
+            return self.data_ordem_inicio + relativedelta(months=+self.vigencia_em_meses)
+        return ''
 
     @property
     def dias_para_o_encerramento(self):

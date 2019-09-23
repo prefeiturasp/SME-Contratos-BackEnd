@@ -1,8 +1,10 @@
 import datetime
 
 import pytest
+from django.contrib import admin
 from model_mommy import mommy
 
+from ..admin import ContratoAdmin
 from ..models import Contrato, ContratoUnidade, TipoServico, Empresa
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
@@ -61,3 +63,21 @@ def test_srt_model_detalhe():
     contrato = mommy.make('Contrato', termo_contrato='XPTO123')
     model = mommy.make('ContratoUnidade', contrato=contrato, unidade=unidade)
     assert model.__str__() == f'TC:XPTO123 - Unidade: Teste'
+
+
+def test_admin():
+    model_admin = ContratoAdmin(Contrato, admin.site)
+    # pylint: disable=W0212
+    assert admin.site._registry[Contrato]
+    assert model_admin.list_display == (
+        'processo',
+        'tipo_servico',
+        'termo_contrato',
+        'empresa_contratada',
+        'data_ordem_inicio',
+        'data_encerramento',
+        'situacao'
+    )
+    assert model_admin.ordering == ('processo', 'tipo_servico', 'termo_contrato', 'empresa_contratada')
+    assert model_admin.search_fields == ('processo', 'termo_contrato')
+    assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao')
