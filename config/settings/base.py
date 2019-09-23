@@ -307,6 +307,7 @@ SOCIALACCOUNT_ADAPTER = "sme_coad_apps.users.adapters.SocialAccountAdapter"
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        'core.permissions.usuario_validado_permission.UsuarioValidadoPermission'
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
