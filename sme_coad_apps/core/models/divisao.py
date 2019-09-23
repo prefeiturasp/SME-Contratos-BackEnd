@@ -12,4 +12,3 @@ class Divisao(ModeloBase, TemNome):
     class Meta:
         verbose_name = 'Divisão'
         verbose_name_plural = 'Divisões'
-
