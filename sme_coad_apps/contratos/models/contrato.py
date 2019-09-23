@@ -31,14 +31,14 @@ class Contrato(ModeloBase):
                                      verbose_name='tipo de serviço')
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
                                            verbose_name='núcleo responsável')
-    objeto = models.TextField(blank=True, null=True, default='')
+    objeto = models.TextField(blank=True, default='')
     empresa_contratada = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='contratos_da_empresa')
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
     vigencia_em_meses = models.PositiveSmallIntegerField(default=0)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_ATIVO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
-    observacoes = models.TextField(blank=True, null=True)
+    observacoes = models.TextField(blank=True, default='')
 
     @property
     def data_encerramento(self):
@@ -64,7 +64,7 @@ class ContratoUnidade(ModeloBase):
     valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     dotacao_orcamentaria = models.CharField(max_length=20)
-    lote = models.CharField(max_length=20, blank=True, null=True)
+    lote = models.CharField(max_length=20, blank=True, default='')
 
     def __str__(self):
         return f'TC:{self.contrato.termo_contrato} - Unidade: {self.unidade.nome}'
