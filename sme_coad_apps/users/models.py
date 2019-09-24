@@ -2,7 +2,7 @@ import uuid as uuid
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
-
+import base64
 from sme_coad_apps.core.models import Divisao
 
 
@@ -17,6 +17,16 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse("users:detail", kwargs={"username": self.username})
+
+    @property
+    def encode_hash(self):
+        hash_encode = base64.b64encode(str(self.uuid + self.username))
+        return hash_encode
+
+    def validar_hash(self, hash_encode):
+        if hash_encode == self.encode_hash:
+            return True
+        return False
 
     def __str__(self):
         return self.nome
