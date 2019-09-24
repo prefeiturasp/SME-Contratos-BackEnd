@@ -2,7 +2,7 @@ import environ
 import pandas as pd
 from brazilnum.cnpj import clean_id
 
-from sme_coad_apps.contratos.models import Empresa
+from sme_coad_apps.contratos.models import Empresa, TipoServico
 
 ROOT_DIR = environ.Path(__file__) - 1
 
@@ -88,6 +88,12 @@ def importa_empresa(empresa_data: dict):
         Empresa.objects.create(**empresa_data)
 
 
+def importa_tipo_servico(tipo_servico_data: dict):
+    if not TipoServico.objects.filter(nome=tipo_servico_data['nome']).exists():
+        print(f"Criado tipo de serviço {tipo_servico_data['nome']}")
+        TipoServico.objects.create(**tipo_servico_data)
+
+
 def importa_contratos():
     for index, row in df.iterrows():
         empresa_data = {
@@ -95,8 +101,12 @@ def importa_contratos():
             'cnpj': clean_id(row['CNPJ'])
         }
         importa_empresa(empresa_data)
-        tc = row['TC']
+
         servico = de_para_servicos(row["OBJETO"])
+        importa_tipo_servico({'nome': servico})
+
+        tc = row['TC']
+
         cnpj = clean_id(row['CNPJ'])
         inicio = row['INICIO']
         print(f'Cont:{index} TC:{tc} - CNPJ:{empresa_data["cnpj"]}-{empresa_data["nome"]}')
