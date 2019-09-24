@@ -12,6 +12,8 @@ def authencticated_client(client, django_user_model):
     fake = Faker()
     username = fake.user_name()
     password = fake.text()
-    django_user_model.objects.create_user(username=username, password=password)
+    u = django_user_model.objects.create_user(username=username, password=password)
+    u.validado = True
+    u.save()
     client.login(username=username, password=password)
     return client
