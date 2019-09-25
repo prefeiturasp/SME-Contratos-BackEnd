@@ -52,7 +52,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 'nucleo_responsavel',
                 'objeto',
                 'empresa_contratada',
-                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_meses'),
+                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
                 'observacoes',
                 'gestor',
                 'situacao',

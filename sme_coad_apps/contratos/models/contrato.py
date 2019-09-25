@@ -35,15 +35,15 @@ class Contrato(ModeloBase):
     empresa_contratada = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='contratos_da_empresa')
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
-    vigencia_em_meses = models.PositiveSmallIntegerField(default=0)
+    vigencia_em_dias = models.PositiveSmallIntegerField(default=0)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_ATIVO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
 
     @property
     def data_encerramento(self):
-        if self.vigencia_em_meses and self.data_ordem_inicio:
-            return self.data_ordem_inicio + relativedelta(months=+self.vigencia_em_meses)
+        if self.vigencia_em_dias and self.data_ordem_inicio:
+            return self.data_ordem_inicio + relativedelta(days=+self.vigencia_em_dias)
         return ''
 
     @property

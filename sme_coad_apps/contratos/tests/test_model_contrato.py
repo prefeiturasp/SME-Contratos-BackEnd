@@ -27,7 +27,7 @@ def test_instance_model():
     assert isinstance(model.empresa_contratada, Empresa)
     assert isinstance(model.data_assinatura, datetime.date)
     assert isinstance(model.data_ordem_inicio, datetime.date)
-    assert isinstance(model.vigencia_em_meses, int)
+    assert isinstance(model.vigencia_em_dias, int)
     assert isinstance(model.situacao, str)
     assert isinstance(model.gestor, User)
     assert isinstance(model.observacoes, str)
