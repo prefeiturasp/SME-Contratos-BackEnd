@@ -288,3 +288,5 @@ sme_coad_apps/media/
 .coveragerc
 .pylintrc
 
+/utility/carga_de_dados/contratos.xlsx
+/utility/carga_de_dados/.~lock.contratos.xlsx#
