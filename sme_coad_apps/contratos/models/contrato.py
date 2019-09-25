@@ -65,9 +65,17 @@ class ContratoUnidade(ModeloBase):
     valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     dotacao_orcamentaria = models.CharField(max_length=20)
     lote = models.CharField(max_length=20, blank=True, default='')
+    dre_lote = models.CharField('DRE do lote', max_length=5, blank=True, default='')
 
     def __str__(self):
         return f'TC:{self.contrato.termo_contrato} - Unidade: {self.unidade.nome}'
+
+    @property
+    def numero_lote(self):
+        if self.dre_lote != '':
+            return f'Lote {self.lote} DRE {self.dre_lote}'
+        else:
+            return f'Lote {self.lote}'
 
     class Meta:
         verbose_name = 'Unidade de Contrato'

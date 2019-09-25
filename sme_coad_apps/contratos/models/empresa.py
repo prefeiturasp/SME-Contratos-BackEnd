@@ -8,7 +8,7 @@ from ...core.models_abstracts import ModeloBase, TemNome
 class Empresa(ModeloBase, TemNome):
     # TODO Implementar validação do CNPJ para não permitir gravação de CNPJ inválido.
 
-    cnpj = models.CharField('CNPJ', validators=[MinLengthValidator(14)], max_length=14)
+    cnpj = models.CharField('CNPJ', validators=[MinLengthValidator(14)], max_length=14, unique=True)
 
     def __str__(self):
         return self.nome

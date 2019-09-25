@@ -34,3 +34,6 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 # Para validação e formatação de CNPJ e CPF
 brazilnum==0.8.8
 
+# Para melhoria da aparência do Django Admin
+# https://github.com/fabiocaccamo/django-admin-interface
+django-admin-interface==0.11.1
