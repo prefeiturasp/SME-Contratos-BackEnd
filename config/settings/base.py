@@ -85,6 +85,7 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "rest_framework_swagger",
     "django_prometheus",
+    "des",
 ]
 
 LOCAL_APPS = [
@@ -181,7 +182,8 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR.path("templates"))],
+        # "DIRS": [str(APPS_DIR.path("templates"))],
+        "DIRS": [],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -225,9 +227,9 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
+# EMAIL_BACKEND = env(
+#     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+# )
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -289,21 +291,27 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # django-allauth
+SITE_ID = 1
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "sme_coad_apps.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "sme_coad_apps.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "allauth.socialaccount.adapter.DefaultSocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# DRF
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -318,6 +326,7 @@ REST_FRAMEWORK = {
 
 }
 
+# REDIS
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -331,9 +340,14 @@ CACHES = {
     }
 }
 
+# CORS
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
 ]
+
+# EMAIL
+EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
+
 
 # sentry_sdk.init(
 #     dsn=env('DSN_SENTRY'),
