@@ -3,6 +3,7 @@ import pandas as pd
 from brazilnum.cnpj import clean_id
 
 from sme_coad_apps.contratos.models import Empresa, TipoServico
+from sme_coad_apps.core.models import Divisao, Nucleo
 
 ROOT_DIR = environ.Path(__file__) - 1
 
@@ -16,6 +17,35 @@ df = pd.read_excel(f'{ROOT_DIR}/contratos.xlsx',
                                'DOTACAO': str
                                },
                    sheet_name='importar')
+
+
+def cria_digecon():
+    digecon = Divisao.objects.filter(sigla='DIGECON')
+    if digecon.exists():
+        return digecon.first()
+    else:
+        print(f"Criada divisão DIGECON.")
+        return Divisao.objects.create(sigla='DIGECON', nome='Divisão de Gestão de Contratos')
+
+
+def cria_nucleos(divisao):
+    nuad = cria_nucleo(divisao, sigla='NUAD', nome='Núcleo de Unidades Administrativas')
+    nuceu = cria_nucleo(divisao, sigla='NUCEU', nome='Núcleo de Centros Educacionais Unificados')
+    nue = cria_nucleo(divisao, sigla='NUE', nome='Núcleo de Unidades Escolares')
+    return {
+        'NUAD': nuad,
+        'NUCEU': nuceu,
+        'NUE': nue
+    }
+
+
+def cria_nucleo(divisao, sigla, nome):
+    busca_sigla = Nucleo.objects.filter(sigla=sigla)
+    if busca_sigla.exists():
+        return busca_sigla.first()
+    else:
+        print(f'Criado Núcleo {sigla}')
+        return Nucleo.objects.create(sigla=sigla, nome=nome, divisao=divisao)
 
 
 def de_para_servicos(de):
@@ -95,6 +125,9 @@ def importa_tipo_servico(tipo_servico_data: dict):
 
 
 def importa_contratos():
+    digecon = cria_digecon()
+    nucleos = cria_nucleos(digecon)
+
     for index, row in df.iterrows():
         empresa_data = {
             'nome': row['EMPRESA'],
