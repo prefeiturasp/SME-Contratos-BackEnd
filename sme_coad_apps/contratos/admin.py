@@ -22,8 +22,10 @@ class EmpresaAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'cnpj')
 
 
+# class ContratoUnidadeInLine(admin.StackedInline):
 class ContratoUnidadeInLine(admin.TabularInline):
     model = ContratoUnidade
+    raw_id_fields = ("unidade",)
     extra = 1  # Quantidade de linhas que serão exibidas.
 
 
@@ -52,7 +54,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 'nucleo_responsavel',
                 'objeto',
                 'empresa_contratada',
-                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_meses'),
+                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
                 'observacoes',
                 'gestor',
                 'situacao',
