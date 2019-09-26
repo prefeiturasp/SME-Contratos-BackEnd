@@ -48,7 +48,8 @@ def test_meta_modelo():
 
 def test_instance_model_detalhe():
     contrato = mommy.make('Contrato')
-    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1')
+    unidade = mommy.make('Unidade', codigo_eol='123456')
+    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade)
     assert isinstance(model, ContratoUnidade)
     assert isinstance(model.contrato, Contrato)
     assert isinstance(model.unidade, Unidade)
@@ -59,7 +60,7 @@ def test_instance_model_detalhe():
 
 
 def test_srt_model_detalhe():
-    unidade = mommy.make(Unidade, nome='Teste')
+    unidade = mommy.make(Unidade, nome='Teste', codigo_eol='123456')
     contrato = mommy.make('Contrato', termo_contrato='XPTO123')
     model = mommy.make('ContratoUnidade', contrato=contrato, unidade=unidade)
     assert model.__str__() == f'TC:XPTO123 - Unidade: Teste'

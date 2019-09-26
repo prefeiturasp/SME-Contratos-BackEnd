@@ -60,7 +60,7 @@ class Contrato(ModeloBase):
 
 class ContratoUnidade(ModeloBase):
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="unidades")
-    unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos")
+    unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
     valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     dotacao_orcamentaria = models.CharField(max_length=20)

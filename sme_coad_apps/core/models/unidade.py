@@ -40,7 +40,7 @@ class Unidade(ModeloBase, TemNome):
 
     equipamento = models.CharField(max_length=3, choices=EQP_CHOICES, default=EQP_UNIDADE_ENSINO)
     tipo_unidade = models.CharField(max_length=10, choices=TIPOS_CHOICE, default='ADM')
-    codigo_eol = models.CharField(max_length=10, blank=True, default='', primary_key=True, unique=True)
+    codigo_eol = models.CharField(max_length=10, primary_key=True, unique=True)
     cep = models.CharField(max_length=15, blank=True, default='')
 
     def __str__(self):

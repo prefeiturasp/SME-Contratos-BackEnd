@@ -22,8 +22,10 @@ class EmpresaAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'cnpj')
 
 
+# class ContratoUnidadeInLine(admin.StackedInline):
 class ContratoUnidadeInLine(admin.TabularInline):
     model = ContratoUnidade
+    raw_id_fields = ("unidade",)
     extra = 1  # Quantidade de linhas que serão exibidas.
 
 
