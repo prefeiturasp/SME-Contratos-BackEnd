@@ -1,16 +1,15 @@
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
-from sme_coad_apps.core.permissions.usuario_invalidado_permission import UsuarioInvalidadoPermission
 from ..serializers.usuario_serializer import (UsuarioSerializer, UsuarioSerializerCreators)
-from ...models import User
 
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     lookup_field = 'username'
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -20,7 +19,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         else:
             return UsuarioSerializerCreators
 
-    @action(detail=True, url_path='troca-senha', methods=['patch'], permission_classes=[UsuarioInvalidadoPermission])
+    @action(detail=True, url_path='troca-senha', methods=['patch'], permission_classes=[AllowAny])
     def troca_senha(self, request, username):
         usuario = request.user
         data = request.data
@@ -29,3 +28,4 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         usuario.validado = True
         usuario.save()
         return Response({'detail': 'Usuário validado', 'status': status.HTTP_200_OK})
+

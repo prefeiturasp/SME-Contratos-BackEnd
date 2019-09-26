@@ -1,3 +1,4 @@
+from des import urls as des_url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -5,6 +6,7 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework_swagger.views import get_swagger_view
+
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
 
@@ -16,15 +18,12 @@ urlpatterns = [
     path("api-token-refresh/", refresh_jwt_token),
     path("api-token-verify/", verify_jwt_token),
     path('metrics/', include('django_prometheus.urls')),
-    # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    # path(
-    #     "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
-    # ),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
-    # path("accounts/", include("allauth.urls")),
+                  path("accounts/", include("allauth.urls")),
+                  path("django-des/", include(des_url)),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

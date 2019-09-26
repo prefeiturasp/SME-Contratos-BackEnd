@@ -1,6 +1,7 @@
-from rest_framework import serializers, status
-
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+user_model = get_user_model()
 
 
 def senhas_devem_ser_iguais(senha1, senha2):
@@ -16,12 +17,23 @@ def registro_funcional_deve_existir(registro_funcional):
 
 
 def senha_nao_pode_ser_nulo(senha, campo='Senha'):
-    if senha is None or senha == 'string':
+    if senha is None or senha == 'string' or len(senha) == 0:
         raise serializers.ValidationError({'detail': 'O Campo {} deve ser preenchido'.format(campo)})
 
 
+def usuario_precisa_estar_validado(registro_funcional):
+    usuario = user_model.objects.get(username=registro_funcional)
+    if not usuario.validado:
+        raise serializers.ValidationError({'detail': 'Este usuário ainda não foi validado'})
+
+
 def usuario_ja_foi_validado(registro_funcional):
-    user = get_user_model()
-    usuario = user.objects.get(username=registro_funcional)
+    usuario = user_model.objects.get(username=registro_funcional)
     if usuario.validado:
         raise serializers.ValidationError({'detail': 'O usuário já foi validado'})
+
+
+def hash_redefinicao_deve_existir(hash):
+    existe = user_model.objects.filter(hash_redefinicao=hash).exists()
+    if not existe:
+        raise serializers.ValidationError({'detail': 'Hash de redefinicação não foi encontrado'})
