@@ -9,6 +9,6 @@ def test_url_unauthorizade(client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_url_authorized(authorizade_client):
-    response = authorizade_client.get('/divisao/')
+def test_url_authorized(authencticated_client):
+    response = authencticated_client.get('/divisao/')
     assert response.status_code == status.HTTP_200_OK
