@@ -30,6 +30,9 @@ class ContratoUnidadeInLine(admin.TabularInline):
     raw_id_fields = ("unidade",)
     extra = 1  # Quantidade de linhas que serão exibidas.
 
+    def get_queryset(self, request):
+        return super(ContratoUnidadeInLine, self).get_queryset(request).select_related('unidade')
+
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
