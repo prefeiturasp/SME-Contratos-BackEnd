@@ -32,6 +32,6 @@ def test_admin():
     model_admin = NucleoAdmin(Divisao, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Nucleo]
-    assert model_admin.list_display == ('divisao', 'sigla', 'nome')
-    assert model_admin.ordering == ('divisao__nome', 'sigla', 'nome')
+    assert model_admin.list_display == ('sigla', 'nome', 'divisao')
+    assert model_admin.ordering == ('divisao__sigla', 'sigla',)
     assert model_admin.search_fields == ('sigla', 'nome')

@@ -32,17 +32,18 @@ class ContratoUnidadeInLine(admin.TabularInline):
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
     list_display = (
+        'termo_contrato',
         'processo',
         'tipo_servico',
-        'termo_contrato',
         'empresa_contratada',
         'data_ordem_inicio',
         'data_encerramento',
+        'estado_contrato',
         'situacao'
     )
-    ordering = ('processo', 'tipo_servico', 'termo_contrato', 'empresa_contratada')
+    ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
-    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao')
+    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
     inlines = [ContratoUnidadeInLine]
 
     fieldsets = (

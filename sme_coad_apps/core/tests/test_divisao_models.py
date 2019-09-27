@@ -2,8 +2,8 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
-from ..models import Divisao
 from ..admin import DivisaoAdmin
+from ..models import Divisao
 
 pytestmark = pytest.mark.django_db
 
@@ -31,5 +31,5 @@ def test_admin():
     # pylint: disable=W0212
     assert admin.site._registry[Divisao]
     assert model_admin.list_display == ('sigla', 'nome')
-    assert model_admin.ordering == ('sigla', 'nome')
+    assert model_admin.ordering == ('sigla',)
     assert model_admin.search_fields == ('sigla', 'nome')
