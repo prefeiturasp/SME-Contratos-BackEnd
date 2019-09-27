@@ -1,3 +1,5 @@
+import locale
+
 from django.contrib import admin
 
 from .models import TipoServico, Empresa, Contrato, ContratoUnidade
@@ -31,15 +33,27 @@ class ContratoUnidadeInLine(admin.TabularInline):
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
+
     def dias_para_vencer(self, contrato):
         return contrato.dias_para_o_encerramento
 
     dias_para_vencer.short_description = 'Dias para vencer'
 
     def valor_mensal(self, contrato):
-        return contrato.total_mensal
+        locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+        return locale.currency(contrato.total_mensal, grouping=True)
 
     valor_mensal.short_description = 'Valor Mensal'
+
+    def data_inicio(self, contrato):
+        return f'{contrato.data_ordem_inicio:%d/%m/%Y}'
+
+    data_inicio.short_description = 'Início'
+
+    def data_fim(self, contrato):
+        return f'{contrato.data_encerramento:%d/%m/%Y}'
+
+    data_fim.short_description = 'Fim'
 
     list_display = (
         'termo_contrato',
@@ -47,8 +61,8 @@ class ContratoAdmin(admin.ModelAdmin):
         'tipo_servico',
         'empresa_contratada',
         'valor_mensal',
-        'data_ordem_inicio',
-        'data_encerramento',
+        'data_inicio',
+        'data_fim',
         'dias_para_vencer',
         'estado_contrato',
         'situacao'

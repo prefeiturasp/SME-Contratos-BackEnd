@@ -98,8 +98,8 @@ def test_admin():
         'tipo_servico',
         'empresa_contratada',
         'valor_mensal',
-        'data_ordem_inicio',
-        'data_encerramento',
+        'data_inicio',
+        'data_fim',
         'dias_para_vencer',
         'estado_contrato',
         'situacao'
