@@ -59,6 +59,15 @@ def test_property_dias_para_o_encerramento():
     assert model.dias_para_o_encerramento == 16
 
 
+def test_property_total_mensal():
+    contrato = mommy.make('Contrato')
+    unidade1 = mommy.make('Unidade', codigo_eol='123456')
+    unidade2 = mommy.make('Unidade', codigo_eol='789012')
+    mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade1, valor_mensal=100)
+    mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade2, valor_mensal=200)
+    assert contrato.total_mensal == 300
+
+
 def test_instance_model_detalhe():
     contrato = mommy.make('Contrato')
     unidade = mommy.make('Unidade', codigo_eol='123456')
@@ -88,6 +97,7 @@ def test_admin():
         'processo',
         'tipo_servico',
         'empresa_contratada',
+        'valor_mensal',
         'data_ordem_inicio',
         'data_encerramento',
         'dias_para_vencer',

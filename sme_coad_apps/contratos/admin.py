@@ -36,11 +36,17 @@ class ContratoAdmin(admin.ModelAdmin):
 
     dias_para_vencer.short_description = 'Dias para vencer'
 
+    def valor_mensal(self, contrato):
+        return contrato.total_mensal
+
+    valor_mensal.short_description = 'Valor Mensal'
+
     list_display = (
         'termo_contrato',
         'processo',
         'tipo_servico',
         'empresa_contratada',
+        'valor_mensal',
         'data_ordem_inicio',
         'data_encerramento',
         'dias_para_vencer',

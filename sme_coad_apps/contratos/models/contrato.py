@@ -76,6 +76,13 @@ class Contrato(ModeloBase):
         # Futuramente o estado será calculado. No momento ele é um campo digitado.
         return self.estado_contrato
 
+    @property
+    def total_mensal(self):
+        total = 0
+        for unidade in self.unidades.all():
+            total += unidade.valor_mensal
+        return total
+
     def __str__(self):
         return f'TC:{self.termo_contrato} - {self.tipo_servico.nome} - {Contrato.SITUACAO_NOMES[self.situacao]}'
 
