@@ -92,3 +92,5 @@ class ContratoAdmin(admin.ModelAdmin):
         }
          ),
     )
+
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'tipo_servico')

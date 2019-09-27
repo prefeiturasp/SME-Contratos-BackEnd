@@ -107,3 +107,4 @@ def test_admin():
     assert model_admin.ordering == ('termo_contrato',)
     assert model_admin.search_fields == ('processo', 'termo_contrato')
     assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
+
