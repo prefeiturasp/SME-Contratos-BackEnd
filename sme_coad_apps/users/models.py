@@ -12,11 +12,11 @@ class User(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     nome = models.CharField('Nome', max_length=160)
     username = models.CharField('Registro Funcional', max_length=30, unique=True)
-    celular = models.CharField('Celular', max_length=20, blank=True, null=True)
+    celular = models.CharField('Celular', max_length=20, blank=True, default='')
     validado = models.BooleanField('Validado', default=False,
                                    help_text='Campo para verificar se o cadastro do usuário foi validado')
     divisoes = models.ManyToManyField(Divisao, blank=True)
-    hash_redefinicao = models.TextField(blank=True, null=True,
+    hash_redefinicao = models.TextField(blank=True, default='',
                                         help_text='Campo utilizado para registrar hash na redefinição de senhas')
 
     def get_absolute_url(self):

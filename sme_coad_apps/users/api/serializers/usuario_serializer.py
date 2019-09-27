@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from sme_coad_apps.core.api.serializers.divisao_serializer import DivisaoSerializer
-from sme_coad_apps.users.api.validations.usuario_validations import senhas_devem_ser_iguais, \
-    registro_funcional_deve_existir, senha_nao_pode_ser_nulo
+from ..validations.usuario_validations import (senhas_devem_ser_iguais,
+                                               registro_funcional_deve_existir,
+                                               senha_nao_pode_ser_nulo)
+from ....core.api.serializers.divisao_serializer import DivisaoSerializer
 
 user_model = get_user_model()
 
@@ -33,6 +34,12 @@ class UsuarioSerializerCreators(serializers.ModelSerializer):
         senha_nao_pode_ser_nulo(attrs.get('password2'), 'Senha 2')
         attrs.pop('password2')
         return attrs
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data.get('password'))
+        instance.validado = True
+        instance.save()
+        return instance
 
     class Meta:
         model = user_model

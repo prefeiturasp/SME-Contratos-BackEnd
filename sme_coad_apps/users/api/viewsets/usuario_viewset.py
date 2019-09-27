@@ -30,10 +30,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, url_path='troca-senha', methods=['patch'], permission_classes=[AllowAny])
     def troca_senha(self, request, username):
-        usuario = request.user
         data = request.data
-        UsuarioSerializerCreators().validate(data)
-        usuario.set_password(data.get('password'))
-        usuario.validado = True
-        usuario.save()
+        validated_data = UsuarioSerializerCreators().validate(data)
+        usuario = user_model.objects.get(username=username)
+        UsuarioSerializerCreators().update(usuario, validated_data)
         return Response({'detail': 'Usuário validado', 'status': status.HTTP_200_OK})
