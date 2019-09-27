@@ -2,8 +2,8 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
-from ..models import Unidade
 from ..admin import UnidadeAdmin
+from ..models import Unidade
 
 pytestmark = pytest.mark.django_db
 
@@ -33,7 +33,7 @@ def test_admin():
     model_admin = UnidadeAdmin(Unidade, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Unidade]
-    assert model_admin.list_display == ('equipamento', 'nome', 'tipo_unidade', 'codigo_eol')
-    assert model_admin.ordering == ('equipamento', 'nome', 'tipo_unidade', 'codigo_eol')
+    assert model_admin.list_display == ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol')
+    assert model_admin.ordering == ('nome',)
     assert model_admin.search_fields == ('nome', 'codigo_eol')
     assert model_admin.list_filter == ('equipamento', 'tipo_unidade')

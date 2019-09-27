@@ -71,14 +71,14 @@ def test_admin():
     # pylint: disable=W0212
     assert admin.site._registry[Contrato]
     assert model_admin.list_display == (
+        'termo_contrato',
         'processo',
         'tipo_servico',
-        'termo_contrato',
         'empresa_contratada',
         'data_ordem_inicio',
         'data_encerramento',
         'situacao'
     )
-    assert model_admin.ordering == ('processo', 'tipo_servico', 'termo_contrato', 'empresa_contratada')
+    assert model_admin.ordering == ('termo_contrato',)
     assert model_admin.search_fields == ('processo', 'termo_contrato')
     assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao')
