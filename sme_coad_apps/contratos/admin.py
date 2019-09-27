@@ -31,6 +31,11 @@ class ContratoUnidadeInLine(admin.TabularInline):
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
+    def dias_para_vencer(self, contrato):
+        return contrato.dias_para_o_encerramento
+
+    dias_para_vencer.short_description = 'Dias para vencer'
+
     list_display = (
         'termo_contrato',
         'processo',
@@ -38,6 +43,7 @@ class ContratoAdmin(admin.ModelAdmin):
         'empresa_contratada',
         'data_ordem_inicio',
         'data_encerramento',
+        'dias_para_vencer',
         'estado_contrato',
         'situacao'
     )

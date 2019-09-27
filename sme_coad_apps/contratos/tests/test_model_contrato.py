@@ -2,6 +2,7 @@ import datetime
 
 import pytest
 from django.contrib import admin
+from freezegun import freeze_time
 from model_mommy import mommy
 
 from ..admin import ContratoAdmin
@@ -47,6 +48,17 @@ def test_meta_modelo():
     assert model._meta.verbose_name_plural == 'Contratos'
 
 
+def test_property_data_encerramento():
+    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia_em_dias=30)
+    assert model.data_encerramento == datetime.date(2018, 12, 31)
+
+
+@freeze_time('2018-12-15')
+def test_property_dias_para_o_encerramento():
+    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia_em_dias=30)
+    assert model.dias_para_o_encerramento == 16
+
+
 def test_instance_model_detalhe():
     contrato = mommy.make('Contrato')
     unidade = mommy.make('Unidade', codigo_eol='123456')
@@ -78,6 +90,7 @@ def test_admin():
         'empresa_contratada',
         'data_ordem_inicio',
         'data_encerramento',
+        'dias_para_vencer',
         'estado_contrato',
         'situacao'
     )

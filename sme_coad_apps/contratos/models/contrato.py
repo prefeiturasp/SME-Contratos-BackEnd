@@ -69,7 +69,7 @@ class Contrato(ModeloBase):
 
     @property
     def dias_para_o_encerramento(self):
-        return self.data_encerramento - datetime.date.today()
+        return (self.data_encerramento - datetime.date.today()).days
 
     @property
     def estado(self):
