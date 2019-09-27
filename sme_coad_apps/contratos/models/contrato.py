@@ -11,6 +11,26 @@ from ...users.models import User
 
 
 class Contrato(ModeloBase):
+    # Estado do Contrato
+    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
+    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
+    ESTADO_ULTIMO_ANO = 'ULTIMO_ANO'
+    ESTADO_VIGENTE = 'VIGENTE'
+
+    ESTADO_NOMES = {
+        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_EXCEPCIONAL: 'Excepcional',
+        ESTADO_ULTIMO_ANO: 'Último Ano',
+        ESTADO_VIGENTE: 'Vigente'
+    }
+
+    ESTADO_CHOICES = (
+        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
+        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
+        (ESTADO_ULTIMO_ANO, ESTADO_NOMES[ESTADO_ULTIMO_ANO]),
+        (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
+    )
+
     # Situações do Contrato Choice
     SITUACAO_ATIVO = 'ATIVO'
     SITUACAO_ENCERRADO = 'ENCERRADO'
@@ -39,6 +59,7 @@ class Contrato(ModeloBase):
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_ATIVO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
+    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, default=ESTADO_VIGENTE)
 
     @property
     def data_encerramento(self):
@@ -49,6 +70,11 @@ class Contrato(ModeloBase):
     @property
     def dias_para_o_encerramento(self):
         return self.data_encerramento - datetime.date.today()
+
+    @property
+    def estado(self):
+        # Futuramente o estado será calculado. No momento ele é um campo digitado.
+        return self.estado_contrato
 
     def __str__(self):
         return f'TC:{self.termo_contrato} - {self.tipo_servico.nome} - {Contrato.SITUACAO_NOMES[self.situacao]}'

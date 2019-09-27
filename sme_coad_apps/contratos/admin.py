@@ -38,11 +38,12 @@ class ContratoAdmin(admin.ModelAdmin):
         'empresa_contratada',
         'data_ordem_inicio',
         'data_encerramento',
+        'estado_contrato',
         'situacao'
     )
     ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
-    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao')
+    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
     inlines = [ContratoUnidadeInLine]
 
     fieldsets = (

@@ -130,6 +130,18 @@ def de_para_equipamento(de):
     return para
 
 
+def de_para_estado(de):
+    de = de.strip()
+
+    if de == 'ÚLTIMO ANO':
+        para = 'ULTIMO_ANO'
+    elif de == 'EXCEPCIONALIDADE':
+        para = 'EXCEPCIONAL'
+    else:
+        para = de
+    return para
+
+
 def importa_empresa(empresa_data: dict):
     empresa = Empresa.objects.filter(cnpj=empresa_data['cnpj'])
     if not empresa.exists():
@@ -231,6 +243,7 @@ def importa_contratos():
             'data_ordem_inicio': row['INICIO'],
             'vigencia_em_dias': vigencia_em_dias,
             'situacao': Contrato.SITUACAO_ATIVO,
+            'estado_contrato': de_para_estado(row['SITUACAO'])
         }
 
         contrato = importa_contrato(contrato_data)
