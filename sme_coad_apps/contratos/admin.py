@@ -1,3 +1,5 @@
+import locale
+
 from django.contrib import admin
 
 from .models import TipoServico, Empresa, Contrato, ContratoUnidade
@@ -28,16 +30,43 @@ class ContratoUnidadeInLine(admin.TabularInline):
     raw_id_fields = ("unidade",)
     extra = 1  # Quantidade de linhas que serão exibidas.
 
+    def get_queryset(self, request):
+        return super(ContratoUnidadeInLine, self).get_queryset(request).select_related('unidade')
+
 
 @admin.register(Contrato)
 class ContratoAdmin(admin.ModelAdmin):
+
+    def dias_para_vencer(self, contrato):
+        return contrato.dias_para_o_encerramento
+
+    dias_para_vencer.short_description = 'Dias para vencer'
+
+    def valor_mensal(self, contrato):
+        locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+        return locale.currency(contrato.total_mensal, grouping=True)
+
+    valor_mensal.short_description = 'Valor Mensal'
+
+    def data_inicio(self, contrato):
+        return f'{contrato.data_ordem_inicio:%d/%m/%Y}'
+
+    data_inicio.short_description = 'Início'
+
+    def data_fim(self, contrato):
+        return f'{contrato.data_encerramento:%d/%m/%Y}'
+
+    data_fim.short_description = 'Fim'
+
     list_display = (
         'termo_contrato',
         'processo',
         'tipo_servico',
         'empresa_contratada',
-        'data_ordem_inicio',
-        'data_encerramento',
+        'valor_mensal',
+        'data_inicio',
+        'data_fim',
+        'dias_para_vencer',
         'estado_contrato',
         'situacao'
     )
@@ -63,3 +92,5 @@ class ContratoAdmin(admin.ModelAdmin):
         }
          ),
     )
+
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'tipo_servico')
