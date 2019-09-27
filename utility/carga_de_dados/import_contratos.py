@@ -118,7 +118,7 @@ def de_para_servicos(de):
 def de_para_equipamento(de):
     de = de.strip()
 
-    if de in ('ADM', 'DRE', 'IFSP', 'CMCT',):
+    if de in ('ADM', 'DRE', 'IFSP', 'CMCT'):
         para = Unidade.EQP_UNIDADE_ADMINISTRATIVA
     elif de in ('CECI', 'CEI', 'CEMEI', 'CIEJA', 'EMEBS', 'EMEF', 'EMEFM', 'EMEI'):
         para = Unidade.EQP_UNIDADE_ENSINO
@@ -217,7 +217,8 @@ def importa_contratos():
             'codigo_eol': eol_unidade,
             'cep': row['CEP_UNIDADE'],
             'nome': row['NOME_UNIDADE'],
-            'equipamento': equipamento
+            'equipamento': equipamento,
+            'tipo_unidade': row['EQP']
         }
         unidade = importa_unidade(unidade_data)
 
