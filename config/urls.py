@@ -13,19 +13,19 @@ from sme_coad_apps.users.urls import urlpatterns as usuario_url
 schema_view = get_swagger_view(title='API SME COAD')
 
 urlpatterns = [
-    path("docs/", schema_view),
-    path("api-token-auth/", obtain_jwt_token),
-    path("api-token-refresh/", refresh_jwt_token),
-    path("api-token-verify/", verify_jwt_token),
-    path('metrics/', include('django_prometheus.urls')),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
+                  path("docs/", schema_view),
+                  path("api-token-auth/", obtain_jwt_token),
+                  path("api-token-refresh/", refresh_jwt_token),
+                  path("api-token-verify/", verify_jwt_token),
+                  path('metrics/', include('django_prometheus.urls')),
+                  # Django Admin, use {% url 'admin:index' %}
+                  path(settings.ADMIN_URL, admin.site.urls),
+                  # User management
+                  # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
                   path("accounts/", include("allauth.urls")),
                   path("django-des/", include(des_url)),
-    # Your stuff: custom urls includes go here
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  # Your stuff: custom urls includes go here
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # ADDING URLS FROM APPS
 urlpatterns += core_urls
