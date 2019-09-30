@@ -62,14 +62,11 @@ class RedefinirSenhaSerializerCreator(serializers.ModelSerializer):
         return attrs
 
     def update(self, instance, validated_data):
-        try:
-            instance.set_password(validated_data.get('password'))
-            instance.is_active = True
-            instance.hash_redefinicao = None
-            instance.save()
-            return instance
-        except serializers.ValidationError(detail='Ocorreu um erro ao tentar redefinir senha'):
-            pass
+        instance.set_password(validated_data.get('password'))
+        instance.is_active = True
+        instance.hash_redefinicao = ''
+        instance.save()
+        return instance
 
     class Meta:
         model = user_model

@@ -1,3 +1,4 @@
+#FROM python:3.6-jessie
 FROM python:3.6-alpine3.8
 ENV PYTHONUNBUFFERED 1
 ADD . /code
@@ -8,6 +9,7 @@ RUN apk update && apk add postgresql-dev tzdata && \
       apk add --no-cache \
       --virtual=.build-dependencies \
       gcc \
+      g++ \
       musl-dev \
       git \
       python3-dev \
@@ -23,9 +25,9 @@ RUN apk update && apk add postgresql-dev tzdata && \
       harfbuzz-dev \
       fribidi-dev && \
     python -m pip --no-cache install -U pip && \
+    python -m pip --no-cache install Cython && \
+    python -m pip --no-cache install numpy && \
     python -m pip --no-cache install -r requirements/production.txt && \
-#    python manage.py migrate &&\
-#    python manage.py collectstatic &&\
     apk del --purge .build-dependencies
 
 EXPOSE 8000
