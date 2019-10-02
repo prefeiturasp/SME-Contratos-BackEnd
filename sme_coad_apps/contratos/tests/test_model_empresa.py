@@ -13,6 +13,7 @@ def test_instance_model():
     assert isinstance(model, Empresa)
     assert isinstance(model.nome, str)
     assert isinstance(model.cnpj, str)
+    assert model.historico
 
 
 def test_srt_model():

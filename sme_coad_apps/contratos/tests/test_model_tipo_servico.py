@@ -2,8 +2,8 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
-from ..models import TipoServico
 from ..admin import TipoServicoAdmin
+from ..models import TipoServico
 
 pytestmark = pytest.mark.django_db
 
@@ -12,6 +12,7 @@ def test_instance_model():
     model = mommy.make('TipoServico', nome='Limpeza')
     assert isinstance(model, TipoServico)
     assert isinstance(model.nome, str)
+    assert model.historico
 
 
 def test_srt_model():

@@ -14,6 +14,7 @@ def test_instance_model():
     assert isinstance(model.nome, str)
     assert isinstance(model.sigla, str)
     assert isinstance(model.divisao, Divisao)
+    assert model.historico
 
 
 def test_str_model():

@@ -16,6 +16,7 @@ def test_instance_model():
     assert isinstance(model.tipo_unidade, str)
     assert isinstance(model.codigo_eol, str)
     assert isinstance(model.cep, str)
+    assert model.historico
 
 
 def test_srt_model():
