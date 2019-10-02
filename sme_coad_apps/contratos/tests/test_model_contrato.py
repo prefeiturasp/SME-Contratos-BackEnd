@@ -33,6 +33,7 @@ def test_instance_model():
     assert isinstance(model.gestor, User)
     assert isinstance(model.observacoes, str)
     assert isinstance(model.estado_contrato, str)
+    assert model.historico
 
 
 def test_srt_model():
@@ -79,6 +80,7 @@ def test_instance_model_detalhe():
     assert isinstance(model.valor_total, float)
     assert isinstance(model.dotacao_orcamentaria, str)
     assert isinstance(model.lote, str)
+    assert model.historico
 
 
 def test_srt_model_detalhe():

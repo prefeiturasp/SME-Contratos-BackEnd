@@ -41,3 +41,9 @@ django-admin-interface==0.11.1
 
 # Pandas - Para importação de dados
 pandas==0.25.1
+
+# Para gravação de log de alterações nos modelos
+# https://django-auditlog.readthedocs.io/en/latest/index.html
+#django-auditlog==0.4.5
+# Pegando última versão diretamente do repositório oficial.
+-e git:https://github.com/jjkester/django-auditlog.git

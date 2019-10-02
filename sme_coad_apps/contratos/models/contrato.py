@@ -1,5 +1,7 @@
 import datetime
 
+from auditlog.models import AuditlogHistoryField
+from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.db import models
 
@@ -11,6 +13,8 @@ from ...users.models import User
 
 
 class Contrato(ModeloBase):
+    historico = AuditlogHistoryField()
+
     # Estado do Contrato
     ESTADO_EMERGENCIAL = 'EMERGENCIAL'
     ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
@@ -92,6 +96,8 @@ class Contrato(ModeloBase):
 
 
 class ContratoUnidade(ModeloBase):
+    historico = AuditlogHistoryField()
+
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="unidades")
     unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
     valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
@@ -113,3 +119,7 @@ class ContratoUnidade(ModeloBase):
     class Meta:
         verbose_name = 'Unidade de Contrato'
         verbose_name_plural = 'Unidades de Contratos'
+
+
+auditlog.register(Contrato)
+auditlog.register(ContratoUnidade)

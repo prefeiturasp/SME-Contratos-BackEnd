@@ -1,9 +1,13 @@
+from auditlog.models import AuditlogHistoryField
+from auditlog.registry import auditlog
 from django.db import models
 
 from ..models_abstracts import TemNome, ModeloBase
 
 
 class Unidade(ModeloBase, TemNome):
+    historico = AuditlogHistoryField(pk_indexable=False)
+
     # Equipamentos Choice
     EQP_UNIDADE_ADMINISTRATIVA = 'UA'
     EQP_UNIDADE_ENSINO = 'UE'
@@ -49,3 +53,6 @@ class Unidade(ModeloBase, TemNome):
     class Meta:
         verbose_name = 'Unidade'
         verbose_name_plural = 'Unidades'
+
+
+auditlog.register(Unidade)

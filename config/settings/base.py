@@ -88,6 +88,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_swagger",
     "django_prometheus",
     "des",
+    "auditlog",
 ]
 
 LOCAL_APPS = [
@@ -132,6 +133,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = [
