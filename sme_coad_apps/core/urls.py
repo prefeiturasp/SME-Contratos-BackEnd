@@ -6,8 +6,8 @@ from .api.viewsets.nucleo_viewsets import NucleoViewSet
 
 router = routers.DefaultRouter()
 
-router.register('divisao', DivisaoViewSet)
-router.register('nucleo', NucleoViewSet)
+router.register('divisoes', DivisaoViewSet)
+router.register('nucleos', NucleoViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
