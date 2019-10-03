@@ -1,15 +1,19 @@
 from rest_framework import serializers
 
+from ..serializers.divisao_serializer import DivisaoLookUpSerializer
 from ...models import Nucleo
 
 
 class NucleoSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Nucleo
-        fields = '__all__'
+        fields = ('id', 'sigla', 'nome')
 
 
-class NucleoSerializerCreator(serializers.ModelSerializer):
+class NucleoLookUpSerializer(serializers.ModelSerializer):
+    divisao = DivisaoLookUpSerializer()
+
     class Meta:
         model = Nucleo
-        fields = '__all__'
+        fields = ('id', 'sigla', 'divisao')

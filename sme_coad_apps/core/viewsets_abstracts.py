@@ -15,3 +15,15 @@ class ComHistoricoViewSet(viewsets.ModelViewSet):
 
     class Meta:
         abstract = True
+
+
+class ComHistoricoReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+
+    @action(detail=True)
+    def historico(self, request, uuid):
+        historico = self.get_object().historico.all()
+        serializer = HistoricoSerializer(historico, many=True)
+        return Response(serializer.data)
+
+    class Meta:
+        abstract = True

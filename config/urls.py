@@ -7,6 +7,7 @@ from django.views import defaults as default_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework_swagger.views import get_swagger_view
 
+from sme_coad_apps.contratos.urls import urlpatterns as contrato_url
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
 
@@ -30,6 +31,7 @@ urlpatterns = [
 # ADDING URLS FROM APPS
 urlpatterns += core_urls
 urlpatterns += usuario_url
+urlpatterns += contrato_url
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
