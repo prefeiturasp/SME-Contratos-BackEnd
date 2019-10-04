@@ -19,6 +19,7 @@ def test_contrato_serializer(fake_user):
         gestor=fake_user,
         tipo_servico=tipo_servico,
         empresa_contratada=empresa,
+        vigencia_em_dias=100,
     )
 
     contrato_serializer = ContratoSerializer(contrato)
