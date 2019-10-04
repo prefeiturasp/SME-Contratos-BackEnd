@@ -13,5 +13,6 @@ def test_tipo_servico_serializer():
     tipo_servico_serializer = TipoServicoSerializer(tipo_servico)
 
     assert tipo_servico_serializer.data is not None
-    assert tipo_servico_serializer.data['id'] == 1
+    assert 'id' not in tipo_servico_serializer.data
     assert tipo_servico_serializer.data['nome'] == 'teste'
+    assert tipo_servico_serializer.data['uuid']

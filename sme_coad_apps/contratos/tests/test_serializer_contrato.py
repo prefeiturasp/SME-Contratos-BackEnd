@@ -36,7 +36,8 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['observacoes'] is not None
     assert contrato_serializer.data['estado_contrato']
     assert contrato_serializer.data['nucleo_responsavel']
-    assert contrato_serializer.data['empresa_contratada'] == {'id': 1, 'cnpj': '55.803.656/0001-34', 'nome': 'teste'}
+    assert contrato_serializer.data['empresa_contratada'] == {'cnpj': empresa.cnpj_formatado, 'nome': empresa.nome,
+                                                              'uuid': str(empresa.uuid)}
     assert contrato_serializer.data['gestor']
     assert contrato_serializer.data['data_encerramento'] is not None
-    assert contrato_serializer.data['tipo_servico'] == {'id': 1, 'nome': 'teste'}
+    assert contrato_serializer.data['tipo_servico'] == {'nome': tipo_servico.nome, 'uuid': str(tipo_servico.uuid)}

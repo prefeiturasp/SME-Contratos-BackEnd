@@ -13,6 +13,7 @@ def test_empresa_serializer():
     empresa_serializer = EmpresaLookUpSerializer(empresa)
 
     assert empresa_serializer.data is not None
-    assert empresa_serializer.data['id'] == 1
+    assert 'id' not in empresa_serializer.data
     assert empresa_serializer.data['nome'] == 'teste'
     assert empresa_serializer.data['cnpj'] == '55.803.656/0001-34'
+    assert empresa_serializer.data['uuid']

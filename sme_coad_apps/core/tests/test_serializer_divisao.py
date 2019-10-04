@@ -1,18 +1,18 @@
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.divisao_serializer import DivisaoSerializer
+from ..api.serializers.divisao_serializer import DivisaoLookUpSerializer
 from ..models.divisao import Divisao
 
 pytestmark = pytest.mark.django_db
 
 
-def test_divisao_serializer():
+def test_divisao_lookup_serializer():
     divisao = mommy.make(Divisao, id=1, sigla='dv1', nome='teste')
 
-    divisao_serializer = DivisaoSerializer(divisao)
+    divisao_serializer = DivisaoLookUpSerializer(divisao)
 
     assert divisao_serializer.data is not None
-    assert divisao_serializer.data['id'] == 1
-    assert divisao_serializer.data['nome'] == 'teste'
+    assert 'id' not in divisao_serializer.data
     assert divisao_serializer.data['sigla'] == 'dv1'
+    assert divisao_serializer['uuid']

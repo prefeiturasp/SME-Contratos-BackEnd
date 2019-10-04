@@ -18,4 +18,4 @@ class DivisaoSerializerCreator(serializers.ModelSerializer):
 class DivisaoLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Divisao
-        fields = ('id', 'sigla')
+        fields = ('sigla', 'uuid')

@@ -15,6 +15,7 @@ def test_nucleo_lookup_serializer():
     nucleo_serializer = NucleoLookUpSerializer(nucleo)
 
     assert nucleo_serializer.data is not None
-    assert nucleo_serializer.data['id'] == 1
+    assert 'id' not in nucleo_serializer.data
     assert nucleo_serializer.data['sigla'] == 'nc1'
-    assert nucleo_serializer.data['divisao'] == {'id': 1, 'sigla': 'dv1'}
+    assert nucleo_serializer.data['divisao'] == {'sigla': divisao.sigla, 'uuid': str(divisao.uuid)}
+    assert nucleo_serializer.data['uuid']

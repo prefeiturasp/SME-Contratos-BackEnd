@@ -16,4 +16,4 @@ class NucleoLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Nucleo
-        fields = ('id', 'sigla', 'divisao')
+        fields = ('sigla', 'uuid', 'divisao')

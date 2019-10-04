@@ -11,4 +11,4 @@ class EmpresaLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Empresa
-        fields = ('id', 'nome', 'cnpj')
+        fields = ('nome', 'cnpj', 'uuid')
