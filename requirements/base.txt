@@ -47,3 +47,7 @@ pandas==0.25.1
 #django-auditlog==0.4.5
 # Pegando última versão diretamente do repositório oficial.
 -e git:https://github.com/jjkester/django-auditlog.git
+
+# Para filtros no DRF
+# https://django-filter.readthedocs.io/en/master/#
+django-filter==2.1.0

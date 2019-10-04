@@ -178,7 +178,10 @@ def importa_contrato(contrato_data: dict):
     contrato = Contrato.objects.filter(termo_contrato=contrato_data['termo_contrato'])
     if not contrato.exists():
         print(f"Criado Contrato {contrato_data['termo_contrato']}")
-        return Contrato.objects.create(**contrato_data)
+        novo_contrato = Contrato(**contrato_data)
+        novo_contrato.save()
+        return novo_contrato
+        # return Contrato.objects.create(**contrato_data)
     else:
         return contrato.first()
 
@@ -243,7 +246,8 @@ def importa_contratos():
             'data_ordem_inicio': row['INICIO'],
             'vigencia_em_dias': vigencia_em_dias,
             'situacao': Contrato.SITUACAO_ATIVO,
-            'estado_contrato': de_para_estado(row['SITUACAO'])
+            'estado_contrato': de_para_estado(row['SITUACAO'], ),
+            'data_encerramento': row['TERMINO']
         }
 
         contrato = importa_contrato(contrato_data)

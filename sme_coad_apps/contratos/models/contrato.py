@@ -4,6 +4,8 @@ from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 from .empresa import Empresa
 from .tipo_servico import TipoServico
@@ -64,16 +66,14 @@ class Contrato(ModeloBase):
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
     estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, default=ESTADO_VIGENTE)
-
-    @property
-    def data_encerramento(self):
-        if self.vigencia_em_dias and self.data_ordem_inicio:
-            return self.data_ordem_inicio + relativedelta(days=+self.vigencia_em_dias)
-        return ''
+    data_encerramento = models.DateField(blank=True, null=True)
 
     @property
     def dias_para_o_encerramento(self):
-        return (self.data_encerramento - datetime.date.today()).days
+        if self.data_encerramento:
+            return (self.data_encerramento - datetime.date.today()).days
+        else:
+            return 0
 
     @property
     def estado(self):
@@ -93,6 +93,12 @@ class Contrato(ModeloBase):
     class Meta:
         verbose_name = 'Contrato'
         verbose_name_plural = 'Contratos'
+
+
+@receiver(pre_save, sender=Contrato)
+def contrato_pre_save(instance, *_args, **_kwargs):
+    if instance.data_ordem_inicio and instance.vigencia_em_dias:
+        instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
 
 
 class ContratoUnidade(ModeloBase):
