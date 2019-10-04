@@ -44,3 +44,9 @@ class UsuarioSerializerCreators(serializers.ModelSerializer):
     class Meta:
         model = user_model
         fields = ['uuid', 'username', 'password', 'password2', 'validado']
+
+
+class UsuarioLookUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = user_model
+        fields = ['nome', 'uuid']

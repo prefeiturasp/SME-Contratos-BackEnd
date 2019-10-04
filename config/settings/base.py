@@ -89,6 +89,7 @@ THIRD_PARTY_APPS = [
     "django_prometheus",
     "des",
     "auditlog",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
