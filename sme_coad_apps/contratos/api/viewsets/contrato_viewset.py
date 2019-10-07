@@ -8,7 +8,16 @@ from ....core.viewsets_abstracts import ComHistoricoReadOnlyViewSet
 
 class ContratoViewSet(ComHistoricoReadOnlyViewSet):
     lookup_field = 'uuid'
-    queryset = Contrato.objects.all()
+    contratos_queryset = Contrato.objects \
+        .select_related('empresa_contratada') \
+        .select_related('nucleo_responsavel') \
+        .select_related('gestor') \
+        .select_related('tipo_servico') \
+        .select_related() \
+        .all()
+
+    queryset = contratos_queryset
+
     serializer_class = ContratoSerializer
 
     filter_backends = (filters.DjangoFilterBackend, SearchFilter, OrderingFilter)
@@ -17,14 +26,7 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
     search_fields = ('processo',)
 
     def get_queryset(self):
-        contratos = Contrato.objects \
-            .select_related('empresa_contratada') \
-            .select_related('nucleo_responsavel') \
-            .select_related('gestor') \
-            .select_related() \
-            .all()
-
-        queryset = contratos
+        queryset = self.contratos_queryset
 
         encerramento_de = self.request.query_params.get('encerramento_de')
         encerramento_ate = self.request.query_params.get('encerramento_ate')
