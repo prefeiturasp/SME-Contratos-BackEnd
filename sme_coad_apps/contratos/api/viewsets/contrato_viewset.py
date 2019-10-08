@@ -1,5 +1,7 @@
 from django_filters import rest_framework as filters
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
 
 from ..serializers.contrato_serializer import ContratoSerializer
 from ...models import Contrato
@@ -35,3 +37,7 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
             queryset = queryset.filter(data_encerramento__range=[encerramento_de, encerramento_ate])
 
         return queryset
+
+    @action(detail=False)
+    def estados(self, _):
+        return Response(Contrato.estados_to_json())
