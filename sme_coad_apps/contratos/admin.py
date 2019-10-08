@@ -1,5 +1,3 @@
-import locale
-
 from django.contrib import admin
 
 from .models import TipoServico, Empresa, Contrato, ContratoUnidade
@@ -43,8 +41,9 @@ class ContratoAdmin(admin.ModelAdmin):
     dias_para_vencer.short_description = 'Dias para vencer'
 
     def valor_mensal(self, contrato):
-        locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
-        return locale.currency(contrato.total_mensal, grouping=True)
+        return f"R$ {contrato.total_mensal: 20,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        # locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+        # return locale.currency(contrato.total_mensal, grouping=True)
 
     valor_mensal.short_description = 'Valor Mensal'
 
