@@ -346,9 +346,7 @@ CACHES = {
 }
 
 # CORS
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default="http://localhost:3000")
 
 # EMAIL
 EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
