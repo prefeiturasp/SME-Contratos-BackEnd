@@ -23,3 +23,10 @@ def test_url_estados(authencticated_client):
     assert response.status_code == status.HTTP_200_OK
     json_data = json.loads(response.content)
     assert json_data == Contrato.estados_to_json()
+
+
+def test_url_situacoes(authencticated_client):
+    response = authencticated_client.get('/contratos/situacoes/')
+    assert response.status_code == status.HTTP_200_OK
+    json_data = json.loads(response.content)
+    assert json_data == Contrato.situacoes_to_json()

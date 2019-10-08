@@ -101,6 +101,17 @@ class Contrato(ModeloBase):
             result.append(choice)
         return result
 
+    @classmethod
+    def situacoes_to_json(cls):
+        result = []
+        for situacao in cls.SITUACAO_CHOICES:
+            choice = {
+                'id': situacao[0],
+                'nome': situacao[1]
+            }
+            result.append(choice)
+        return result
+
     class Meta:
         verbose_name = 'Contrato'
         verbose_name_plural = 'Contratos'
