@@ -90,6 +90,28 @@ class Contrato(ModeloBase):
     def __str__(self):
         return f'TC:{self.termo_contrato} - {self.tipo_servico.nome} - {Contrato.SITUACAO_NOMES[self.situacao]}'
 
+    @classmethod
+    def estados_to_json(cls):
+        result = []
+        for estado in cls.ESTADO_CHOICES:
+            choice = {
+                'id': estado[0],
+                'nome': estado[1]
+            }
+            result.append(choice)
+        return result
+
+    @classmethod
+    def situacoes_to_json(cls):
+        result = []
+        for situacao in cls.SITUACAO_CHOICES:
+            choice = {
+                'id': situacao[0],
+                'nome': situacao[1]
+            }
+            result.append(choice)
+        return result
+
     class Meta:
         verbose_name = 'Contrato'
         verbose_name_plural = 'Contratos'
