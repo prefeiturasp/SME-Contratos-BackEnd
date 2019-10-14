@@ -13,9 +13,14 @@ class ContratoSerializer(serializers.ModelSerializer):
     empresa_contratada = EmpresaLookUpSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
     gestor = UsuarioLookUpSerializer()
+    total_mensal = serializers.SerializerMethodField('get_total_mensal')
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
+
+    def get_total_mensal(self, obj):
+        return obj.total_mensal
+
 
     class Meta:
         model = Contrato
