@@ -13,4 +13,4 @@ class EmpresaViewSet(ComHistoricoReadOnlyViewSet):
 
     @action(detail=False)
     def lookup(self, _):
-        return Response(EmpresaLookUpSerializer(self.queryset, many=True).data)
+        return Response(EmpresaLookUpSerializer(self.queryset.order_by('nome'), many=True).data)
