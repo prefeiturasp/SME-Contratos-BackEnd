@@ -8,3 +8,9 @@ class TipoServicoSerializer(serializers.ModelSerializer):
         model = TipoServico
         fields = ('nome', 'uuid')
 
+
+class TipoServicoLookupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoServico
+        fields = ('nome', 'uuid', 'id')
+
