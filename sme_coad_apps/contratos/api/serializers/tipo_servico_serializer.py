@@ -7,3 +7,4 @@ class TipoServicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoServico
         fields = ('nome', 'uuid')
+
