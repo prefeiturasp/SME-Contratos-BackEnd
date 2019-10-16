@@ -1,3 +1,4 @@
+import environ
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -8,6 +9,7 @@ from ..validations.usuario_validations import (registro_funcional_deve_existir,
                                                senhas_devem_ser_iguais)
 
 user_model = get_user_model()
+env = environ.Env()
 
 
 class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
@@ -22,7 +24,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
             instance.is_active = False
             instance.hash_redefinicao = instance.encode_hash
             instance.save()
-            link = 'http://localhost:8080/redefinir-senha/?hash={}'.format(instance.hash_redefinicao)
+            link = 'http://{}/redefinir-senha/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
             enviar_email(
                 'Solicitação de redefinição de senha',
                 'Link: <a href="{}">Clique aqui</a>'.format(link),
