@@ -42,3 +42,4 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['data_encerramento'] is not None
     assert contrato_serializer.data['tipo_servico'] == {'nome': tipo_servico.nome, 'uuid': str(tipo_servico.uuid)}
     assert contrato_serializer.data['total_mensal'] is not None
+    assert contrato_serializer.data['row_index'] is not None
