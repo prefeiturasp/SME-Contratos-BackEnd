@@ -10,13 +10,11 @@ from ....core.viewsets_abstracts import ComHistoricoReadOnlyViewSet
 
 class ContratoViewSet(ComHistoricoReadOnlyViewSet):
     lookup_field = 'uuid'
-    contratos_queryset = Contrato.objects \
-        .select_related('empresa_contratada') \
-        .select_related('nucleo_responsavel') \
-        .select_related('gestor') \
-        .select_related('tipo_servico') \
-        .select_related() \
-        .all()
+    contratos_queryset = Contrato.objects.select_related(
+        'empresa_contratada').select_related(
+        'nucleo_responsavel').select_related(
+        'gestor').select_related(
+        'tipo_servico').select_related().all()
 
     queryset = contratos_queryset
 

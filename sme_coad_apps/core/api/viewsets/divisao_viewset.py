@@ -1,4 +1,3 @@
-
 from ..serializers.divisao_serializer import DivisaoSerializer
 
 from ...models import Divisao
@@ -9,4 +8,3 @@ class DivisaoViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
     queryset = Divisao.objects.all()
     serializer_class = DivisaoSerializer
-

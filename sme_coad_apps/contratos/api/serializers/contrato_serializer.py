@@ -21,7 +21,6 @@ class ContratoSerializer(serializers.ModelSerializer):
     def get_total_mensal(self, obj):
         return obj.total_mensal
 
-
     class Meta:
         model = Contrato
         fields = '__all__'
