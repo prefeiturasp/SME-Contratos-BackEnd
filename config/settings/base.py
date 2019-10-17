@@ -3,6 +3,8 @@ Base settings to build other settings files upon.
 """
 # import sentry_sdk
 # from sentry_sdk.integrations.django import DjangoIntegration
+import datetime
+
 import environ
 
 ROOT_DIR = (
@@ -352,8 +354,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 # EMAIL
 EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
 
-
 # sentry_sdk.init(
 #     dsn=env('DSN_SENTRY'),
 #     integrations=[DjangoIntegration()]
 # )
+
+
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),  # Token expires * minutes after being issued
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
+    # Token can be refreshed up to * minutes after being issued
+}
