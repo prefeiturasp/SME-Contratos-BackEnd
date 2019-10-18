@@ -3,6 +3,8 @@ Base settings to build other settings files upon.
 """
 # import sentry_sdk
 # from sentry_sdk.integrations.django import DjangoIntegration
+import datetime
+
 import environ
 
 ROOT_DIR = (
@@ -65,6 +67,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # APPS
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
+    "corsheaders",
+    'admin_interface',  # App de terceiros, mas precisam ficar antes do django.contrib.admin
+    'colorfield',  # App de terceiros, mas precisam ficar antes do django.contrib.admin
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -84,11 +89,16 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "rest_framework_swagger",
     "django_prometheus",
+    "des",
+    "auditlog",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
     "sme_coad_apps.users.apps.UsersConfig",
+    "sme_coad_apps.core",
     "sme_coad_apps.divisoes",
+    "sme_coad_apps.contratos"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -114,6 +124,20 @@ AUTH_USER_MODEL = "users.User"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = [
     # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
@@ -135,25 +159,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
-MIDDLEWARE = [
-    "django_prometheus.middleware.PrometheusBeforeMiddleware",
-    "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_prometheus.middleware.PrometheusAfterMiddleware",
-]
 
 # STATIC
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR("staticfiles"))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = "/static/"
+STATIC_URL = "/django_static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [str(APPS_DIR.path("static"))]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -177,7 +189,8 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR.path("templates"))],
+        # "DIRS": [str(APPS_DIR.path("templates"))],
+        "DIRS": [],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -216,14 +229,14 @@ CSRF_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-)
+# EMAIL_BACKEND = env(
+#     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+# )
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -285,24 +298,31 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # django-allauth
+SITE_ID = 1
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "sme_coad_apps.users.adapters.AccountAdapter"
+ACCOUNT_ADAPTER = "allauth.account.adapter.DefaultAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "sme_coad_apps.users.adapters.SocialAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "allauth.socialaccount.adapter.DefaultSocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+# DRF
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
+        'sme_coad_apps.core.permissions.usuario_validado_permission.UsuarioValidadoPermission'
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
@@ -313,6 +333,7 @@ REST_FRAMEWORK = {
 
 }
 
+# REDIS
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -326,7 +347,23 @@ CACHES = {
     }
 }
 
+# CORS
+# CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default="http://localhost:3000")
+CORS_ORIGIN_ALLOW_ALL = True
+
+# EMAIL
+EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
+
 # sentry_sdk.init(
 #     dsn=env('DSN_SENTRY'),
 #     integrations=[DjangoIntegration()]
 # )
+
+
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),  # Token expires * minutes after being issued
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
+    # Token can be refreshed up to * minutes after being issued
+}

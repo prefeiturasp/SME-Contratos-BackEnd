@@ -3,7 +3,6 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/ad33daa97c71f74ad579/test_coverage)](https://codeclimate.com/github/prefeiturasp/SME-Contratos-BackEnd/test_coverage)
 
 # SME-Contratos-BackEnd
-
 SME COAD
 ========
 
@@ -11,6 +10,7 @@ Sistema de gestão da COORDENADORIA DE ADMINISTRAÇÃO, FINANÇAS E INFRAESTRUTU
 
 License: MIT
 
+Versão: 0.2
 
 Basic Commands
 --------------
@@ -53,3 +53,4 @@ Deployment
 ----------
 
 The following details how to deploy this application.
+

@@ -1,10 +1,10 @@
 from django.db import models
 
-from sme_coad_apps.core.models_abstracts import Nomeavel, Ativavel, Descritivel, TemChaveExterna
+from sme_coad_apps.core.models_abstracts import TemNome, TemAtivo, Descritivel, TemChaveExterna
 from sme_coad_apps.divisoes.models import Divisao
 
 
-class Nucleo(TemChaveExterna, Nomeavel, Descritivel, Ativavel):
+class Nucleo(TemChaveExterna, TemNome, Descritivel, TemAtivo):
     sigla = models.CharField('Sigla', max_length=20)
     divisao = models.ForeignKey(Divisao, on_delete=models.DO_NOTHING)
 

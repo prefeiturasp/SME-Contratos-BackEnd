@@ -25,7 +25,29 @@ django-debug-toolbar==2.0  # https://github.com/jazzband/django-debug-toolbar
 django-extensions==2.2.1  # https://github.com/django-extensions/django-extensions
 prometheus-client==0.7.1  # https://github.com/korfuri/django-prometheus
 django-prometheus==1.0.15  # https://github.com/korfuri/django-prometheus
+django-cors-headers==3.1.0  # https://github.com/adamchainz/django-cors-headers
+django-des==2.4.1  # https://github.com/jamiecounsell/django-des
 
 # Django REST Framework
 djangorestframework==3.10.2  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
+
+# Para validação e formatação de CNPJ e CPF
+brazilnum==0.8.8
+
+# Para melhoria da aparência do Django Admin
+# https://github.com/fabiocaccamo/django-admin-interface
+django-admin-interface==0.11.1
+
+# Pandas - Para importação de dados
+# pandas==0.25.1
+
+# Para gravação de log de alterações nos modelos
+# https://django-auditlog.readthedocs.io/en/latest/index.html
+#django-auditlog==0.4.5
+# Pegando última versão diretamente do repositório oficial.
+-e git://github.com/jjkester/django-auditlog.git##egg=auditlog
+
+# Para filtros no DRF
+# https://django-filter.readthedocs.io/en/master/#
+django-filter==2.1.0

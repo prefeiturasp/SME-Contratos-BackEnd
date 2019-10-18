@@ -153,3 +153,9 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),  # Token expires * minutes after being issued
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=60)
+    # Token can be refreshed up to * minutes after being issued
+}
