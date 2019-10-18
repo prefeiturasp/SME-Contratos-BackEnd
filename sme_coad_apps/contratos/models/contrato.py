@@ -71,7 +71,6 @@ class Contrato(ModeloBase):
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
 
-
     @property
     def dias_para_o_encerramento(self):
         if self.data_encerramento:
