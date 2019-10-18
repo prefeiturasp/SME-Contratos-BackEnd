@@ -4,7 +4,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
 from ..serializers.contrato_serializer import ContratoSerializer
-from ...models import Contrato, ContratoUnidade
+from ...models import Contrato
 from ....core.viewsets_abstracts import ComHistoricoReadOnlyViewSet
 
 
@@ -26,7 +26,6 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
     search_fields = ('processo',)
 
     def get_queryset(self):
-        # c_ua = Contrato.objects.filter(id__in=[linha.contrato.id for linha in ContratoUnidade.objects.filter(unidade__equipamento='CEU')])
         queryset = self.contratos_queryset
 
         encerramento_de = self.request.query_params.get('encerramento_de')
@@ -35,11 +34,14 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
             queryset = queryset.filter(data_encerramento__range=[encerramento_de, encerramento_ate])
 
         equipamento = self.request.query_params.get('equipamento')
-        contratos_por_equipamento = [linha.contrato.id for linha in
-                                               ContratoUnidade.objects.filter(unidade__equipamento=equipamento)]
+
         if equipamento is not None:
-            queryset = queryset.prefetch_related('unidades')
-            queryset = queryset.filter(id__in=contratos_por_equipamento)
+            if equipamento == 'UE':
+                queryset = queryset.filter(tem_ue=True)
+            elif equipamento == 'CEU':
+                queryset = queryset.filter(tem_ceu=True)
+            elif equipamento == 'UA':
+                queryset = queryset.filter(tem_ua=True)
 
         return queryset
 
