@@ -1,6 +1,6 @@
 import pytest
-from rest_framework import status
 from faker import Faker
+from rest_framework import status
 
 pytestmark = pytest.mark.django_db
 

@@ -1,8 +1,8 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .api.viewsets.usuario_viewset import UsuarioViewSet
 from .api.viewsets.senha_viewset import EsqueciMinhaSenhaViewSet, RedefinirSenhaViewSet
+from .api.viewsets.usuario_viewset import UsuarioViewSet
 
 router = routers.DefaultRouter()
 

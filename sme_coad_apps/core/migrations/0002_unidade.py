@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0001_initial'),
     ]
@@ -19,8 +18,14 @@ class Migration(migrations.Migration):
                 ('criado_em', models.DateTimeField(auto_now_add=True, verbose_name='Criado em')),
                 ('alterado_em', models.DateTimeField(auto_now=True, verbose_name='Alterado em')),
                 ('uuid', models.UUIDField(default=uuid.uuid4, editable=False, unique=True)),
-                ('equipamento', models.CharField(choices=[('UA', 'Unidade Administrativa'), ('UE', 'Unidade de Ensino'), ('CEU', 'Centro Educacional Unificado')], default='UE', max_length=3)),
-                ('tipo_unidade', models.CharField(choices=[('ADM', 'ADM'), ('DRE', 'DRE'), ('IFSP', 'IFSP'), ('CMCT', 'CMCT'), ('CECI', 'CECI'), ('CEI', 'CEI'), ('CEMEI', 'CEMEI'), ('CIEJA', 'CIEJA'), ('EMEBS', 'EMEBS'), ('EMEF', 'EMEF'), ('EMEFM', 'EMEFM'), ('EMEI', 'EMEI'), ('CEU', 'CEU')], default='ADM', max_length=10)),
+                ('equipamento', models.CharField(choices=[('UA', 'Unidade Administrativa'), ('UE', 'Unidade de Ensino'),
+                                                          ('CEU', 'Centro Educacional Unificado')], default='UE',
+                                                 max_length=3)),
+                ('tipo_unidade', models.CharField(
+                    choices=[('ADM', 'ADM'), ('DRE', 'DRE'), ('IFSP', 'IFSP'), ('CMCT', 'CMCT'), ('CECI', 'CECI'),
+                             ('CEI', 'CEI'), ('CEMEI', 'CEMEI'), ('CIEJA', 'CIEJA'), ('EMEBS', 'EMEBS'),
+                             ('EMEF', 'EMEF'), ('EMEFM', 'EMEFM'), ('EMEI', 'EMEI'), ('CEU', 'CEU')], default='ADM',
+                    max_length=10)),
                 ('codigo_eol', models.CharField(max_length=10, primary_key=True, unique=True)),
                 ('cep', models.CharField(blank=True, default='', max_length=15)),
             ],
