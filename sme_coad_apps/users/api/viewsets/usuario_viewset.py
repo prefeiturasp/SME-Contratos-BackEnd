@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from ..serializers.usuario_serializer import (UsuarioSerializer, UsuarioSerializerCreators)
+from ..serializers.usuario_serializer import (UsuarioSerializer, UsuarioSerializerCreators, UsuarioLookUpSerializer)
 
 user_model = get_user_model()
 
@@ -35,3 +35,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         usuario = user_model.objects.get(username=username)
         UsuarioSerializerCreators().update(usuario, validated_data)
         return Response({'detail': 'Usuário validado', 'status': status.HTTP_200_OK})
+
+    @action(detail=False)
+    def lookup(self, _):
+        return Response(UsuarioLookUpSerializer(self.queryset.order_by('nome'), many=True).data)
