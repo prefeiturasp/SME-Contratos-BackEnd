@@ -17,3 +17,4 @@ def atualiza_filtro_equipamento_nos_contratos():
     for contrato in Contrato.objects.all():
         contrato.save()
 
+
