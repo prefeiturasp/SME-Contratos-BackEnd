@@ -30,9 +30,18 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
 
         encerramento_de = self.request.query_params.get('encerramento_de')
         encerramento_ate = self.request.query_params.get('encerramento_ate')
-
         if encerramento_de is not None and encerramento_ate is not None:
             queryset = queryset.filter(data_encerramento__range=[encerramento_de, encerramento_ate])
+
+        equipamento = self.request.query_params.get('equipamento')
+
+        if equipamento is not None:
+            if equipamento == 'UE':
+                queryset = queryset.filter(tem_ue=True)
+            elif equipamento == 'CEU':
+                queryset = queryset.filter(tem_ceu=True)
+            elif equipamento == 'UA':
+                queryset = queryset.filter(tem_ua=True)
 
         return queryset
 

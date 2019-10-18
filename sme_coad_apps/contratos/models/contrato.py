@@ -67,6 +67,10 @@ class Contrato(ModeloBase):
     observacoes = models.TextField(blank=True, default='')
     estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, default=ESTADO_VIGENTE)
     data_encerramento = models.DateField(blank=True, null=True)
+    tem_ue = models.BooleanField(default=False)
+    tem_ua = models.BooleanField(default=False)
+    tem_ceu = models.BooleanField(default=False)
+
 
     @property
     def dias_para_o_encerramento(self):
@@ -121,6 +125,10 @@ class Contrato(ModeloBase):
 def contrato_pre_save(instance, *_args, **_kwargs):
     if instance.data_ordem_inicio and instance.vigencia_em_dias:
         instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
+
+    instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
+    instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
+    instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
 
 
 class ContratoUnidade(ModeloBase):

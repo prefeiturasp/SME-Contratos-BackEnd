@@ -33,3 +33,8 @@ def test_login_jwt(client, django_user_model):
     response = client.post(url, {'username': username, 'password': password}, format='json')
     assert response.status_code == status.HTTP_200_OK
     assert 'token' in response.data
+
+
+def test_url_lookup(authencticated_client):
+    response = authencticated_client.get('/usuarios/lookup/')
+    assert response.status_code == status.HTTP_200_OK
