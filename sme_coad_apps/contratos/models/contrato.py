@@ -40,15 +40,18 @@ class Contrato(ModeloBase):
     # Situações do Contrato Choice
     SITUACAO_ATIVO = 'ATIVO'
     SITUACAO_ENCERRADO = 'ENCERRADO'
+    SITUACAO_RASCUNHO = 'RASCUNHO'
 
     SITUACAO_NOMES = {
         SITUACAO_ATIVO: 'Ativo',
         SITUACAO_ENCERRADO: 'Encerrado',
+        SITUACAO_RASCUNHO: 'Rascunho',
     }
 
     SITUACAO_CHOICES = (
         (SITUACAO_ATIVO, SITUACAO_NOMES[SITUACAO_ATIVO]),
         (SITUACAO_ENCERRADO, SITUACAO_NOMES[SITUACAO_ENCERRADO]),
+        (SITUACAO_RASCUNHO, SITUACAO_NOMES[SITUACAO_RASCUNHO]),
     )
 
     termo_contrato = models.CharField('TC No.', max_length=20)
@@ -64,6 +67,8 @@ class Contrato(ModeloBase):
     vigencia_em_dias = models.PositiveSmallIntegerField(default=0)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_ATIVO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
+    suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente', blank=True,
+                                 null=True)
     observacoes = models.TextField(blank=True, default='')
     estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, default=ESTADO_VIGENTE)
     data_encerramento = models.DateField(blank=True, null=True)
