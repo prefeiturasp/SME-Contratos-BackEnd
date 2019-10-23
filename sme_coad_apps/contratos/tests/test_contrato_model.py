@@ -17,9 +17,10 @@ pytestmark = pytest.mark.django_db
 
 def test_instance_model():
     gestor = mommy.make(User)
+    suplente = mommy.make(User)
     model = mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                        data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
-                       observacoes='teste')
+                       suplente=suplente, observacoes='teste')
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
     assert isinstance(model.processo, str)
@@ -32,6 +33,7 @@ def test_instance_model():
     assert isinstance(model.vigencia_em_dias, int)
     assert isinstance(model.situacao, str)
     assert isinstance(model.gestor, User)
+    assert isinstance(model.suplente, User)
     assert isinstance(model.observacoes, str)
     assert isinstance(model.estado_contrato, str)
     assert isinstance(model.data_encerramento, datetime.date)
@@ -49,6 +51,19 @@ def test_meta_modelo():
     model = mommy.make('Contrato')
     assert model._meta.verbose_name == 'Contrato'
     assert model._meta.verbose_name_plural == 'Contratos'
+
+
+def test_situcoes():
+    assert Contrato.SITUACAO_ATIVO
+    assert Contrato.SITUACAO_ENCERRADO
+    assert Contrato.SITUACAO_RASCUNHO
+
+
+def test_estado():
+    assert Contrato.ESTADO_EMERGENCIAL
+    assert Contrato.ESTADO_EXCEPCIONAL
+    assert Contrato.ESTADO_ULTIMO_ANO
+    assert Contrato.ESTADO_VIGENTE
 
 
 def test_field_data_encerramento():
