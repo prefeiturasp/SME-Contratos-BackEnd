@@ -16,12 +16,6 @@ class EsqueciMinhaSenhaViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = EsqueciMinhaSenhaSerializer
 
-    def create(self, request, username=None):
-        validated_data = EsqueciMinhaSenhaSerializer().validate(request.data)
-        usuario = get_user_model().objects.get(username=validated_data.get('username'))
-        EsqueciMinhaSenhaSerializer().update(usuario, validated_data)
-        return Response({'detail': 'Instruções foram enviados ao seu email', 'status': 200})
-
 
 class RedefinirSenhaViewSet(viewsets.ModelViewSet):
     lookup_field = 'hash_redefinicao'
