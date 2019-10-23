@@ -90,6 +90,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
                 'observacoes',
                 'gestor',
+                'suplente',
                 'situacao',
                 'tem_ue',
                 'tem_ceu',
@@ -99,4 +100,4 @@ class ContratoAdmin(admin.ModelAdmin):
          ),
     )
 
-    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'tipo_servico')
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
