@@ -48,15 +48,12 @@ class ContratoAdmin(admin.ModelAdmin):
     valor_mensal.short_description = 'Valor Mensal'
 
     def data_inicio(self, contrato):
-        return f'{contrato.data_ordem_inicio:%d/%m/%Y}'
+        return f'{contrato.data_ordem_inicio:%d/%m/%Y}' if contrato.data_ordem_inicio else ''
 
     data_inicio.short_description = 'Início'
 
     def data_fim(self, contrato):
-        if contrato.data_encerramento:
-            return f'{contrato.data_encerramento:%d/%m/%Y}'
-        else:
-            return ''
+        return f'{contrato.data_encerramento:%d/%m/%Y}' if contrato.data_encerramento else ''
 
     data_fim.short_description = 'Fim'
 
