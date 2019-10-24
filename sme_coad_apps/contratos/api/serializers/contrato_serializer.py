@@ -1,10 +1,14 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from sme_coad_apps.contratos.api.validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoSerializer
 from ...models import Contrato
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+
+user_model = get_user_model()
 
 
 class ContratoSerializer(serializers.ModelSerializer):
@@ -14,6 +18,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     empresa_contratada = EmpresaLookUpSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
     gestor = UsuarioLookUpSerializer()
+    suplente = UsuarioLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
 
@@ -30,3 +35,28 @@ class ContratoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrato
         fields = '__all__'
+
+
+class ContratoCreateSerializer(serializers.ModelSerializer):
+    gestor = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=user_model.objects.all()
+    )
+    suplente = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=user_model.objects.all()
+    )
+
+    def validate(self, attrs):
+        gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
+        return attrs
+
+    class Meta:
+        model = Contrato
+        exclude = ('id',)

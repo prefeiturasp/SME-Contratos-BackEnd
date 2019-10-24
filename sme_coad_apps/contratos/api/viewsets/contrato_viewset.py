@@ -3,17 +3,18 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from ..serializers.contrato_serializer import ContratoSerializer
+from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer
 from ...models import Contrato
-from ....core.viewsets_abstracts import ComHistoricoReadOnlyViewSet
+from ....core.viewsets_abstracts import ComHistoricoViewSet
 
 
-class ContratoViewSet(ComHistoricoReadOnlyViewSet):
+class ContratoViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
     contratos_queryset = Contrato.objects.select_related(
         'empresa_contratada').select_related(
         'nucleo_responsavel').select_related(
         'gestor').select_related(
+        'suplente').select_related(
         'tipo_servico').select_related().all()
 
     queryset = contratos_queryset
@@ -21,7 +22,8 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
     serializer_class = ContratoSerializer
 
     filter_backends = (filters.DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filter_fields = ('situacao', 'tipo_servico', 'gestor', 'empresa_contratada', 'estado_contrato', 'termo_contrato')
+    filter_fields = (
+        'situacao', 'tipo_servico', 'gestor', 'suplente', 'empresa_contratada', 'estado_contrato', 'termo_contrato')
     ordering_fields = ('data_ordem_inicio',)
     search_fields = ('processo',)
 
@@ -44,6 +46,14 @@ class ContratoViewSet(ComHistoricoReadOnlyViewSet):
                 queryset = queryset.filter(tem_ua=True)
 
         return queryset
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ContratoSerializer
+        elif self.action == 'list':
+            return ContratoSerializer
+        else:
+            return ContratoCreateSerializer
 
     @action(detail=False)
     def estados(self, _):
