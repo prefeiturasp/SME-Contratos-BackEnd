@@ -13,6 +13,7 @@ env = environ.Env()
 
 
 class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
 
     def validate(self, attrs):
         registro_funcional_deve_existir(attrs.get('username'))
