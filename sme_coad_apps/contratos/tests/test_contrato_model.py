@@ -18,9 +18,13 @@ pytestmark = pytest.mark.django_db
 def test_instance_model():
     gestor = mommy.make(User)
     suplente = mommy.make(User)
+    tipo_servico = mommy.make(TipoServico)
+    nucleo_responsavel = mommy.make(Nucleo)
+    empresa_contratada = mommy.make(Empresa)
     model = mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                        data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
-                       suplente=suplente, observacoes='teste')
+                       suplente=suplente, observacoes='teste', tipo_servico=tipo_servico,
+                       nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada)
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
     assert isinstance(model.processo, str)
@@ -44,7 +48,7 @@ def test_srt_model():
     tipo_servico = mommy.make(TipoServico, nome='teste')
     model = mommy.make('Contrato', termo_contrato='XPTO123', tipo_servico=tipo_servico,
                        situacao=Contrato.SITUACAO_ATIVO)
-    assert model.__str__() == f'TC:XPTO123 - teste - {Contrato.SITUACAO_NOMES[Contrato.SITUACAO_ATIVO]}'
+    assert model.__str__() == 'XPTO123'
 
 
 def test_meta_modelo():

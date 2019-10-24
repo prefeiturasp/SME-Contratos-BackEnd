@@ -55,22 +55,25 @@ class Contrato(ModeloBase):
     )
 
     termo_contrato = models.CharField('TC No.', max_length=20)
-    processo = models.CharField(max_length=50)
+    processo = models.CharField(max_length=50, blank=True, default='')
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
-                                     verbose_name='tipo de serviço')
+                                     verbose_name='tipo de serviço', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
-                                           verbose_name='núcleo responsável')
+                                           verbose_name='núcleo responsável', blank=True, null=True)
     objeto = models.TextField(blank=True, default='')
-    empresa_contratada = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='contratos_da_empresa')
+    empresa_contratada = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='contratos_da_empresa',
+                                           blank=True, null=True)
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
-    vigencia_em_dias = models.PositiveSmallIntegerField(default=0)
-    situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_ATIVO)
-    gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True, null=True)
-    suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente', blank=True,
+    vigencia_em_dias = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
+    gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
+                               null=True)
+    suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente',
+                                 blank=True,
                                  null=True)
     observacoes = models.TextField(blank=True, default='')
-    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, default=ESTADO_VIGENTE)
+    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
@@ -96,7 +99,7 @@ class Contrato(ModeloBase):
         return total
 
     def __str__(self):
-        return f'TC:{self.termo_contrato} - {self.tipo_servico.nome} - {Contrato.SITUACAO_NOMES[self.situacao]}'
+        return self.termo_contrato
 
     @classmethod
     def estados_to_json(cls):
