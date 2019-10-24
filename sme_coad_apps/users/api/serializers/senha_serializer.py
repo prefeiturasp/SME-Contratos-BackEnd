@@ -25,7 +25,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
             instance.is_active = False
             instance.hash_redefinicao = instance.encode_hash
             instance.save()
-            link = 'http://{}/redefinir-senha/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
+            link = 'http://{}/#/redefinir-senha/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
             enviar_email(
                 'Solicitação de redefinição de senha',
                 'Link: <a href="{}">Clique aqui</a>'.format(link),
@@ -37,7 +37,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user_model
-        fields = ['uuid', 'username']
+        fields = ['username']
 
 
 class RedefinirSenhaSerializer(serializers.ModelSerializer):
