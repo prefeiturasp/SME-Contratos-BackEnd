@@ -5,6 +5,7 @@ from model_mommy import mommy
 
 from ..api.serializers.contrato_serializer import ContratoSerializer
 from ..models.contrato import Contrato, TipoServico, Empresa
+from ...core.models.nucleo import Nucleo
 
 pytestmark = pytest.mark.django_db
 
@@ -17,9 +18,13 @@ def test_contrato_serializer(fake_user):
         data_assinatura=datetime.date(2019, 10, 1),
         data_ordem_inicio=datetime.date(2019, 10, 1),
         gestor=fake_user,
+        suplente=fake_user,
         tipo_servico=tipo_servico,
         empresa_contratada=empresa,
         vigencia_em_dias=100,
+        processo='12233',
+        estado_contrato='Vigente',
+        nucleo_responsavel=mommy.make(Nucleo)
     )
 
     contrato_serializer = ContratoSerializer(contrato)
@@ -41,6 +46,8 @@ def test_contrato_serializer(fake_user):
                                                               'id': empresa.id}
     assert contrato_serializer.data['gestor'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
                                                   'id': fake_user.id}
+    assert contrato_serializer.data['suplente'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
+                                                    'id': fake_user.id}
     assert contrato_serializer.data['data_encerramento'] is not None
     assert contrato_serializer.data['tipo_servico'] == {'nome': tipo_servico.nome, 'uuid': str(tipo_servico.uuid)}
     assert contrato_serializer.data['total_mensal'] is not None
