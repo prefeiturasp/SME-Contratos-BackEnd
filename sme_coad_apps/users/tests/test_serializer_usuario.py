@@ -18,3 +18,4 @@ def test_usuario_lookup_serializer():
     assert usuario_serializer.data['id']
     assert usuario_serializer.data['nome'] == 'teste'
     assert usuario_serializer.data['uuid']
+    assert usuario_serializer.data['username'] == 'teste'
