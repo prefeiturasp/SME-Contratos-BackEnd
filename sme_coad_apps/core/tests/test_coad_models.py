@@ -18,6 +18,7 @@ def test_instance_model():
     assert isinstance(model, Coad)
     assert isinstance(model.coordenador, User)
     assert model.historico
+    assert model.assessores
 
 
 def test_srt_model():
