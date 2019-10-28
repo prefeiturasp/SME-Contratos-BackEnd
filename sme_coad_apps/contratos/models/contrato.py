@@ -54,7 +54,7 @@ class Contrato(ModeloBase):
         (SITUACAO_RASCUNHO, SITUACAO_NOMES[SITUACAO_RASCUNHO]),
     )
 
-    termo_contrato = models.CharField('TC No.', max_length=20)
+    termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
