@@ -19,7 +19,7 @@ def test_instance_model():
     assert model.historico
     assert isinstance(model.chefe, User)
     assert isinstance(model.suplente_chefe, User)
-
+    assert model.servidores
 
 
 def test_str_model():
