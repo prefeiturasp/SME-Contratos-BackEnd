@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Divisao, Nucleo, Unidade
+from .models import Divisao, Nucleo, Unidade, Coad
 
 
 @admin.register(Divisao)
@@ -25,3 +25,8 @@ class UnidadeAdmin(admin.ModelAdmin):
     search_fields = ('nome', 'codigo_eol')
     list_filter = ('equipamento', 'tipo_unidade')
     list_display_links = ('nome',)
+
+
+@admin.register(Coad)
+class CoadAdmin(admin.ModelAdmin):
+    ...
