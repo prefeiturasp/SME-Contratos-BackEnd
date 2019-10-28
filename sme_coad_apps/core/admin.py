@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Divisao, Nucleo, Unidade, Coad
+from .models import Divisao, Nucleo, Unidade, Coad, CoadAssessor
 
 
 @admin.register(Divisao)
@@ -27,6 +27,12 @@ class UnidadeAdmin(admin.ModelAdmin):
     list_display_links = ('nome',)
 
 
+class CoadAssessorInLine(admin.TabularInline):
+    model = CoadAssessor
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
 @admin.register(Coad)
 class CoadAdmin(admin.ModelAdmin):
-    ...
+    inlines = [CoadAssessorInLine]
+
