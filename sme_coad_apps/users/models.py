@@ -5,8 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 
-from sme_coad_apps.core.models import Divisao
-
 
 class User(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -15,7 +13,6 @@ class User(AbstractUser):
     celular = models.CharField('Celular', max_length=20, blank=True, default='')
     validado = models.BooleanField('Validado', default=False,
                                    help_text='Campo para verificar se o cadastro do usuário foi validado')
-    divisoes = models.ManyToManyField(Divisao, blank=True)
     hash_redefinicao = models.TextField(blank=True, default='',
                                         help_text='Campo utilizado para registrar hash na redefinição de senhas')
 
