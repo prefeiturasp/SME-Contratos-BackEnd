@@ -2,6 +2,7 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
+from sme_coad_apps.users.models import User
 from ..admin import NucleoAdmin
 from ..models import Nucleo, Divisao
 
@@ -9,12 +10,16 @@ pytestmark = pytest.mark.django_db
 
 
 def test_instance_model():
-    model = mommy.make(Nucleo)
+    user = mommy.make(User)
+    model = mommy.make(Nucleo, chefe=user, suplente_chefe=user)
     assert isinstance(model, Nucleo)
     assert isinstance(model.nome, str)
     assert isinstance(model.sigla, str)
     assert isinstance(model.divisao, Divisao)
     assert model.historico
+    assert isinstance(model.chefe, User)
+    assert isinstance(model.suplente_chefe, User)
+
 
 
 def test_str_model():
