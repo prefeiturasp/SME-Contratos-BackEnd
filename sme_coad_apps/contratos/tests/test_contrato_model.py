@@ -21,10 +21,13 @@ def test_instance_model():
     tipo_servico = mommy.make(TipoServico)
     nucleo_responsavel = mommy.make(Nucleo)
     empresa_contratada = mommy.make(Empresa)
+    documento_anexo_dre = ['documento1.pdf', 'documento2.pdf']
+    documento_anexo_fiscal = ['documento1.pdf', 'documento2.pdf']
     model = mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                        data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
                        suplente=suplente, observacoes='teste', tipo_servico=tipo_servico,
-                       nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada)
+                       nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada,
+                       documento_fiscal_dre=documento_anexo_dre, documento_fiscal_unidades=documento_anexo_fiscal)
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
     assert isinstance(model.processo, str)
@@ -41,6 +44,8 @@ def test_instance_model():
     assert isinstance(model.observacoes, str)
     assert isinstance(model.estado_contrato, str)
     assert isinstance(model.data_encerramento, datetime.date)
+    assert isinstance(model.documento_fiscal_dre, list)
+    assert isinstance(model.documento_fiscal_unidades, list)
     assert model.historico
 
 

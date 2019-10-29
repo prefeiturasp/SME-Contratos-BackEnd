@@ -3,6 +3,7 @@ import datetime
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -78,6 +79,10 @@ class Contrato(ModeloBase):
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
+    documento_fiscal_dre = ArrayField(models.CharField('Anexos Documento Fisca DRE', max_length=200), blank=True,
+                                      default=list)
+    documento_fiscal_unidades = ArrayField(models.CharField('Anexos Documento Fisca Unidades', max_length=200),
+                                           blank=True, default=list)
 
     @property
     def dias_para_o_encerramento(self):
