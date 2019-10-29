@@ -23,7 +23,7 @@ class Coad(SingletonModel):
 class CoadAssessor(ModeloBase):
     historico = AuditlogHistoryField()
     coad = models.ForeignKey(Coad, on_delete=models.CASCADE, related_name='assessores')
-    assessor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='assessor_coad')
+    assessor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='assessor_coad', unique=True)
 
     def __str__(self):
         return f"{self.assessor.nome}"
