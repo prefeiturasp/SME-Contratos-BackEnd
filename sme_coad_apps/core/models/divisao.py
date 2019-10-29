@@ -9,7 +9,7 @@ from ..models_abstracts import TemNome, ModeloBase
 class Divisao(ModeloBase, TemNome):
     historico = AuditlogHistoryField()
 
-    sigla = models.CharField('Sigla', max_length=15)
+    sigla = models.CharField('Sigla', max_length=15, unique=True)
     diretor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='diretor_divisao', blank=True, null=True)
     suplente_diretor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='suplente_diretor_divisao',
                                          blank=True, null=True)
