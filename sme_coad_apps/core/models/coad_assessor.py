@@ -15,6 +15,10 @@ class CoadAssessor(ModeloBase):
     def __str__(self):
         return f"{self.assessor.nome}"
 
+    @classmethod
+    def limpa_assessores(cls):
+        cls.objects.all().delete()
+
     class Meta:
         verbose_name = "Assessor COAD"
         verbose_name_plural = "Assessores COAD"
