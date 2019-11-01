@@ -43,7 +43,7 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['estado_contrato']
     assert contrato_serializer.data['nucleo_responsavel']
     assert contrato_serializer.data['empresa_contratada'] == {'nome': empresa.nome, 'uuid': str(empresa.uuid),
-                                                              'id': empresa.id}
+                                                              'id': empresa.id, 'cnpj': empresa.cnpj}
     assert contrato_serializer.data['gestor'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
                                                   'id': fake_user.id, 'username': fake_user.username}
     assert contrato_serializer.data['suplente'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),

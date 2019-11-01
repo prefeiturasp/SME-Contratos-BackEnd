@@ -7,7 +7,7 @@ from ...models import Nucleo
 class NucleoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nucleo
-        fields = ('id', 'sigla', 'nome')
+        fields = ('id', 'uuid', 'sigla', 'nome')
 
 
 class NucleoLookUpSerializer(serializers.ModelSerializer):

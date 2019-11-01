@@ -27,5 +27,5 @@ def test_empresa_lookup_serializer(empresa):
 
     assert empresa_serializer.data is not None
     # TODO Remover o id do serrializer de empresas
-    assert list(empresa_serializer.data.keys()) == ['nome', 'uuid', 'id']
+    assert list(empresa_serializer.data.keys()) == ['nome', 'uuid', 'id', 'cnpj']
     assert empresa_serializer.data['nome'] == 'teste'
