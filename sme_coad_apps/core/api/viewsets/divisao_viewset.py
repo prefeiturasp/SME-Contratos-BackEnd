@@ -1,5 +1,8 @@
-from ..serializers.divisao_serializer import DivisaoSerializer, DivisaoSerializerCreator
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
+from ..serializers.divisao_serializer import DivisaoSerializer, DivisaoSerializerCreator
+from ..serializers.nucleo_serializer import NucleoSerializer
 from ...models import Divisao
 from ...viewsets_abstracts import ComHistoricoViewSet
 
@@ -16,3 +19,11 @@ class DivisaoViewSet(ComHistoricoViewSet):
             return DivisaoSerializer
         else:
             return DivisaoSerializerCreator
+
+    @action(detail=True)
+    def nucleos(self, request, uuid=None):
+        divisao = self.get_object()
+        nucleos = divisao.nucleo_set.all()
+
+        serializer = NucleoSerializer(nucleos, many=True)
+        return Response(serializer.data)
