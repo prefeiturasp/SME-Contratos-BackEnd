@@ -4,7 +4,6 @@ from rest_framework import serializers
 from ..validations.usuario_validations import (senhas_devem_ser_iguais,
                                                registro_funcional_deve_existir,
                                                senha_nao_pode_ser_nulo)
-from ....core.api.serializers.divisao_serializer import DivisaoSerializer
 
 user_model = get_user_model()
 
