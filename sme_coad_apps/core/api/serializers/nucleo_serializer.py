@@ -21,3 +21,9 @@ class NucleoLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nucleo
         fields = ('sigla', 'uuid', 'divisao')
+
+
+class NucleoCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nucleo
+        fields = ('id', 'sigla', 'nome', 'chefe', 'suplente_chefe', 'divisao', 'uuid')
