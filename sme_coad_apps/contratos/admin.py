@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TipoServico, Empresa, Contrato, ContratoUnidade
+from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato
 
 
 @admin.register(TipoServico)
@@ -98,3 +98,10 @@ class ContratoAdmin(admin.ModelAdmin):
     )
 
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
+
+
+@admin.register(ColunasContrato)
+class ColunasContratoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'colunas_array')
+    ordering = ('usuario',)
+    search_fields = ('usuario',)
