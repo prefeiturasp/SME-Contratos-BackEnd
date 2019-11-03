@@ -50,7 +50,7 @@ def test_admin():
 
 def test_append_servidor(nucleo, fake_user):
     assert nucleo.servidores.all().count() == 0
-    servidores = [{'username': fake_user.username}, ]
+    servidores = [{'servidor': {'username': fake_user.username}}, ]
     Servidor.append_servidores(nucleo=nucleo, servidores=servidores)
     assert nucleo.servidores.all().count() == 1
 
