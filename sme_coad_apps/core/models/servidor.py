@@ -21,7 +21,7 @@ class Servidor(ModeloBase):
             return
 
         for servidor in servidores:
-            usuario = User.objects.get(username=servidor["username"])
+            usuario = User.objects.get(username=servidor["servidor"]["username"])
             cls.objects.create(nucleo=nucleo, servidor=usuario)
 
     @classmethod
