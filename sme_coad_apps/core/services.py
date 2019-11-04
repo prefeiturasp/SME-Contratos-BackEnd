@@ -17,4 +17,4 @@ def limpa_servidores_nucleo(nucleo):
 
 def update_servidores_nucleo(servidores, nucleo):
     limpa_servidores_nucleo(nucleo=nucleo)
-    Servidor.append_servidores(servidores=servidores)
+    Servidor.append_servidores(nucleo=nucleo, servidores=servidores)
