@@ -3,11 +3,17 @@ from django.contrib import admin
 from .models import Divisao, Nucleo, Unidade, Coad, CoadAssessor, Servidor
 
 
+class NucleoInLine(admin.TabularInline):
+    model = Nucleo
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
 @admin.register(Divisao)
 class DivisaoAdmin(admin.ModelAdmin):
     list_display = ('sigla', 'nome')
     ordering = ('sigla',)
     search_fields = ('sigla', 'nome')
+    inlines = [NucleoInLine]
 
 
 class ServidoresInLine(admin.TabularInline):
