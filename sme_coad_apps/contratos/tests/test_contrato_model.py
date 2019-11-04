@@ -27,7 +27,9 @@ def test_instance_model():
                        data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
                        suplente=suplente, observacoes='teste', tipo_servico=tipo_servico,
                        nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada,
-                       documento_fiscal_dre=documento_anexo_dre, documento_fiscal_unidades=documento_anexo_fiscal)
+                       documento_fiscal_dre=documento_anexo_dre,
+                       documento_fiscal_unidades=documento_anexo_fiscal
+                       )
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
     assert isinstance(model.processo, str)
