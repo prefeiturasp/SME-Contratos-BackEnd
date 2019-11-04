@@ -24,6 +24,8 @@ def fake_user(client, django_user_model):
     username = 'teste'
     password = 'teste'
     nome = 'teste'
-    user = django_user_model.objects.create_user(username=username, password=password, validado=True, nome=nome)
+    email = 'teste@teste.com'
+    user = django_user_model.objects.create_user(username=username, password=password, validado=True, nome=nome,
+                                                 email=email)
     client.login(username=username, password=password)
     return user
