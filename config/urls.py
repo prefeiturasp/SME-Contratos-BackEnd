@@ -1,3 +1,4 @@
+import notifications.urls
 from des import urls as des_url
 from django.conf import settings
 from django.conf.urls.static import static
@@ -25,6 +26,8 @@ urlpatterns = [
                   # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
                   path("accounts/", include("allauth.urls")),
                   path("django-des/", include(des_url)),
+                  # Django Notifications
+                  path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
                   # Your stuff: custom urls includes go here
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
