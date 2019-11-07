@@ -3,7 +3,7 @@ import datetime
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.contrato_serializer import ContratoSerializer
+from ..api.serializers.contrato_serializer import ContratoSerializer, ContratoLookUpSerializer
 from ..models.contrato import Contrato, TipoServico, Empresa
 from ...core.models.nucleo import Nucleo
 
@@ -54,3 +54,21 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['tipo_servico'] == {'nome': tipo_servico.nome, 'uuid': str(tipo_servico.uuid)}
     assert contrato_serializer.data['total_mensal'] is not None
     assert contrato_serializer.data['row_index'] is not None
+
+
+def test_contrato_lookup_serializer(fake_user):
+    contrato = mommy.make(
+        Contrato,
+        termo_contrato='00/00',
+        criado_em=datetime.date(2019, 10, 1),
+        gestor=fake_user,
+        suplente=fake_user
+    )
+
+    contrato_serializer = ContratoLookUpSerializer(contrato)
+
+    assert contrato_serializer.data is not None
+    assert contrato_serializer.data['termo_contrato'] == '00/00'
+    assert contrato_serializer.data['uuid']
+    assert contrato_serializer.data['gestor']
+    assert contrato_serializer.data['suplente']

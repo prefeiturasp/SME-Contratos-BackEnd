@@ -64,3 +64,9 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrato
         exclude = ('id',)
+
+
+class ContratoLookUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contrato
+        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'criado_em')
