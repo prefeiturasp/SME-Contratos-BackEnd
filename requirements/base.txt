@@ -51,3 +51,7 @@ django-admin-interface==0.11.1
 # Para filtros no DRF
 # https://django-filter.readthedocs.io/en/master/#
 django-filter==2.1.0
+
+# Notification app for Django,
+# https://github.com/django-notifications/django-notifications
+django-notifications-hq==1.5.0

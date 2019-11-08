@@ -92,6 +92,7 @@ THIRD_PARTY_APPS = [
     "des",
     "auditlog",
     "django_filters",
+    "notifications",
 ]
 
 LOCAL_APPS = [

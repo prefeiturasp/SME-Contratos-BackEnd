@@ -2,7 +2,7 @@ from ...core.models_abstracts import ModeloBase
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-from django.contrib.postgres.fields import ArrayField
+
 
 model_user = get_user_model()
 
@@ -19,7 +19,7 @@ class ColunasContrato(ModeloBase):
         },
         {
             "field": "tipo_servico.nome",
-            "header": "Tipode de Serviço"
+            "header": "Tipo de Serviço"
         },
         {
             "field": "empresa_contratada.nome",
