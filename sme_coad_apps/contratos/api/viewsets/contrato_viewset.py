@@ -1,9 +1,10 @@
+from django.db.models import Q
 from django_filters import rest_framework as filters
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
-from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer
+from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer, ContratoLookUpSerializer
 from ...models import Contrato
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 
@@ -45,6 +46,10 @@ class ContratoViewSet(ComHistoricoViewSet):
             elif equipamento == 'UA':
                 queryset = queryset.filter(tem_ua=True)
 
+        atribuido = self.request.query_params.get('atribuido')
+        if atribuido is not None :
+            queryset = queryset.filter(Q(gestor__id=atribuido) | Q(suplente__id=atribuido))
+
         return queryset
 
     def get_serializer_class(self):
@@ -62,3 +67,7 @@ class ContratoViewSet(ComHistoricoViewSet):
     @action(detail=False)
     def situacoes(self, _):
         return Response(Contrato.situacoes_to_json())
+
+    @action(detail=False)
+    def termos(self, _):
+        return Response(ContratoLookUpSerializer(self.queryset.order_by('-criado_em'), many=True).data)
