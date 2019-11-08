@@ -349,7 +349,7 @@ CACHES = {
 
 # CORS
 # CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default="http://localhost:3000")
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = env('CORS_ORIGIN_ALLOW_ALL', default=True)
 
 # EMAIL
 EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
