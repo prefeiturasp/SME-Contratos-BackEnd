@@ -9,12 +9,15 @@ from ..api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 pytestmark = pytest.mark.django_db
 
 
-def test_contrato_unidade_viewset(faker_user):
+def test_contrato_unidade_viewset(fake_user):
     request = APIRequestFactory().get("")
     contrato_unidade_detalhe = ContratoUnidadeViewSet.as_view({'get': 'retrieve'})
-    force_authenticate(request, user=faker_user)
+    contrato_unidade_lista = ContratoUnidadeViewSet.as_view({'get': 'list'})
+    force_authenticate(request, user=fake_user)
     contrato = mommy.make('Contrato')
 
-    response = contrato_unidade_detalhe(request, uuid=contrato.uuid)
+    response = contrato_unidade_detalhe(request, contrato__uuid=contrato.uuid)
+    response2 = contrato_unidade_lista(request)
 
     assert response.status_code == status.HTTP_200_OK
+    assert response2.status_code == status.HTTP_200_OK
