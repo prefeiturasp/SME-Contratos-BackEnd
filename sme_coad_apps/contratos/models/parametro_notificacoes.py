@@ -6,7 +6,7 @@ from .contrato import Contrato
 from ...core.models_abstracts import ModeloBase
 
 
-class ParametrosNotificacoesVigencia(ModeloBase):
+class ParametroNotificacoesVigencia(ModeloBase):
     historico = AuditlogHistoryField()
 
     estado_contrato = models.CharField('Para contratos com estado', max_length=15, choices=Contrato.ESTADO_CHOICES,
@@ -27,4 +27,4 @@ class ParametrosNotificacoesVigencia(ModeloBase):
         unique_together = [['estado_contrato', 'vencendo_em']]
 
 
-auditlog.register(ParametrosNotificacoesVigencia)
+auditlog.register(ParametroNotificacoesVigencia)
