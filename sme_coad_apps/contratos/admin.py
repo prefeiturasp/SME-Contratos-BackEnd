@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato
+from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia
 
 
 @admin.register(TipoServico)
@@ -105,3 +105,10 @@ class ColunasContratoAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'colunas_array')
     ordering = ('usuario',)
     search_fields = ('usuario',)
+
+
+@admin.register(ParametroNotificacoesVigencia)
+class ParametroNotificacoesVigenciaAdmin(admin.ModelAdmin):
+    list_display = ('estado_contrato', 'vencendo_em', 'repetir_notificacao_a_cada')
+    ordering = ('estado_contrato',)
+    list_filter = ('estado_contrato',)
