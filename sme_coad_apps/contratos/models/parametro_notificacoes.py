@@ -1,3 +1,5 @@
+import datetime
+
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from django.db import models
@@ -19,6 +21,16 @@ class ParametroNotificacoesVigencia(ModeloBase):
         return f"Contratos {Contrato.ESTADO_NOMES[self.estado_contrato]} " \
                f"notificar a partir de {self.vencendo_em} dias " \
                f"repetindo a cada {self.repetir_notificacao_a_cada} dias."
+
+    @classmethod
+    def parametros_do_estado(cls, estado):
+        return cls.objects.filter(estado_contrato=estado).order_by('estado_contrato', '-vencendo_em')
+
+    @classmethod
+    def data_limite_do_estado(cls, estado):
+        maior_limite = cls.parametros_do_estado().first().vencendo_em
+        data_limite = datetime.date.today() + maior_limite
+        return data_limite
 
     class Meta:
         verbose_name = "Parâmetro de notificação de vigência"

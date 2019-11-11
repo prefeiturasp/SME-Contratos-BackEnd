@@ -38,6 +38,13 @@ class Contrato(ModeloBase):
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
     )
 
+    ESTADOS = (
+        ESTADO_EMERGENCIAL,
+        ESTADO_EXCEPCIONAL,
+        ESTADO_ULTIMO_ANO,
+        ESTADO_VIGENTE
+    )
+
     # Situações do Contrato Choice
     SITUACAO_ATIVO = 'ATIVO'
     SITUACAO_ENCERRADO = 'ENCERRADO'
@@ -127,6 +134,10 @@ class Contrato(ModeloBase):
             }
             result.append(choice)
         return result
+
+    @classmethod
+    def contratos_no_estado(cls, estado):
+        return cls.objects.filter(estado=estado)
 
     class Meta:
         verbose_name = 'Contrato'
