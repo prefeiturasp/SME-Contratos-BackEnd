@@ -14,6 +14,9 @@ def gera_notificacoes_vigencia_contratos():
         contratos = Contrato.contratos_no_estado(estado, vencendo_ate=data_limite)
 
         for contrato in contratos:
+            if not contrato.gestor:
+                continue
+
             frequencia_de_notificacao = ParametroNotificacoesVigencia.frequencia_repeticao(
                 estado, dias_pra_vencer=contrato.dias_para_o_encerramento
             )
