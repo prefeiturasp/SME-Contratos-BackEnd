@@ -120,6 +120,6 @@ class NotificacaoVigenciaContratoAdmin(admin.ModelAdmin):
     def termo_contrato(self, notificacao):
         return notificacao.contrato.termo_contrato
 
-    list_display = ('criado_em', 'termo_contrato', 'notificado', 'validade')
+    list_display = ('criado_em', 'termo_contrato', 'notificado')
     ordering = ('criado_em', 'contrato', 'notificado')
     list_filter = ('notificado',)

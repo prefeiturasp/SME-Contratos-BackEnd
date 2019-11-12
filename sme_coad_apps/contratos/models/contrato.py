@@ -136,8 +136,13 @@ class Contrato(ModeloBase):
         return result
 
     @classmethod
-    def contratos_no_estado(cls, estado):
-        return cls.objects.filter(estado=estado)
+    def contratos_no_estado(cls, estado, vencendo_ate=None):
+        result_query = cls.objects.filter(estado_contrato=estado)
+
+        if vencendo_ate:
+            result_query = result_query.filter(data_encerramento__lte=vencendo_ate)
+
+        return result_query.all()
 
     class Meta:
         verbose_name = 'Contrato'

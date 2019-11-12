@@ -15,21 +15,22 @@ from ...users.models import User
 pytestmark = pytest.mark.django_db
 
 
-def test_instance_model():
-    gestor = mommy.make(User)
-    suplente = mommy.make(User)
-    tipo_servico = mommy.make(TipoServico)
-    nucleo_responsavel = mommy.make(Nucleo)
-    empresa_contratada = mommy.make(Empresa)
+@pytest.fixture
+def contrato_emergencial():
     documento_anexo_dre = ['documento1.pdf', 'documento2.pdf']
     documento_anexo_fiscal = ['documento1.pdf', 'documento2.pdf']
-    model = mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
-                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
-                       suplente=suplente, observacoes='teste', tipo_servico=tipo_servico,
-                       nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada,
-                       documento_fiscal_dre=documento_anexo_dre,
-                       documento_fiscal_unidades=documento_anexo_fiscal
-                       )
+    return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
+                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=mommy.make(User),
+                      suplente=mommy.make(User), observacoes='teste', tipo_servico=mommy.make(TipoServico),
+                      nucleo_responsavel=mommy.make(Nucleo), empresa_contratada=mommy.make(Empresa),
+                      documento_fiscal_dre=documento_anexo_dre,
+                      documento_fiscal_unidades=documento_anexo_fiscal,
+                      estado_contrato=Contrato.ESTADO_EMERGENCIAL,
+                      )
+
+
+def test_instance_model(contrato_emergencial):
+    model = contrato_emergencial
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
     assert isinstance(model.processo, str)
@@ -137,3 +138,17 @@ def test_admin():
     assert model_admin.ordering == ('termo_contrato',)
     assert model_admin.search_fields == ('processo', 'termo_contrato')
     assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
+
+
+def test_contratos_no_estado():
+    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, _quantity=3)
+    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_VIGENTE, _quantity=2)
+    assert Contrato.contratos_no_estado(Contrato.ESTADO_EXCEPCIONAL).count() == 3
+
+
+def test_contratos_no_estado_vencendo_ate():
+    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, data_encerramento="2020-01-01", _quantity=3)
+    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, data_encerramento="2021-01-01", _quantity=2)
+    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_VIGENTE, data_encerramento="2020-01-01", _quantity=2)
+
+    assert Contrato.contratos_no_estado(Contrato.ESTADO_EXCEPCIONAL, vencendo_ate="2020-02-01").count() == 3
