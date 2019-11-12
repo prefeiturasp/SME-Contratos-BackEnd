@@ -1,5 +1,8 @@
+import datetime
+
 import pytest
 from django.contrib import admin
+from freezegun import freeze_time
 from model_mommy import mommy
 
 from ..admin import ParametroNotificacoesVigenciaAdmin
@@ -16,6 +19,18 @@ def parametro_notificacao():
         vencendo_em=100,
         repetir_notificacao_a_cada=7,
     )
+
+
+@pytest.fixture
+def parametros_notificacao_por_estado():
+    mommy.make('ParametroNotificacoesVigencia', estado_contrato=Contrato.ESTADO_EMERGENCIAL, vencendo_em=90,
+               repetir_notificacao_a_cada=9)
+    mommy.make('ParametroNotificacoesVigencia', estado_contrato=Contrato.ESTADO_EMERGENCIAL, vencendo_em=100,
+               repetir_notificacao_a_cada=10)
+    mommy.make('ParametroNotificacoesVigencia', estado_contrato=Contrato.ESTADO_EMERGENCIAL, vencendo_em=50,
+               repetir_notificacao_a_cada=5)
+    mommy.make('ParametroNotificacoesVigencia', estado_contrato=Contrato.ESTADO_VIGENTE, vencendo_em=200,
+               repetir_notificacao_a_cada=20)
 
 
 def test_instance_model(parametro_notificacao):
@@ -45,3 +60,39 @@ def test_admin():
     assert model_admin.list_display == ('estado_contrato', 'vencendo_em', 'repetir_notificacao_a_cada')
     assert model_admin.ordering == ('estado_contrato',)
     assert model_admin.list_filter == ('estado_contrato',)
+
+
+def test_parametros_do_estado_decrescente(parametros_notificacao_por_estado):
+    parametros_estado_emergencial = ParametroNotificacoesVigencia.parametros_do_estado(Contrato.ESTADO_EMERGENCIAL)
+
+    assert parametros_estado_emergencial.count() == 3
+    assert parametros_estado_emergencial.first().vencendo_em == 100
+    assert parametros_estado_emergencial.first().estado_contrato == Contrato.ESTADO_EMERGENCIAL
+
+
+def test_parametros_do_estado_crescente(parametros_notificacao_por_estado):
+    parametros_estado_emergencial = ParametroNotificacoesVigencia.parametros_do_estado(Contrato.ESTADO_EMERGENCIAL,
+                                                                                       crescente=True)
+
+    assert parametros_estado_emergencial.count() == 3
+    assert parametros_estado_emergencial.first().vencendo_em == 50
+    assert parametros_estado_emergencial.first().estado_contrato == Contrato.ESTADO_EMERGENCIAL
+
+
+@freeze_time('2019-01-01')
+def test_data_limite_do_estado(parametros_notificacao_por_estado):
+    data_limite_esperada = datetime.date(2019, 1, 1) + datetime.timedelta(days=100)
+    assert ParametroNotificacoesVigencia.data_limite_do_estado(Contrato.ESTADO_EMERGENCIAL) == data_limite_esperada
+
+
+def test_estado_notificavel(parametros_notificacao_por_estado):
+    # Se existem parâmetros para o estado, então ele é notificável
+    assert ParametroNotificacoesVigencia.estado_notificavel(Contrato.ESTADO_VIGENTE)
+
+    # Não existem parâmetros para o estado, então ele não é notificável
+    assert not ParametroNotificacoesVigencia.estado_notificavel(Contrato.ESTADO_EXCEPCIONAL)
+
+
+def test_get_frequencia_repeticao_por_dias_pra_vencer(parametros_notificacao_por_estado):
+    assert ParametroNotificacoesVigencia.frequencia_repeticao(estado=Contrato.ESTADO_EMERGENCIAL,
+                                                              dias_pra_vencer=55) == 9
