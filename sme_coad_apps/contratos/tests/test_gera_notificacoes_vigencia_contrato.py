@@ -6,7 +6,6 @@ from model_mommy import mommy
 from notifications.models import Notification
 
 from ..models import Contrato, NotificacaoVigenciaContrato
-from ..services import gera_notificacoes_vigencia_contratos
 
 pytestmark = pytest.mark.django_db
 
@@ -34,7 +33,7 @@ def contrato(gestor, suplente):
 def test_gera_notificacao_30_dias(parametro_notificacao, contrato):
     assert not NotificacaoVigenciaContrato.objects.all().exists()
 
-    gera_notificacoes_vigencia_contratos()
+    NotificacaoVigenciaContrato.gera_notificacoes()
     assert NotificacaoVigenciaContrato.objects.all().count() == 1
 
 
@@ -54,9 +53,9 @@ def test_gera_notificacao_30_dias_repete_apos_7_dias(parametro_notificacao, cont
 
     assert notificacao_30_dias_em_2019_3_12.idade == 7
 
-    gera_notificacoes_vigencia_contratos()
+    NotificacaoVigenciaContrato.gera_notificacoes()
 
-    assert NotificacaoVigenciaContrato.objects.all().count() == 2
+    assert NotificacaoVigenciaContrato.objects.all().count() == 1
 
 
 @freeze_time('2019-03-18')
@@ -66,14 +65,14 @@ def test_gera_notificacao_30_dias_nao_repete_ates_7_dias(parametro_notificacao, 
 
     assert notificacao_30_dias_em_2019_3_12.idade == 6
 
-    gera_notificacoes_vigencia_contratos()
+    NotificacaoVigenciaContrato.gera_notificacoes()
 
     assert NotificacaoVigenciaContrato.objects.all().count() == 1
 
 
 @freeze_time('2019-03-12')
 def test_gera_django_notification(parametro_notificacao, contrato):
-    gera_notificacoes_vigencia_contratos()
+    NotificacaoVigenciaContrato.gera_notificacoes()
     assert NotificacaoVigenciaContrato.objects.all().count() == 1
     assert Notification.objects.unread().count() == 1
 
@@ -84,3 +83,11 @@ def test_gera_django_notification(parametro_notificacao, contrato):
                                       f'está a {contrato.dias_para_o_encerramento} de seu encerramento.'
     assert notificacao.target == contrato
     assert notificacao.target_object_id == f'{contrato.id}'
+
+
+def test_get_notificacoes_videncia_do_usuario(parametro_notificacao, contrato):
+    NotificacaoVigenciaContrato.gera_notificacoes()
+
+    notificacoes = NotificacaoVigenciaContrato.get_notificacoes_do_usuario(usuario=contrato.gestor)
+
+    assert notificacoes.count() == 1
