@@ -81,10 +81,11 @@ class Contrato(ModeloBase):
     tem_ceu = models.BooleanField(default=False)
     dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
                                       default=list)
-    documentos_fiscais_unidades = ArrayField(models.CharField('Anexos Documento Fiscais Unidades', max_length=200),
-                                             blank=True, default=list)
-    documentos_fiscais_dre = ArrayField(models.CharField('Anexos Documento Fiscais DRE', max_length=200),
-                                        blank=True, default=list)
+
+    # documentos_fiscais_unidades = ArrayField(models.CharField('Anexos Documento Fiscais Unidades', max_length=200),
+    #                                          blank=True, default=list)
+    # documentos_fiscais_dre = ArrayField(models.CharField('Anexos Documento Fiscais DRE', max_length=200),
+    #                                     blank=True, default=list)
 
     @property
     def dias_para_o_encerramento(self):
@@ -145,6 +146,22 @@ def contrato_pre_save(instance, *_args, **_kwargs):
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
 
 
+class DocumentoFiscal(ModeloBase):
+    historico = AuditlogHistoryField()
+
+    CHOICES = (('FISCAL_DRE', 'DRE'), ('FISCAL_UNIDADE', 'UNIDADE'), ('FISCAL_OUTROS', 'OUTROS'))
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='documentos_fiscais')
+    anexo = models.FileField(upload_to='uploads/')
+    tipo_unidade = models.CharField(max_length=20, choices=CHOICES)
+
+    def __str__(self):
+        return f'{self.contrato.termo_contrato} - {self.tipo_unidade}'
+
+    class Meta:
+        verbose_name = 'Documento Fiscal'
+        verbose_name_plural = 'Documentos Fiscais'
+
+
 class ContratoUnidade(ModeloBase):
     historico = AuditlogHistoryField()
 
@@ -172,3 +189,4 @@ class ContratoUnidade(ModeloBase):
 
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
+auditlog.register(DocumentoFiscal)
