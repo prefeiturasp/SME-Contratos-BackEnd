@@ -83,3 +83,11 @@ def test_gera_django_notification(parametro_notificacao, contrato):
                                       f'está a {contrato.dias_para_o_encerramento} de seu encerramento.'
     assert notificacao.target == contrato
     assert notificacao.target_object_id == f'{contrato.id}'
+
+
+def test_get_notificacoes_videncia_do_usuario(parametro_notificacao, contrato):
+    NotificacaoVigenciaContrato.gera_notificacoes()
+
+    notificacoes = NotificacaoVigenciaContrato.get_notificacoes_do_usuario(usuario=contrato.gestor)
+
+    assert notificacoes.count() == 1

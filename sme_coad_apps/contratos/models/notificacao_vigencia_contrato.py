@@ -70,6 +70,10 @@ class NotificacaoVigenciaContrato(ModeloBase):
                     if ultima_notificacao:
                         ultima_notificacao.delete()
 
+    @classmethod
+    def get_notificacoes_do_usuario(cls, usuario):
+        return usuario.notifications.unread().filter(verb='alerta_vigencia_contrato')
+
     class Meta:
         verbose_name = 'Notificação de vigência de contrato'
         verbose_name_plural = 'Notificações de vigência de contrato'

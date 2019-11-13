@@ -19,7 +19,9 @@ class GeraNotificacoesVigenciaContratosViewSet(viewsets.ViewSet):
 class MinhasNotificacoesVigenciaViewSet(viewsets.ViewSet):
 
     def list(self, request):
+        qtd_notificacoes = NotificacaoVigenciaContrato.get_notificacoes_do_usuario(self.request.user).count()
+
         content = {
-            'contratos_vencendo': 10,
+            'contratos_vencendo': qtd_notificacoes,
         }
         return Response(content, status=status.HTTP_200_OK)
