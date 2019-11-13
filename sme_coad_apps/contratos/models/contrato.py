@@ -79,10 +79,12 @@ class Contrato(ModeloBase):
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    documento_fiscal_dre = ArrayField(models.CharField('Anexos Documento Fisca DRE', max_length=200), blank=True,
+    dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
                                       default=list)
-    documento_fiscal_unidades = ArrayField(models.CharField('Anexos Documento Fisca Unidades', max_length=200),
-                                           blank=True, default=list)
+    documentos_fiscais_unidades = ArrayField(models.CharField('Anexos Documento Fiscais Unidades', max_length=200),
+                                             blank=True, default=list)
+    documentos_fiscais_dre = ArrayField(models.CharField('Anexos Documento Fiscais DRE', max_length=200),
+                                        blank=True, default=list)
 
     @property
     def dias_para_o_encerramento(self):
@@ -150,7 +152,6 @@ class ContratoUnidade(ModeloBase):
     unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
     valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-    dotacao_orcamentaria = models.CharField(max_length=20)
     lote = models.CharField(max_length=20, blank=True, default='')
     dre_lote = models.CharField('DRE do lote', max_length=5, blank=True, default='')
 

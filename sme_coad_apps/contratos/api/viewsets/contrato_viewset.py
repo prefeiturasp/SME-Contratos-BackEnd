@@ -47,7 +47,7 @@ class ContratoViewSet(ComHistoricoViewSet):
                 queryset = queryset.filter(tem_ua=True)
 
         atribuido = self.request.query_params.get('atribuido')
-        if atribuido is not None :
+        if atribuido is not None:
             queryset = queryset.filter(Q(gestor__id=atribuido) | Q(suplente__id=atribuido))
 
         return queryset
