@@ -16,7 +16,7 @@ router.register('empresas', EmpresaViewSet)
 router.register('contratos', ContratoViewSet)
 router.register('unidades-contratos', ContratoUnidadeViewSet)
 router.register('gera-notificacoes-vigencia-contratos', GeraNotificacoesVigenciaContratosViewSet,
-                base_name='gera-notificacoes-vigencia-contratos')
+                basename='gera-notificacoes-vigencia-contratos')
 
 urlpatterns = [
     path('', include(router.urls))

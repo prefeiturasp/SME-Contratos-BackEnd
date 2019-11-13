@@ -37,3 +37,6 @@ def gera_notificacoes_vigencia_contratos():
                                 f'está a {contrato.dias_para_o_encerramento} de seu encerramento.',
                     target=contrato,
                 )
+
+                if ultima_notificacao:
+                    ultima_notificacao.delete()
