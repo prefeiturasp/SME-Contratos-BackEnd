@@ -1,8 +1,10 @@
 import datetime
 
 from django.db import models
+from notifications.signals import notify
 
 from .contrato import Contrato
+from .parametro_notificacoes import ParametroNotificacoesVigencia
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
 
@@ -28,6 +30,45 @@ class NotificacaoVigenciaContrato(ModeloBase):
     def idade(self):
         timedelta = datetime.date.today() - self.criado_em.date()
         return timedelta.days
+
+    @classmethod
+    def gera_notificacoes(cls):
+        for estado in Contrato.ESTADOS:
+
+            if not ParametroNotificacoesVigencia.estado_notificavel(estado):
+                continue
+
+            data_limite = ParametroNotificacoesVigencia.data_limite_do_estado(estado)
+
+            contratos = Contrato.contratos_no_estado(estado, vencendo_ate=data_limite)
+
+            for contrato in contratos:
+                if not contrato.gestor:
+                    continue
+
+                frequencia_de_notificacao = ParametroNotificacoesVigencia.frequencia_repeticao(
+                    estado, dias_pra_vencer=contrato.dias_para_o_encerramento
+                )
+
+                ultima_notificacao = NotificacaoVigenciaContrato.ultima_notificacao_para_o_gestor_do_contrato(contrato)
+
+                if not ultima_notificacao or ultima_notificacao.idade >= frequencia_de_notificacao:
+                    notificacao = NotificacaoVigenciaContrato.objects.create(
+                        contrato=contrato,
+                        notificado=contrato.gestor,
+                    )
+
+                    notify.send(
+                        notificacao,
+                        verb='alerta_vigencia_contrato',
+                        recipient=notificacao.notificado,
+                        description=f'O contrato {contrato.termo_contrato} '
+                                    f'está a {contrato.dias_para_o_encerramento} de seu encerramento.',
+                        target=contrato,
+                    )
+
+                    if ultima_notificacao:
+                        ultima_notificacao.delete()
 
     class Meta:
         verbose_name = 'Notificação de vigência de contrato'
