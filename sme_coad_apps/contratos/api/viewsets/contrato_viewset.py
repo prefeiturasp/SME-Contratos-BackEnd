@@ -16,7 +16,7 @@ class ContratoViewSet(ComHistoricoViewSet):
         'nucleo_responsavel').select_related(
         'gestor').select_related(
         'suplente').select_related(
-        'tipo_servico').select_related().all()
+        'tipo_servico').all()
 
     queryset = contratos_queryset
 

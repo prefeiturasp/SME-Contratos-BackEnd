@@ -48,7 +48,7 @@ class ContratoUnidadeLookUpSerializer(serializers.ModelSerializer):
         queryset=Contrato.objects.all()
     )
 
-    unidade = UnidadeSerializer(many=True)
+    unidade = UnidadeSerializer()
 
     class Meta:
         model = ContratoUnidade
