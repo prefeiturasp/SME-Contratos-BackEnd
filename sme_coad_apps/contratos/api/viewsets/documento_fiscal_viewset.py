@@ -10,9 +10,9 @@ from ...models.contrato import DocumentoFiscal
 
 class DocumentoFiscalViewSet(viewsets.ModelViewSet):
     serializer_class = DocumentoFiscalSerializer
-    parser_classes = (MultiPartParser, FormParser,)
     queryset = DocumentoFiscal.objects.all()
     lookup_field = 'uuid'
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ('contrato__uuid',)
     permission_classes = (AllowAny,)
+    parser_classes = (MultiPartParser, FormParser,)

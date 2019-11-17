@@ -10,7 +10,7 @@ def test_contrato_unidade_serializer():
     contrato = mommy.make('Contrato')
     unidade = mommy.make('Unidade')
     contrato_unidade = mommy.make('ContratoUnidade', contrato=contrato, unidade=unidade, valor_mensal=2000.00,
-                                  valor_total=10000.00, dotacao_orcamentaria='123456789', lote='Lote teste',
+                                  valor_total=10000.00, lote='Lote teste',
                                   dre_lote='DTC')
     serializer = ContratoUnidadeSerializer(contrato_unidade)
 
@@ -19,6 +19,5 @@ def test_contrato_unidade_serializer():
     assert serializer.data['unidade']
     assert serializer.data['valor_mensal']
     assert serializer.data['valor_total']
-    assert serializer.data['dotacao_orcamentaria']
     assert serializer.data['lote']
     assert serializer.data['dre_lote']

@@ -21,14 +21,11 @@ def test_instance_model():
     tipo_servico = mommy.make(TipoServico)
     nucleo_responsavel = mommy.make(Nucleo)
     empresa_contratada = mommy.make(Empresa)
-    documento_anexo_dre = ['documento1.pdf', 'documento2.pdf']
-    documento_anexo_fiscal = ['documento1.pdf', 'documento2.pdf']
     model = mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                        data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
                        suplente=suplente, observacoes='teste', tipo_servico=tipo_servico,
                        nucleo_responsavel=nucleo_responsavel, empresa_contratada=empresa_contratada,
-                       documento_fiscal_dre=documento_anexo_dre,
-                       documento_fiscal_unidades=documento_anexo_fiscal
+                       dotacao_orcamentaria=['dotacao_teste1', 'dotacao_teste2']
                        )
     assert isinstance(model, Contrato)
     assert isinstance(model.termo_contrato, str)
@@ -46,8 +43,7 @@ def test_instance_model():
     assert isinstance(model.observacoes, str)
     assert isinstance(model.estado_contrato, str)
     assert isinstance(model.data_encerramento, datetime.date)
-    assert isinstance(model.documento_fiscal_dre, list)
-    assert isinstance(model.documento_fiscal_unidades, list)
+    assert isinstance(model.dotacao_orcamentaria, list)
     assert model.historico
 
 
@@ -100,14 +96,14 @@ def test_property_total_mensal():
 def test_instance_model_detalhe():
     contrato = mommy.make('Contrato')
     unidade = mommy.make('Unidade', codigo_eol='123456')
-    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade)
+    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade, dre_lote='5')
     assert isinstance(model, ContratoUnidade)
     assert isinstance(model.contrato, Contrato)
     assert isinstance(model.unidade, Unidade)
     assert isinstance(model.valor_mensal, float)
     assert isinstance(model.valor_total, float)
-    assert isinstance(model.dotacao_orcamentaria, str)
     assert isinstance(model.lote, str)
+    assert isinstance(model.dre_lote, str)
     assert model.historico
 
 

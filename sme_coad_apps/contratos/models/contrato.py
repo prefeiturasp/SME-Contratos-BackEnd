@@ -82,11 +82,6 @@ class Contrato(ModeloBase):
     dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
                                       default=list)
 
-    # documentos_fiscais_unidades = ArrayField(models.CharField('Anexos Documento Fiscais Unidades', max_length=200),
-    #                                          blank=True, default=list)
-    # documentos_fiscais_dre = ArrayField(models.CharField('Anexos Documento Fiscais DRE', max_length=200),
-    #                                     blank=True, default=list)
-
     @property
     def dias_para_o_encerramento(self):
         if self.data_encerramento:

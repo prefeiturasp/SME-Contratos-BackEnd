@@ -24,7 +24,8 @@ def test_nucleo_lookup_serializer(divisao, nucleo):
     assert nucleo_serializer.data is not None
     assert 'id' not in nucleo_serializer.data
     assert nucleo_serializer.data['sigla'] == 'nc1'
-    assert nucleo_serializer.data['divisao'] == {'sigla': divisao.sigla, 'uuid': str(divisao.uuid)}
+    assert nucleo_serializer.data['divisao'] == {'sigla': divisao.sigla, 'uuid': str(divisao.uuid),
+                                                 'nome': divisao.nome}
     assert nucleo_serializer.data['uuid']
 
 
@@ -32,7 +33,8 @@ def test_nucleo_serializer(divisao, nucleo):
     nucleo_serializer = NucleoSerializer(nucleo)
     assert nucleo_serializer.data is not None
     assert nucleo_serializer.data['sigla'] == 'nc1'
-    assert nucleo_serializer.data['divisao'] == {'sigla': divisao.sigla, 'uuid': str(divisao.uuid)}
+    assert nucleo_serializer.data['divisao'] == {'sigla': divisao.sigla, 'uuid': str(divisao.uuid),
+                                                 'nome': divisao.nome}
     assert nucleo_serializer.data['uuid']
     assert nucleo_serializer.data['chefe']
     assert nucleo_serializer.data['suplente_chefe']
