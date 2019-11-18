@@ -47,8 +47,9 @@ class ContratoViewSet(ComHistoricoViewSet):
                 queryset = queryset.filter(tem_ua=True)
 
         atribuido = self.request.query_params.get('atribuido')
-        if atribuido is not None :
-            queryset = queryset.filter(Q(gestor__id=atribuido) | Q(suplente__id=atribuido))
+        if atribuido is not None:
+            queryset = queryset.filter(
+                Q(gestor__nome__contains=atribuido.capitalize()) | Q(suplente__nome__contains=atribuido.capitalize()))
 
         return queryset
 
