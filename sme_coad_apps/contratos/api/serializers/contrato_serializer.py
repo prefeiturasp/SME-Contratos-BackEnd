@@ -72,4 +72,4 @@ class ContratoLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contrato
-        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'criado_em')
+        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'alterado_em')
