@@ -1,8 +1,10 @@
 import datetime
 
 from django.db import models
+from notifications.models import Notification
 from notifications.signals import notify
 
+from sme_coad_apps.core.helpers.enviar_email import enviar_email
 from .contrato import Contrato
 from .parametro_notificacoes import ParametroNotificacoesVigencia
 from ...core.models_abstracts import ModeloBase
@@ -53,6 +55,14 @@ class NotificacaoVigenciaContrato(ModeloBase):
                 ultima_notificacao = NotificacaoVigenciaContrato.ultima_notificacao_para_o_gestor_do_contrato(contrato)
 
                 if not ultima_notificacao or ultima_notificacao.idade >= frequencia_de_notificacao:
+
+                    if contrato.dias_para_o_encerramento > 0:
+                        texto_notificacao = f'está à {contrato.dias_para_o_encerramento} dias de seu encerramento'
+                    elif contrato.dias_para_o_encerramento < 0:
+                        texto_notificacao = f'encerrou-se à {abs(contrato.dias_para_o_encerramento)} dias'
+                    else:
+                        texto_notificacao = f'encerrou-se'
+
                     notificacao = NotificacaoVigenciaContrato.objects.create(
                         contrato=contrato,
                         notificado=contrato.gestor,
@@ -62,17 +72,32 @@ class NotificacaoVigenciaContrato(ModeloBase):
                         notificacao,
                         verb='alerta_vigencia_contrato',
                         recipient=notificacao.notificado,
-                        description=f'O contrato {contrato.termo_contrato} '
-                                    f'está a {contrato.dias_para_o_encerramento} de seu encerramento.',
+                        description=f'Atenção! O contrato {contrato.termo_contrato} {texto_notificacao}.',
                         target=contrato,
                     )
 
                     if ultima_notificacao:
                         ultima_notificacao.delete()
 
+        cls.enviar_emails_notificacao()
+
     @classmethod
     def get_notificacoes_do_usuario(cls, usuario):
         return usuario.notifications.unread().filter(verb='alerta_vigencia_contrato')
+
+    @classmethod
+    def enviar_emails_notificacao(cls):
+        notificacoes_pendentes = Notification.objects.unsent().filter(verb='alerta_vigencia_contrato')
+        for notificacao in notificacoes_pendentes:
+            assunto = f'Alerta de vigência. Contrato:{notificacao.target.termo_contrato}'
+            print(assunto)
+            enviar_email(
+                assunto,
+                notificacao.description,
+                notificacao.recipient.email
+            )
+            notificacao.emailed = True
+            notificacao.save()
 
     class Meta:
         verbose_name = 'Notificação de vigência de contrato'
