@@ -90,6 +90,9 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
 
 
 class ContratoLookUpSerializer(serializers.ModelSerializer):
+    gestor = UsuarioLookUpSerializer()
+    suplente = UsuarioLookUpSerializer()
+
     class Meta:
         model = Contrato
-        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'criado_em')
+        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'alterado_em')

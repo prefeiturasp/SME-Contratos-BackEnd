@@ -48,7 +48,8 @@ class ContratoViewSet(ComHistoricoViewSet):
 
         atribuido = self.request.query_params.get('atribuido')
         if atribuido is not None:
-            queryset = queryset.filter(Q(gestor__id=atribuido) | Q(suplente__id=atribuido))
+            queryset = queryset.filter(
+                Q(gestor__nome__contains=atribuido.capitalize()) | Q(suplente__nome__contains=atribuido.capitalize()))
 
         return queryset
 
@@ -70,4 +71,4 @@ class ContratoViewSet(ComHistoricoViewSet):
 
     @action(detail=False)
     def termos(self, _):
-        return Response(ContratoLookUpSerializer(self.queryset.order_by('-criado_em'), many=True).data)
+        return Response(ContratoLookUpSerializer(self.queryset.order_by('-alterado_em'), many=True).data)

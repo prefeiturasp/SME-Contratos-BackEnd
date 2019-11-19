@@ -38,6 +38,13 @@ class Contrato(ModeloBase):
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
     )
 
+    ESTADOS = (
+        ESTADO_EMERGENCIAL,
+        ESTADO_EXCEPCIONAL,
+        ESTADO_ULTIMO_ANO,
+        ESTADO_VIGENTE
+    )
+
     # Situações do Contrato Choice
     SITUACAO_ATIVO = 'ATIVO'
     SITUACAO_ENCERRADO = 'ENCERRADO'
@@ -125,6 +132,15 @@ class Contrato(ModeloBase):
             }
             result.append(choice)
         return result
+
+    @classmethod
+    def contratos_no_estado(cls, estado, vencendo_ate=None):
+        result_query = cls.objects.filter(estado_contrato=estado)
+
+        if vencendo_ate:
+            result_query = result_query.filter(data_encerramento__lte=vencendo_ate)
+
+        return result_query.all()
 
     class Meta:
         verbose_name = 'Contrato'
