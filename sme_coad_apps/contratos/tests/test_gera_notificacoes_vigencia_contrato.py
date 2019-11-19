@@ -79,10 +79,12 @@ def test_gera_django_notification(parametro_notificacao, contrato):
     notificacao = Notification.objects.unread().first()
     assert notificacao.verb == 'alerta_vigencia_contrato'
     assert notificacao.recipient == contrato.gestor
-    assert notificacao.description == f'O contrato {contrato.termo_contrato} ' \
-                                      f'está a {contrato.dias_para_o_encerramento} de seu encerramento.'
+    assert notificacao.description == f'Atenção! O contrato {contrato.termo_contrato} ' \
+                                      f'está à {contrato.dias_para_o_encerramento} dias de seu encerramento.'
     assert notificacao.target == contrato
     assert notificacao.target_object_id == f'{contrato.id}'
+
+    assert notificacao.emailed
 
 
 def test_get_notificacoes_videncia_do_usuario(parametro_notificacao, contrato):
