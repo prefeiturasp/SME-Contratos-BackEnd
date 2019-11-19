@@ -43,8 +43,8 @@ def test_instance_model(parametro_notificacao):
 
 def test_srt_model(parametro_notificacao):
     expected = f"Contratos {Contrato.ESTADO_NOMES[parametro_notificacao.estado_contrato]} " \
-               f"notificar a partir de {parametro_notificacao.vencendo_em} dias " \
-               f"repetindo a cada {parametro_notificacao.repetir_notificacao_a_cada} dias."
+        f"notificar a partir de {parametro_notificacao.vencendo_em} dias " \
+        f"repetindo a cada {parametro_notificacao.repetir_notificacao_a_cada} dias."
     assert parametro_notificacao.__str__() == expected
 
 

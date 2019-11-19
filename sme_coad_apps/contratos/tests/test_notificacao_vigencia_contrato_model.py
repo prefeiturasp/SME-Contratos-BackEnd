@@ -50,7 +50,7 @@ def test_instance_model(notificacao_vigencia_contrato):
 
 def test_srt_model(notificacao_vigencia_contrato):
     expected = f"TC:{notificacao_vigencia_contrato.contrato.termo_contrato} " \
-               f"Notificado:{notificacao_vigencia_contrato.notificado.username}"
+        f"Notificado:{notificacao_vigencia_contrato.notificado.username}"
     assert notificacao_vigencia_contrato.__str__() == expected
 
 

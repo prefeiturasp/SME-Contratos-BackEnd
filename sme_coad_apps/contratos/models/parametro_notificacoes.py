@@ -19,8 +19,8 @@ class ParametroNotificacoesVigencia(ModeloBase):
 
     def __str__(self):
         return f"Contratos {Contrato.ESTADO_NOMES[self.estado_contrato]} " \
-               f"notificar a partir de {self.vencendo_em} dias " \
-               f"repetindo a cada {self.repetir_notificacao_a_cada} dias."
+            f"notificar a partir de {self.vencendo_em} dias " \
+            f"repetindo a cada {self.repetir_notificacao_a_cada} dias."
 
     @classmethod
     def parametros_do_estado(cls, estado, crescente=False):

@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from sme_coad_apps.contratos.api.validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
+from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoSerializer
-from ...models import Contrato
+from ...models import Contrato, Empresa
+from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
+from ....core.models.nucleo import Nucleo
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 
 user_model = get_user_model()
@@ -42,6 +44,27 @@ class ContratoSerializer(serializers.ModelSerializer):
 
 
 class ContratoCreateSerializer(serializers.ModelSerializer):
+    tipo_servico = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=TipoServico.objects.all()
+    )
+    nucleo_responsavel = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=Nucleo.objects.all()
+    )
+    empresa_contratada = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=Empresa.objects.all()
+    )
     gestor = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,

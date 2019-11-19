@@ -4,6 +4,7 @@ from rest_framework import routers
 from .api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
 from .api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 from .api.viewsets.contrato_viewset import ContratoViewSet
+from .api.viewsets.documento_fiscal_viewset import DocumentoFiscalViewSet
 from .api.viewsets.empresa_viewsets import EmpresaViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import GeraNotificacoesVigenciaContratosViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import MinhasNotificacoesVigenciaViewSet
@@ -16,11 +17,12 @@ router.register('tipos-servico', TipoServicoViewSet)
 router.register('empresas', EmpresaViewSet)
 router.register('contratos', ContratoViewSet)
 router.register('unidades-contratos', ContratoUnidadeViewSet)
+router.register('documentos-fiscais', DocumentoFiscalViewSet)
 router.register('gera-notificacoes-vigencia-contratos', GeraNotificacoesVigenciaContratosViewSet,
                 basename='gera-notificacoes-vigencia-contratos')
 router.register('minhas-notificacoes-vigencia-contratos', MinhasNotificacoesVigenciaViewSet,
                 basename='minhas-notificacoes-vigencia-contratos')
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]

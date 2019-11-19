@@ -86,10 +86,8 @@ class Contrato(ModeloBase):
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    documento_fiscal_dre = ArrayField(models.CharField('Anexos Documento Fisca DRE', max_length=200), blank=True,
+    dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
                                       default=list)
-    documento_fiscal_unidades = ArrayField(models.CharField('Anexos Documento Fisca Unidades', max_length=200),
-                                           blank=True, default=list)
 
     @property
     def dias_para_o_encerramento(self):
@@ -159,6 +157,22 @@ def contrato_pre_save(instance, *_args, **_kwargs):
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
 
 
+class DocumentoFiscal(ModeloBase):
+    historico = AuditlogHistoryField()
+
+    CHOICES = (('FISCAL_DRE', 'DRE'), ('FISCAL_UNIDADE', 'UNIDADE'), ('FISCAL_OUTROS', 'OUTROS'))
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='documentos_fiscais')
+    anexo = models.FileField(upload_to='uploads/')
+    tipo_unidade = models.CharField(max_length=20, choices=CHOICES)
+
+    def __str__(self):
+        return f'{self.contrato.termo_contrato} - {self.tipo_unidade}'
+
+    class Meta:
+        verbose_name = 'Documento Fiscal'
+        verbose_name_plural = 'Documentos Fiscais'
+
+
 class ContratoUnidade(ModeloBase):
     historico = AuditlogHistoryField()
 
@@ -166,7 +180,6 @@ class ContratoUnidade(ModeloBase):
     unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
     valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-    dotacao_orcamentaria = models.CharField(max_length=20)
     lote = models.CharField(max_length=20, blank=True, default='')
     dre_lote = models.CharField('DRE do lote', max_length=5, blank=True, default='')
 
@@ -187,3 +200,4 @@ class ContratoUnidade(ModeloBase):
 
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
+auditlog.register(DocumentoFiscal)

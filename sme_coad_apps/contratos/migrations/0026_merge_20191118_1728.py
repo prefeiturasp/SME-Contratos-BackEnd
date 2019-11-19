@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('contratos', '0021_auto_20191108_1627'),
         ('contratos', '0025_remove_notificacaovigenciacontrato_validade'),

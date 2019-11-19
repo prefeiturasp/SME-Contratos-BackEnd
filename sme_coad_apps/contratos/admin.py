@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia, \
     NotificacaoVigenciaContrato
 
@@ -106,6 +107,13 @@ class ColunasContratoAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'colunas_array')
     ordering = ('usuario',)
     search_fields = ('usuario',)
+
+
+@admin.register(DocumentoFiscal)
+class DocumentoFiscalAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'tipo_unidade', 'criado_em']
+    ordering = ('contrato',)
+    search_field = ('contrato', 'tipo_unidade')
 
 
 @admin.register(ParametroNotificacoesVigencia)
