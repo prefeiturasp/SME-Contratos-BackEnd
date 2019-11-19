@@ -23,8 +23,6 @@ def contrato_emergencial():
                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=mommy.make(User),
                       suplente=mommy.make(User), observacoes='teste', tipo_servico=mommy.make(TipoServico),
                       nucleo_responsavel=mommy.make(Nucleo), empresa_contratada=mommy.make(Empresa),
-                      documento_fiscal_dre=documento_anexo_dre,
-                      documento_fiscal_unidades=documento_anexo_fiscal,
                       estado_contrato=Contrato.ESTADO_EMERGENCIAL,
                       )
 
