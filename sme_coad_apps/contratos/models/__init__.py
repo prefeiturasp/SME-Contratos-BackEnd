@@ -1,3 +1,4 @@
+from .obrigacao_contratual import ObrigacaoContratual
 from .colunas_contrato import ColunasContrato
 from .contrato import Contrato, ContratoUnidade
 from .empresa import Empresa

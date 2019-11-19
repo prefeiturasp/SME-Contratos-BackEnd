@@ -1,8 +1,8 @@
 from django.contrib import admin
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
-from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia, \
-    NotificacaoVigenciaContrato
+from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia
+from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
 
 
 @admin.register(TipoServico)
@@ -131,3 +131,9 @@ class NotificacaoVigenciaContratoAdmin(admin.ModelAdmin):
     list_display = ('criado_em', 'termo_contrato', 'notificado')
     ordering = ('criado_em', 'contrato', 'notificado')
     list_filter = ('notificado',)
+
+
+@admin.register(ObrigacaoContratual)
+class ObrigacaoContratualAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'item', 'obrigacao', ]
+    ordering = ('contrato',)
