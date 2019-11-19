@@ -5,8 +5,9 @@ from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from notifications.signals import notify
 
 from .empresa import Empresa
 from .tipo_servico import TipoServico
@@ -142,6 +143,28 @@ class Contrato(ModeloBase):
 
         return result_query.all()
 
+    @classmethod
+    def notifica_atribuicao(cls, notificado, papel, contrato):
+        verb = f'tc_atribuido_{papel}'
+        notificacoes_lidas = notificado.notifications.read().filter(verb=verb, actor_object_id=contrato.id)
+        notificacoes_nao_lidas = notificado.notifications.unread().filter(verb=verb, actor_object_id=contrato.id)
+
+        if (not notificacoes_lidas.exists()) and (not notificacoes_nao_lidas.exists()):
+            notify.send(
+                contrato,
+                verb=verb,
+                recipient=notificado,
+                description=f'Atenção! Você foi definido como {papel} do contrato {contrato.termo_contrato}.',
+                target=contrato,
+            )
+
+    def notificar_gestor_e_suplente(self):
+        if self.gestor:
+            Contrato.notifica_atribuicao(notificado=self.gestor, papel='gestor', contrato=self)
+
+        if self.suplente:
+            Contrato.notifica_atribuicao(notificado=self.suplente, papel='suplente', contrato=self)
+
     class Meta:
         verbose_name = 'Contrato'
         verbose_name_plural = 'Contratos'
@@ -155,6 +178,12 @@ def contrato_pre_save(instance, *_args, **_kwargs):
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
+
+
+@receiver(post_save, sender=Contrato)
+def contrato_post_save(instance, **kwargs):
+    if instance.gestor:
+        instance.notificar_gestor_e_suplente()
 
 
 class DocumentoFiscal(ModeloBase):

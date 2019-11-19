@@ -74,9 +74,9 @@ def test_gera_notificacao_30_dias_nao_repete_ates_7_dias(parametro_notificacao, 
 def test_gera_django_notification(parametro_notificacao, contrato):
     NotificacaoVigenciaContrato.gera_notificacoes()
     assert NotificacaoVigenciaContrato.objects.all().count() == 1
-    assert Notification.objects.unread().count() == 1
+    assert Notification.objects.unread().filter(verb='alerta_vigencia_contrato').count() == 1
 
-    notificacao = Notification.objects.unread().first()
+    notificacao = Notification.objects.unread().filter(verb='alerta_vigencia_contrato').first()
     assert notificacao.verb == 'alerta_vigencia_contrato'
     assert notificacao.recipient == contrato.gestor
     assert notificacao.description == f'Atenção! O contrato {contrato.termo_contrato} ' \
