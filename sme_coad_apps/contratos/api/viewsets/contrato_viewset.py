@@ -71,4 +71,4 @@ class ContratoViewSet(ComHistoricoViewSet):
 
     @action(detail=False)
     def termos(self, _):
-        return Response(ContratoLookUpSerializer(self.queryset.order_by('-criado_em'), many=True).data)
+        return Response(ContratoLookUpSerializer(self.queryset.order_by('-alterado_em'), many=True).data)
