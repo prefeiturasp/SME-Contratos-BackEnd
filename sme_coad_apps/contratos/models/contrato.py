@@ -5,10 +5,13 @@ from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from notifications.models import Notification
 from notifications.signals import notify
 
+from sme_coad_apps.core.helpers.enviar_email import enviar_email
 from .empresa import Empresa
 from .tipo_servico import TipoServico
 from ...core.models import Nucleo, Unidade
@@ -164,6 +167,23 @@ class Contrato(ModeloBase):
 
         if self.suplente:
             Contrato.notifica_atribuicao(notificado=self.suplente, papel='suplente', contrato=self)
+
+        Contrato.enviar_emails_notificacao()
+
+    @classmethod
+    def enviar_emails_notificacao(cls):
+        notificacoes_pendentes = Notification.objects.unsent() \
+            .filter(Q(verb='tc_atribuido_gestor') | Q(verb='tc_atribuido_suplente'))
+        for notificacao in notificacoes_pendentes:
+            assunto = f'Alerta de atribuição. Contrato:{notificacao.target.termo_contrato}'
+            print(assunto)
+            enviar_email(
+                assunto,
+                notificacao.description,
+                notificacao.recipient.email
+            )
+            notificacao.emailed = True
+            notificacao.save()
 
     class Meta:
         verbose_name = 'Contrato'
