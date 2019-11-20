@@ -6,7 +6,7 @@ from ..api.serializers.obrigacao_contratual_serializer import ObrigacaoContratua
 pytestmark = pytest.mark.django_db
 
 
-def test_cobrigacao_contratual_serializer():
+def test_obrigacao_contratual_serializer():
     contrato = mommy.make('Contrato')
     obrigacao_contratual = mommy.make('ObrigacaoContratual', contrato=contrato, item='01', obrigacao='teste')
 
