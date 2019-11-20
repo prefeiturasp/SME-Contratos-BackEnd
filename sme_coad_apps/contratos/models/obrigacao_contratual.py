@@ -8,7 +8,7 @@ from django.db import models
 
 class ObrigacaoContratual(ModeloBase):
     historico = AuditlogHistoryField()
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="obrigacao_contratual")
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="obrigacoes_contratuais")
     item = models.CharField(max_length=15)
     obrigacao = models.TextField(default='')
 
