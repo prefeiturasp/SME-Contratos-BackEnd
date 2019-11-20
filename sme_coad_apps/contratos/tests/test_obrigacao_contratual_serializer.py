@@ -2,8 +2,6 @@ import pytest
 from model_mommy import mommy
 
 from ..api.serializers.obrigacao_contratual_serializer import ObrigacaoContratualSerializer
-from ..models.obrigacao_contratual import ObrigacaoContratual
-from ..models.contrato import Contrato
 
 pytestmark = pytest.mark.django_db
 
