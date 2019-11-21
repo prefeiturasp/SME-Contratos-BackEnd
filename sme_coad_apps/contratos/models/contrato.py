@@ -1,5 +1,6 @@
 import datetime
 
+import environ
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
@@ -153,11 +154,14 @@ class Contrato(ModeloBase):
         notificacoes_nao_lidas = notificado.notifications.unread().filter(verb=verb, actor_object_id=contrato.id)
 
         if (not notificacoes_lidas.exists()) and (not notificacoes_nao_lidas.exists()):
+            env = environ.Env()
+            link = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato?uuid={contrato.uuid}'
             notify.send(
                 contrato,
                 verb=verb,
                 recipient=notificado,
-                description=f'Atenção! Você foi definido como {papel} do contrato {contrato.termo_contrato}.',
+                description=f'Atenção! Você foi definido como {papel} do contrato {contrato.termo_contrato}. '
+                            f'Você pode acessá-lo por esse link: {link}',
                 target=contrato,
             )
 
