@@ -65,6 +65,13 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         allow_empty=True,
         queryset=Empresa.objects.all()
     )
+    coordenador = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=user_model.objects.all()
+    )
     gestor = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
@@ -95,4 +102,4 @@ class ContratoLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contrato
-        fields = ('uuid', 'termo_contrato', 'gestor', 'suplente', 'alterado_em')
+        fields = ('uuid', 'termo_contrato', 'gestor', 'coordenador', 'suplente', 'alterado_em')
