@@ -20,6 +20,11 @@ class ContratoSerializer(serializers.ModelSerializer):
     empresa_contratada = EmpresaLookUpSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
     gestor = UsuarioLookUpSerializer()
+    coordenador = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        queryset=user_model.objects.all()
+    )
     suplente = UsuarioLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
