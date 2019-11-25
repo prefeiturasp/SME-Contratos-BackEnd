@@ -76,7 +76,6 @@ class ContratoAdmin(admin.ModelAdmin):
     list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
     inlines = [ContratoUnidadeInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
-
     fieldsets = (
         ('Contrato', {
             'fields': (
@@ -88,6 +87,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 'empresa_contratada',
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
                 'observacoes',
+                'coordenador',
                 'gestor',
                 'suplente',
                 'situacao',

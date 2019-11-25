@@ -93,6 +93,8 @@ class Contrato(ModeloBase):
     tem_ceu = models.BooleanField(default=False)
     dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
                                       default=list)
+    coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
+                                    null=True)
 
     @property
     def dias_para_o_encerramento(self):

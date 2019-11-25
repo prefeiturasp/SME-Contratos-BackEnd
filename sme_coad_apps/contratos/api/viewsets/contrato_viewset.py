@@ -1,9 +1,12 @@
 from django.db.models import Q
 from django_filters import rest_framework as filters
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
+from sme_coad_apps.contratos.models import ContratoUnidade
+from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer, ContratoLookUpSerializer
 from ...models import Contrato
 from ....core.viewsets_abstracts import ComHistoricoViewSet
@@ -72,3 +75,12 @@ class ContratoViewSet(ComHistoricoViewSet):
     @action(detail=False)
     def termos(self, _):
         return Response(ContratoLookUpSerializer(self.queryset.order_by('-alterado_em'), many=True).data)
+
+    @action(detail=True, methods=['delete'], url_path='cancelar-cadastro-unico')
+    def cancelar_cadastro_unico(self, request, uuid):
+        contrato = self.get_object()
+        if contrato.situacao == 'RASCUNHO':
+            ContratoUnidade.objects.filter(contrato=contrato).delete()
+            DocumentoFiscal.objects.filter(contrato=contrato).delete()
+            return Response(data={'detail': 'Contrato {} cancelado'.format(contrato.termo_contrato), 'status': 200})
+        return Response(data=['Este contrato não pode ser cancelado'], status=status.HTTP_403_FORBIDDEN)
