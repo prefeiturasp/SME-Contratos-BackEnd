@@ -14,7 +14,7 @@ APPS_DIR = ROOT_DIR.path("sme_coad_apps")
 
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR.path(".env")))
@@ -327,8 +327,9 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        # TODO Rever esta CONFIG
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 
@@ -350,7 +351,7 @@ CACHES = {
 
 # CORS
 # CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default="http://localhost:3000")
-CORS_ORIGIN_ALLOW_ALL = env('CORS_ORIGIN_ALLOW_ALL', default=True)
+CORS_ORIGIN_ALLOW_ALL = True
 
 # EMAIL
 EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
