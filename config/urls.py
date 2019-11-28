@@ -25,7 +25,6 @@ urlpatterns = [
                   path(settings.ADMIN_URL, admin.site.urls),
                   # User management
                   # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
-                  path("accounts/", include("allauth.urls")),
                   path("django-des/", include(des_url)),
                   # Django Notifications
                   path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
