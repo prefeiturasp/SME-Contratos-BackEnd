@@ -11,6 +11,7 @@ from rest_framework_swagger.views import get_swagger_view
 from sme_coad_apps.contratos.urls import urlpatterns as contrato_url
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
+from sme_coad_apps.atestes.urls import urlpatterns as ateste_url
 
 schema_view = get_swagger_view(title='API SME COAD')
 
