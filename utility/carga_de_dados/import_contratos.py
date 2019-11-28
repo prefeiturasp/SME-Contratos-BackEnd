@@ -256,7 +256,8 @@ def importa_contratos():
             'contrato': contrato,
             'unidade': unidade,
             'valor_mensal': row['TOTAL_MENSAL'],
-            'dotacao_orcamentaria': row['DOTACAO'],
+            # TODO Rever a gravação de dotações em função de mudanças do modelo após importação inicial.
+            # 'dotacao_orcamentaria': row['DOTACAO'],
             'lote': row['LOTE'],
             'dre_lote': row['DRE']
         }
