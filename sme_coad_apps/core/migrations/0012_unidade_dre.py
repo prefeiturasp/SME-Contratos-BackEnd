@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='unidade',
             name='dre',
-            field=models.ForeignKey(blank=True, default='', on_delete=django.db.models.deletion.PROTECT,
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT,
                                     related_name='unidades_da_dre', to='core.Unidade'),
         ),
     ]
