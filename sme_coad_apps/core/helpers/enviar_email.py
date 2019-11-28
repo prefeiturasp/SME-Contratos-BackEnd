@@ -16,7 +16,6 @@ def enviar_email(assunto, mensagem, enviar_para):
             recipient_list=[enviar_para]
         )
     except Exception as err:
-        print('ERROR: ', str(err))
         logger.error(str(err))
 
 
@@ -31,3 +30,4 @@ def enviar_email_html(assunto, mensagem, enviar_para):
         )
     except Exception as err:
         logger.error(str(err))
+

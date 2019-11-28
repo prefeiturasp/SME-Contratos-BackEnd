@@ -164,3 +164,5 @@ JWT_AUTH = {
     # Token can be refreshed up to * minutes after being issued
 }
 
+# EMAIL
+EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
