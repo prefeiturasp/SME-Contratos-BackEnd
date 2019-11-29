@@ -30,4 +30,3 @@ def enviar_email_html(assunto, mensagem, enviar_para):
         )
     except Exception as err:
         logger.error(str(err))
-

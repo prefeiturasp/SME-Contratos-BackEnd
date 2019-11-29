@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ....contratos.models.contrato import ContratoUnidade, Contrato
-from ....core.api.serializers.unidade_serializer import UnidadeSerializer
+from ....core.api.serializers.unidade_serializer import UnidadeSerializer, UnidadeLookUpSerializer
 from ....core.models.unidade import Unidade
 
 
@@ -12,11 +12,7 @@ class ContratoUnidadeSerializer(serializers.ModelSerializer):
         queryset=Contrato.objects.all()
     )
 
-    unidade = serializers.SlugRelatedField(
-        slug_field='uuid',
-        required=True,
-        queryset=Unidade.objects.all()
-    )
+    unidade = UnidadeLookUpSerializer()
 
     class Meta:
         model = ContratoUnidade
