@@ -33,6 +33,7 @@ urlpatterns = [
 
 # ADDING URLS FROM APPS
 urlpatterns += core_urls
+urlpatterns += ateste_url
 urlpatterns += usuario_url
 urlpatterns += contrato_url
 
