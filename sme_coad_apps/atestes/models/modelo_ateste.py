@@ -22,7 +22,7 @@ class ModeloAteste(ModeloBase):
 class GrupoVerificacao(ModeloBase):
     historico = AuditlogHistoryField()
     nome = models.CharField('Nome do Grupo', max_length=100)
-    modelo = models.ForeignKey(ModeloAteste, on_delete=models.CASCADE, related_name="modelo_ateste")
+    modelo = models.ForeignKey(ModeloAteste, on_delete=models.CASCADE, related_name="grupos_de_verificacao")
 
     def __str__(self):
         return self.nome
@@ -36,7 +36,7 @@ class ItensVerificacao(ModeloBase):
     historico = AuditlogHistoryField()
     descricao = models.TextField('Descrição')
     item = models.SmallIntegerField('Item', default=0)
-    grupo = models.ForeignKey(GrupoVerificacao, on_delete=models.CASCADE, related_name="grupo_verificacao")
+    grupo = models.ForeignKey(GrupoVerificacao, on_delete=models.CASCADE, related_name="itens_de_verificacao")
 
     def __str__(self):
         return f'{self.item} - {self.descricao}'

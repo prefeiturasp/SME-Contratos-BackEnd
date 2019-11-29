@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from sme_coad_apps.contratos.urls import router as contratos_router
 from sme_coad_apps.users.urls import router as usuarios_router
+from sme_coad_apps.atestes.urls import router as atestes_router
 from .api.viewsets.coad_assessor_viewset import CoadAssessorViewSet
 from .api.viewsets.coad_viewset import CoadViewSet
 from .api.viewsets.divisao_viewset import DivisaoViewSet
@@ -19,6 +20,7 @@ router.register('unidades', UnidadeViewSet)
 
 router.registry.extend(contratos_router.registry)
 router.registry.extend(usuarios_router.registry)
+router.registry.extend(atestes_router.registry)
 
 urlpatterns = [
     path('', include(router.urls))
