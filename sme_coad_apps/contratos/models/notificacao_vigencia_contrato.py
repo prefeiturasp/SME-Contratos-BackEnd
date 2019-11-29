@@ -90,7 +90,7 @@ class NotificacaoVigenciaContrato(ModeloBase):
         notificacoes_pendentes = Notification.objects.unsent().filter(verb='alerta_vigencia_contrato')
         for notificacao in notificacoes_pendentes:
             assunto = f'Alerta de vigência. Contrato:{notificacao.target.termo_contrato}'
-            print(assunto)
+            print(assunto)  # noqa
             enviar_email(
                 assunto,
                 notificacao.description,

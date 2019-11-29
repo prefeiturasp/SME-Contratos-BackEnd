@@ -178,11 +178,11 @@ class Contrato(ModeloBase):
 
     @classmethod
     def enviar_emails_notificacao(cls):
-        notificacoes_pendentes = Notification.objects.unsent() \
-            .filter(Q(verb='tc_atribuido_gestor') | Q(verb='tc_atribuido_suplente'))
+        notificacoes_pendentes = Notification.objects.unsent().filter(
+            Q(verb='tc_atribuido_gestor') | Q(verb='tc_atribuido_suplente'))
         for notificacao in notificacoes_pendentes:
             assunto = f'Alerta de atribuição. Contrato:{notificacao.target.termo_contrato}'
-            print(assunto)
+            print(assunto)  # noqa
             enviar_email(
                 assunto,
                 notificacao.description,
