@@ -10,4 +10,9 @@ class ModeloAtesteSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModeloAteste
         fields = ('uuid', 'titulo', 'criado_em', 'grupos_de_verificacao')
-        # exclude = ('id',)
+
+
+class ModeloAtesteLookUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ModeloAteste
+        fields = ('uuid', 'titulo', 'criado_em')
