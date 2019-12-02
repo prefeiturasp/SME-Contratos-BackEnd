@@ -106,14 +106,13 @@ def test_property_total_mensal():
 def test_instance_model_detalhe():
     contrato = mommy.make('Contrato')
     unidade = mommy.make('Unidade', codigo_eol='123456')
-    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade, dre_lote='5')
+    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade)
     assert isinstance(model, ContratoUnidade)
     assert isinstance(model.contrato, Contrato)
     assert isinstance(model.unidade, Unidade)
     assert isinstance(model.valor_mensal, float)
     assert isinstance(model.valor_total, float)
     assert isinstance(model.lote, str)
-    assert isinstance(model.dre_lote, str)
     assert model.historico
 
 
