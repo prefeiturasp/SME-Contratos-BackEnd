@@ -18,4 +18,3 @@ def test_instance_model():
     assert isinstance(contrato_unidade.valor_mensal, float)
     assert isinstance(contrato_unidade.valor_total, float)
     assert isinstance(contrato_unidade.lote, str)
-    assert isinstance(contrato_unidade.dre_lote, str)
