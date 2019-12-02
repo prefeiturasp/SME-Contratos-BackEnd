@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
-from .models import TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia
 from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
+from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
+                     FiscaisUnidade)
 
 
 @admin.register(TipoServico)
@@ -137,3 +138,16 @@ class NotificacaoVigenciaContratoAdmin(admin.ModelAdmin):
 class ObrigacaoContratualAdmin(admin.ModelAdmin):
     list_display = ['contrato', 'item', 'obrigacao', ]
     ordering = ('contrato',)
+
+
+class FiscaisContratoUnidadeInLine(admin.TabularInline):
+    model = FiscaisUnidade
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
+@admin.register(ContratoUnidade)
+class ContratoUnidadeAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'unidade', 'lote', ]
+    ordering = ('contrato',)
+    list_filter = ('contrato',)
+    inlines = [FiscaisContratoUnidadeInLine]
