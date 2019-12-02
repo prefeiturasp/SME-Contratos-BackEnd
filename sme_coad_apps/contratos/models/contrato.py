@@ -249,6 +249,38 @@ class ContratoUnidade(ModeloBase):
         verbose_name_plural = 'Unidades de Contratos'
 
 
+class FiscaisUnidade(ModeloBase):
+    # Tipos de Fiscal
+    FISCAL_TITULAR = 'TITULAR'
+    FISCAL_SUPLENTE = 'SUPLENTE'
+
+    FISCAL_NOMES = {
+        FISCAL_TITULAR: 'Titular',
+        FISCAL_SUPLENTE: 'Suplente',
+    }
+
+    FISCAL_CHOICES = (
+        (FISCAL_TITULAR, FISCAL_NOMES[FISCAL_TITULAR]),
+        (FISCAL_SUPLENTE, FISCAL_NOMES[FISCAL_SUPLENTE]),
+    )
+
+    historico = AuditlogHistoryField()
+
+    contrato_unidade = models.ForeignKey(ContratoUnidade, on_delete=models.CASCADE, related_name="fiscais")
+    fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_fiscalizados')
+    tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
+
+    def __str__(self):
+        fiscal = f'Fiscal ({self.tipo_fiscal}): {self.fiscal.nome}'
+        contrato = f'TC:{self.contrato_unidade.contrato.termo_contrato}'
+        unidade = f'unidade: {self.contrato_unidade.unidade.nome}'
+        return f'{fiscal} do {contrato} na {unidade}'
+
+    class Meta:
+        verbose_name = 'Fiscal da Unidade de Contrato'
+        verbose_name_plural = 'Fiscais das Unidades de Contratos'
+
+
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
 auditlog.register(DocumentoFiscal)
