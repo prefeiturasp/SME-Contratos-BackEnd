@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from ..serializers.fiscal_contrato_unidade_serializer import FiscalContratoUnidadeSerializer
 from ....contratos.models.contrato import ContratoUnidade, Contrato
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer, UnidadeLookUpSerializer
 from ....core.models.unidade import Unidade
@@ -45,6 +46,7 @@ class ContratoUnidadeLookUpSerializer(serializers.ModelSerializer):
     )
 
     unidade = UnidadeSerializer()
+    fiscais = FiscalContratoUnidadeSerializer(many=True)
 
     class Meta:
         model = ContratoUnidade
