@@ -244,6 +244,10 @@ class ContratoUnidade(ModeloBase):
     def numero_lote(self):
         return f'Lote {self.lote}'
 
+    @property
+    def fiscais(self):
+        return self.fiscais
+
     class Meta:
         verbose_name = 'Unidade de Contrato'
         verbose_name_plural = 'Unidades de Contratos'
@@ -266,7 +270,8 @@ class FiscaisUnidade(ModeloBase):
 
     historico = AuditlogHistoryField()
 
-    contrato_unidade = models.ForeignKey(ContratoUnidade, on_delete=models.CASCADE, related_name="fiscais")
+    contrato_unidade = models.ForeignKey(ContratoUnidade, on_delete=models.CASCADE, related_name="fiscais", blank=True,
+                                         null=True)
     fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_fiscalizados')
     tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
 
