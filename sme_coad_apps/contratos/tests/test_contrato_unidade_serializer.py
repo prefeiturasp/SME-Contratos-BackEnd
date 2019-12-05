@@ -27,6 +27,11 @@ def contrato_unidade(contrato, unidade):
                       valor_total=10000.00, lote='Lote teste')
 
 
+@pytest.fixture
+def fiscal_contrato_unidade(contrato_unidade, fake_user):
+    return mommy.make('FiscaisUnidade', contrato_unidade=contrato_unidade, fiscal=fake_user)
+
+
 def test_contrato_unidade_serializer(contrato, unidade, contrato_unidade):
 
     serializer = ContratoUnidadeSerializer(contrato_unidade)
@@ -39,7 +44,7 @@ def test_contrato_unidade_serializer(contrato, unidade, contrato_unidade):
     assert serializer.data['lote']
 
 
-def test_contrato_unidade_lookup_serializer(contrato, unidade, contrato_unidade):
+def test_contrato_unidade_lookup_serializer(contrato, unidade, contrato_unidade, fiscal_contrato_unidade):
     serializer = ContratoUnidadeLookUpSerializer(contrato_unidade)
 
     assert serializer.data is not None
@@ -49,3 +54,4 @@ def test_contrato_unidade_lookup_serializer(contrato, unidade, contrato_unidade)
     assert serializer.data['valor_total']
     assert serializer.data['lote']
     assert serializer.data['unidade']['dre']
+    assert serializer.data['fiscais']
