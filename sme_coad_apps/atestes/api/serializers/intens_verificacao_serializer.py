@@ -13,3 +13,19 @@ class ItensVerificacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItensVerificacao
         fields = ('uuid', 'item', 'descricao', 'grupo')
+
+
+class ItensVerificacaoSerializeCreate(serializers.ModelSerializer):
+    grupo = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        queryset=GrupoVerificacao.objects.all()
+    )
+
+    def create(self, validated_data):
+        item = ItensVerificacao.objects.create(**validated_data)
+        return item
+
+    class Meta:
+        model = ItensVerificacao
+        fields = ('uuid', 'item', 'descricao', 'grupo')

@@ -8,10 +8,10 @@ from django.views import defaults as default_views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework_swagger.views import get_swagger_view
 
+from sme_coad_apps.atestes.urls import urlpatterns as ateste_url
 from sme_coad_apps.contratos.urls import urlpatterns as contrato_url
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
-from sme_coad_apps.atestes.urls import urlpatterns as ateste_url
 
 schema_view = get_swagger_view(title='API SME COAD')
 
@@ -24,7 +24,6 @@ urlpatterns = [
                   # Django Admin, use {% url 'admin:index' %}
                   path(settings.ADMIN_URL, admin.site.urls),
                   # User management
-                  # path("users/", include("sme_coad_apps.users.urls", namespace="users")),
                   path("django-des/", include(des_url)),
                   # Django Notifications
                   path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
@@ -60,5 +59,4 @@ if settings.DEBUG:
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
-
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns

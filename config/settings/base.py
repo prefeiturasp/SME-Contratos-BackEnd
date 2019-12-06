@@ -95,7 +95,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "sme_coad_apps.users.apps.UsersConfig",
     "sme_coad_apps.core.apps.CoreConfig",
-    "sme_coad_apps.divisoes.apps.DivisoesConfig",
     "sme_coad_apps.contratos.apps.ContratosConfig",
     "sme_coad_apps.atestes.apps.AtestesConfig"
 ]
@@ -295,7 +294,6 @@ CELERY_TASK_SOFT_TIME_LIMIT = 60
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html#beat-scheduler
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 
@@ -350,3 +348,6 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
     # Token can be refreshed up to * minutes after being issued
 }
+
+# SILENCIANDO MODELOS
+SILENCED_SYSTEM_CHECKS = ["postgres.E003"]
