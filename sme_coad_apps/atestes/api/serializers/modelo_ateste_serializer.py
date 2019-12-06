@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
+from sme_coad_apps.core.helpers.update_instance_from_dict import update_instance_from_dict
 from .grupo_verificacao_serializer import GrupoVerificacaoSerializer
 from .intens_verificacao_serializer import ItensVerificacaoSerializer
-from ...models import ModeloAteste, GrupoVerificacao, ItensVerificacao
+from ..helpers.update_modelo_ateste import salvar_grupo
+from ...models import ModeloAteste
 
 
 class ModeloAtesteSerializer(serializers.ModelSerializer):
@@ -26,16 +28,24 @@ class ModeloAtesteSerializerCreate(serializers.ModelSerializer):
     def create(self, validated_data):
         grupos_de_verificacao_list = []
         grupos_de_verificacao = validated_data.pop('grupos_de_verificacao')
-        modelo_ateste = ModeloAteste.objects.create(**validated_data)
+        modelo = ModeloAteste.objects.create(**validated_data)
         for grupo_verificacao in grupos_de_verificacao:
-            itens_verificacao = grupo_verificacao.pop('itens_de_verificacao')
-            grupo = GrupoVerificacao.objects.create(modelo=modelo_ateste, **dict(grupo_verificacao))
+            grupo = salvar_grupo(modelo, grupo_verificacao)
             grupos_de_verificacao_list.append(grupo)
-            for item_verificacao in itens_verificacao:
-                ItensVerificacao.objects.create(grupo=grupo, **dict(item_verificacao))
+        modelo.grupos_de_verificacao.set(grupos_de_verificacao_list)
+        return modelo
 
-        modelo_ateste.grupos_de_verificacao.set(grupos_de_verificacao_list)
-        return modelo_ateste
+    def update(self, instance, validated_data):
+        grupos_de_verificacao_alterar_list = []
+        grupos_de_verificacao = validated_data.pop('grupos_de_verificacao')
+        instance.grupos_de_verificacao.all().delete()
+        for grupo_verificacao in grupos_de_verificacao:
+            grupo = salvar_grupo(instance, grupo_verificacao)
+            grupos_de_verificacao_alterar_list.append(grupo)
+        update_instance_from_dict(instance, validated_data)
+        instance.grupos_de_verificacao.set(grupos_de_verificacao_alterar_list)
+        instance.save()
+        return instance
 
     class Meta:
         model = ModeloAteste
