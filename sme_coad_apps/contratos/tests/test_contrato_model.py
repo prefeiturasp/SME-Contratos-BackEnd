@@ -9,6 +9,7 @@ from ..admin import ContratoAdmin
 from ..models import Contrato, ContratoUnidade, TipoServico, Empresa
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
+from ...atestes.models import ModeloAteste
 
 # from ..admin import TipoServicoAdmin
 
@@ -31,7 +32,7 @@ def contrato_emergencial(gestor, suplente):
                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
                       suplente=suplente, observacoes='teste', tipo_servico=mommy.make(TipoServico),
                       nucleo_responsavel=mommy.make(Nucleo), empresa_contratada=mommy.make(Empresa),
-                      estado_contrato=Contrato.ESTADO_EMERGENCIAL,
+                      estado_contrato=Contrato.ESTADO_EMERGENCIAL, modelo_ateste=mommy.make(ModeloAteste)
                       )
 
 
@@ -55,6 +56,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(model.data_encerramento, datetime.date)
     assert isinstance(model.dotacao_orcamentaria, list)
     assert model.historico
+    assert isinstance(model.modelo_ateste, ModeloAteste)
 
 
 def test_srt_model():

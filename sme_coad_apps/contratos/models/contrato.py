@@ -18,6 +18,7 @@ from .tipo_servico import TipoServico
 from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
+from ...atestes.models import ModeloAteste
 
 
 class Contrato(ModeloBase):
@@ -85,6 +86,8 @@ class Contrato(ModeloBase):
     suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente',
                                  blank=True,
                                  null=True)
+    modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
+                                      blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
     estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
