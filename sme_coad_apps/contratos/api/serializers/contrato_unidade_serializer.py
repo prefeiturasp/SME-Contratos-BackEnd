@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from ..serializers.fiscal_contrato_unidade_serializer import FiscalContratoUnidadeSerializer, \
-    FiscalContratoUnidadeSerializerCreate
+from ..serializers.fiscal_contrato_unidade_serializer import (FiscalContratoUnidadeSerializer,
+                                                              FiscalContratoUnidadeSerializerCreate)
 from ....contratos.models.contrato import ContratoUnidade, Contrato
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer, UnidadeLookUpSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
