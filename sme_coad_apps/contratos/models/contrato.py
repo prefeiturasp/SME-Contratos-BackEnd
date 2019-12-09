@@ -15,10 +15,10 @@ from notifications.signals import notify
 from sme_coad_apps.core.helpers.enviar_email import enviar_email
 from .empresa import Empresa
 from .tipo_servico import TipoServico
+from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
-from ...atestes.models import ModeloAteste
 
 
 class Contrato(ModeloBase):
@@ -279,9 +279,12 @@ class FiscaisUnidade(ModeloBase):
     tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
 
     def __str__(self):
+        contrato = ''
+        unidade = ''
         fiscal = f'Fiscal ({self.tipo_fiscal}): {self.fiscal.nome}'
-        contrato = f'TC:{self.contrato_unidade.contrato.termo_contrato}'
-        unidade = f'unidade: {self.contrato_unidade.unidade.nome}'
+        if self.contrato_unidade:
+            contrato = f'TC:{self.contrato_unidade.contrato.termo_contrato}'
+            unidade = f'unidade: {self.contrato_unidade.unidade.nome}'
         return f'{fiscal} do {contrato} na {unidade}'
 
     class Meta:
