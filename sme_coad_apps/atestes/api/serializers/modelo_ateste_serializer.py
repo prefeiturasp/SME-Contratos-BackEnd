@@ -8,11 +8,15 @@ from ...models import ModeloAteste
 
 
 class ModeloAtesteSerializer(serializers.ModelSerializer):
-    grupos_de_verificacao = GrupoVerificacaoSerializer(many=True)
+    grupos_de_verificacao = serializers.SerializerMethodField()
 
     class Meta:
         model = ModeloAteste
         fields = ('uuid', 'titulo', 'criado_em', 'grupos_de_verificacao')
+
+    def get_grupos_de_verificacao(self, instance):
+        grupo = instance.grupos_de_verificacao.all().order_by('id')
+        return GrupoVerificacaoSerializer(grupo, many=True).data
 
 
 class ModeloAtesteLookUpSerializer(serializers.ModelSerializer):
