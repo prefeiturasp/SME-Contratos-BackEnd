@@ -289,3 +289,4 @@ class FiscaisUnidade(ModeloBase):
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
 auditlog.register(DocumentoFiscal)
+auditlog.register(FiscaisUnidade)
