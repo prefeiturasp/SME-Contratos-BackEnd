@@ -9,9 +9,21 @@ Sistema de gestão da Coordenadoria de Administração, Finanças e Infraestrutu
 
 License: MIT
 
-Versão: 0.3
+Versão: 0.5.0
 
 ## Release Notes
+### 0.5.0 - 09/12/2019 - Sprint 5
+* Cadastro de Modelos de Ateste
+* Duplicar um Modelo de Ateste
+* Registro de fiscais e suplentes de um contrato
+
+### 0.4.0 - 22/11/2019 - Sprint 4
+* Cadastro único de contratos
+* Consulta e Edição de Termos de Contrato
+* Notificações por e-mail de atribuição de contrato
+* Notificações por e-mail e tela de vencimento de contratos
+* Cadastro de Obrigações Contratuais
+* Configuração de Parâmetros Globais de alertas de vencimento de contrato.
 ### 0.3 - 04/11/2019 - Sprint 3
 * Consulta de detalhes de um contrato
 * Atribuição de um contrato a um gestor e suplente
