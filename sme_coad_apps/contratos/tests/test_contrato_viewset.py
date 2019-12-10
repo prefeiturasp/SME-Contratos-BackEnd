@@ -26,5 +26,5 @@ def test_contrato_view_set_filters(fake_user):
 
     assert contrato_viewset.ordering_fields == ('data_ordem_inicio',)
     assert contrato_viewset.filter_fields == (
-        'situacao', 'tipo_servico', 'gestor', 'empresa_contratada', 'estado_contrato', 'termo_contrato')
+        'situacao', 'tipo_servico', 'gestor', 'suplente', 'empresa_contratada', 'estado_contrato', 'termo_contrato')
     assert contrato_viewset.search_fields == ('processo',)

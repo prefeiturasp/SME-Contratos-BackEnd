@@ -1,5 +1,6 @@
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 from ..models_abstracts import TemNome, ModeloBase
@@ -44,8 +45,10 @@ class Unidade(ModeloBase, TemNome):
 
     equipamento = models.CharField(max_length=3, choices=EQP_CHOICES, default=EQP_UNIDADE_ENSINO)
     tipo_unidade = models.CharField(max_length=10, choices=TIPOS_CHOICE, default='ADM')
-    codigo_eol = models.CharField(max_length=10, primary_key=True, unique=True)
+    codigo_eol = models.CharField(max_length=6, validators=[MinLengthValidator(6)], primary_key=True, unique=True)
     cep = models.CharField(max_length=15, blank=True, default='')
+    dre = models.ForeignKey('Unidade', on_delete=models.PROTECT, related_name='unidades_da_dre', to_field="codigo_eol",
+                            blank=True, null=True, limit_choices_to={'tipo_unidade': 'DRE'})
 
     def __str__(self):
         return self.nome

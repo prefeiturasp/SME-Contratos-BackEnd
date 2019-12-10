@@ -4,13 +4,11 @@ from rest_framework import serializers
 from ..validations.usuario_validations import (senhas_devem_ser_iguais,
                                                registro_funcional_deve_existir,
                                                senha_nao_pode_ser_nulo)
-from ....core.api.serializers.divisao_serializer import DivisaoSerializer
 
 user_model = get_user_model()
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    divisoes = DivisaoSerializer(many=True)
 
     def validate_validado(self, username):
         usuario = user_model.objects.filter(username=username)
@@ -21,7 +19,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user_model
-        fields = ['uuid', 'username', 'nome', 'divisoes', 'validado']
+        fields = ['uuid', 'username', 'nome', 'validado']
 
 
 class UsuarioSerializerCreators(serializers.ModelSerializer):
@@ -49,4 +47,4 @@ class UsuarioSerializerCreators(serializers.ModelSerializer):
 class UsuarioLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = user_model
-        fields = ['nome', 'uuid', 'id']
+        fields = ['nome', 'uuid', 'id', 'username', 'email']

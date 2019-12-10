@@ -1,0 +1,52 @@
+version: "3.1"
+services:
+  nginx:
+    container_name: coad-nginx
+    build: .
+    ports:
+      - 80:80
+    depends_on:
+      - api
+      - frontend
+    env_file: .env
+
+  frontend:
+    container_name: coad-frontend
+    image: coad/contratos-frontend:latest
+    env_file: .env
+    depends_on:
+      - db
+      - api
+
+  db:
+    container_name: coad-db
+    image: postgres:11.2-alpine
+    restart: always
+    env_file: .env
+    volumes:
+      - ../postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  api:
+    container_name: coad-api
+    # build: ./backend/.
+    image: coad/contratos-api
+    command: "gunicorn config.wsgi:application --bind=0.0.0.0:8000 -w 8"
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    container_name: coad-redis
+    image: redis:5.0.0-alpine
+    ports:
+      - "6379:6379"
+
+networks:
+  default:
+    external:
+      name: coad-network

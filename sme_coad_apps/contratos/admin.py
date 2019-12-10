@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-from .models import TipoServico, Empresa, Contrato, ContratoUnidade
+from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
+from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
+                     FiscaisUnidade)
 
 
 @admin.register(TipoServico)
@@ -48,15 +51,12 @@ class ContratoAdmin(admin.ModelAdmin):
     valor_mensal.short_description = 'Valor Mensal'
 
     def data_inicio(self, contrato):
-        return f'{contrato.data_ordem_inicio:%d/%m/%Y}'
+        return f'{contrato.data_ordem_inicio:%d/%m/%Y}' if contrato.data_ordem_inicio else ''
 
     data_inicio.short_description = 'Início'
 
     def data_fim(self, contrato):
-        if contrato.data_encerramento:
-            return f'{contrato.data_encerramento:%d/%m/%Y}'
-        else:
-            return ''
+        return f'{contrato.data_encerramento:%d/%m/%Y}' if contrato.data_encerramento else ''
 
     data_fim.short_description = 'Fim'
 
@@ -77,7 +77,6 @@ class ContratoAdmin(admin.ModelAdmin):
     list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
     inlines = [ContratoUnidadeInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
-
     fieldsets = (
         ('Contrato', {
             'fields': (
@@ -87,9 +86,12 @@ class ContratoAdmin(admin.ModelAdmin):
                 'nucleo_responsavel',
                 'objeto',
                 'empresa_contratada',
+                'modelo_ateste',
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
                 'observacoes',
+                'coordenador',
                 'gestor',
+                'suplente',
                 'situacao',
                 'tem_ue',
                 'tem_ceu',
@@ -99,4 +101,54 @@ class ContratoAdmin(admin.ModelAdmin):
          ),
     )
 
-    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'tipo_servico')
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
+
+
+@admin.register(ColunasContrato)
+class ColunasContratoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'colunas_array')
+    ordering = ('usuario',)
+    search_fields = ('usuario',)
+
+
+@admin.register(DocumentoFiscal)
+class DocumentoFiscalAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'tipo_unidade', 'criado_em']
+    ordering = ('contrato',)
+    search_field = ('contrato', 'tipo_unidade')
+
+
+@admin.register(ParametroNotificacoesVigencia)
+class ParametroNotificacoesVigenciaAdmin(admin.ModelAdmin):
+    list_display = ('estado_contrato', 'vencendo_em', 'repetir_notificacao_a_cada')
+    ordering = ('estado_contrato',)
+    list_filter = ('estado_contrato',)
+
+
+@admin.register(NotificacaoVigenciaContrato)
+class NotificacaoVigenciaContratoAdmin(admin.ModelAdmin):
+    def termo_contrato(self, notificacao):
+        return notificacao.contrato.termo_contrato
+
+    list_display = ('criado_em', 'termo_contrato', 'notificado')
+    ordering = ('criado_em', 'contrato', 'notificado')
+    list_filter = ('notificado',)
+
+
+@admin.register(ObrigacaoContratual)
+class ObrigacaoContratualAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'item', 'obrigacao', ]
+    ordering = ('contrato',)
+
+
+class FiscaisContratoUnidadeInLine(admin.TabularInline):
+    model = FiscaisUnidade
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
+@admin.register(ContratoUnidade)
+class ContratoUnidadeAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'unidade', 'lote', ]
+    ordering = ('contrato',)
+    list_filter = ('contrato',)
+    inlines = [FiscaisContratoUnidadeInLine]

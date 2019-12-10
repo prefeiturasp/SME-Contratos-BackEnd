@@ -1,0 +1,28 @@
+1 - Criar a rede: docker network create coad-network
+2 - Iniciar o build: docker-compose up --build -d
+3 - Setup do Django:
+3.1 - docker-compose run api python manage.py collectstatic (digitar yes ao ser solicitado pelo console)
+3.2 - docker-compose run api python manage.py makemigrations
+3.3 - docker-compose run api python manage.py migrate
+3.4 - docker-compose run api python manage.py createsuperuser (Para RF: admin - Email: weslei.souza@amcom.com.br - Senha: ?)  
+
+
+O formato sugerido para o docker-compose teve algumas alterações por questões de compatibilidade de configurações dos containers:
+
+ - Nomes composto de serviços
+	services:	
+	    coad-frontend:...
+   Alem de não ser um padrão utilizado pela comunidade teve alguns erros nas   configurações dependentes, como por exemplo, arquivo de configuração do nginx, então ao vez de coad-frontend renomeei para frontend.
+
+ - Vincular a network a todos os serviços
+  Criando uma única rede, não há necessidade de mencionar em cada serviço, ha não ser que o serviço se comunicará com mais de uma rede, exemplo:
+	services:	
+	    coad-frontend:...
+	    network: ....
+
+
+apt install python3-pip
+pip install virtualenv
+virtualenv ENV
+ 
+		 
