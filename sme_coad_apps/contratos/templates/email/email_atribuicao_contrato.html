@@ -32,14 +32,33 @@
   </div>
   <div class="row">
     <div class="col-12 p-2" style="font-family: Roboto">
-      Olá, {{ nome }}.
-      <br/> <br/>
-      Atenção! Você foi definido como {{ papel }} do contrato {{ contrato }}.
-      <br/> <br/>
-      Clique no link abaixo para iniciar o cadastro desse contrato.
-      <br/> <br/>
+      <p>
+        Olá, {{ nome }}.
+      </p>
 
-      <a href="{{ url_contrato }}">Cadastrar Contrato</a>
+      <p>
+        Você foi definido como {{ papel }} do contrato {{ contrato }} no SAFI. Para cadastrar esse contrato, basta
+        clicar no botão abaixo ou
+        copiar o endereço do link e colar no seu navegador.
+      </p>
+
+      <p>
+        Clique no botão abaixo e complete o cadastro do contrato:
+
+        <br/> <br/>
+
+      <form action="{{ url_contrato }}" method="get">
+        <button type="submit" value="Submit"
+                style="display:inline-block; margin-bottom: 0;font-weight: 400; text-align:center; white-space: nowrap; vertical-align: middle; touch-action: manipulation; cursor: pointer; background-image: none; border: 1px solid transparent; padding: 6px 12px; font-size: 14px; line-height: 1.42857143; border-radius: 4px; user-select: none;color: #fff; background-color: #602A2A; border-color: #602A2A;"
+        >
+          Cadastrar Contrato
+        </button>
+      </form>
+      </p>
+
+      <p>
+        Ou utilize o link <a href="{{ url_contrato }}">{{ url_contrato }}</a>.
+      </p>
 
     </div>
   </div>
