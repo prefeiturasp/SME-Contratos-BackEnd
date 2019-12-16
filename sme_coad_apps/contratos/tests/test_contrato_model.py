@@ -7,9 +7,9 @@ from model_mommy import mommy
 
 from ..admin import ContratoAdmin
 from ..models import Contrato, ContratoUnidade, TipoServico, Empresa
+from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
-from ...atestes.models import ModeloAteste
 
 # from ..admin import TipoServicoAdmin
 
@@ -36,27 +36,62 @@ def contrato_emergencial(gestor, suplente):
                       )
 
 
+@pytest.fixture
+def dre_aa():
+    return mommy.make(Unidade, codigo_eol='99999', tipo_unidade='DRE', sigla='AA')
+
+
+@pytest.fixture
+def dre_bb():
+    return mommy.make(Unidade, codigo_eol='888888', tipo_unidade='DRE', sigla='BB')
+
+
+@pytest.fixture
+def unidade_123456(dre_aa):
+    return mommy.make(Unidade, nome='Teste', codigo_eol='123456', dre=dre_aa)
+
+
+@pytest.fixture
+def unidade_654321(dre_bb):
+    return mommy.make(Unidade, nome='Teste', codigo_eol='654321', dre=dre_bb)
+
+
+@pytest.fixture
+def contrato_xpto123():
+    return mommy.make('Contrato', termo_contrato='XPTO123')
+
+
+@pytest.fixture
+def contrato_unidade_xpto123_123456(contrato_xpto123, unidade_123456):
+    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, lote='1', unidade=unidade_123456)
+
+
+@pytest.fixture
+def contrato_unidade_xpto123_654321(contrato_xpto123, unidade_654321):
+    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, lote='1', unidade=unidade_654321)
+
+
 def test_instance_model(contrato_emergencial):
-    model = contrato_emergencial
-    assert isinstance(model, Contrato)
-    assert isinstance(model.termo_contrato, str)
-    assert isinstance(model.processo, str)
-    assert isinstance(model.tipo_servico, TipoServico)
-    assert isinstance(model.nucleo_responsavel, Nucleo)
-    assert isinstance(model.objeto, str)
-    assert isinstance(model.empresa_contratada, Empresa)
-    assert isinstance(model.data_assinatura, datetime.date)
-    assert isinstance(model.data_ordem_inicio, datetime.date)
-    assert isinstance(model.vigencia_em_dias, int)
-    assert isinstance(model.situacao, str)
-    assert isinstance(model.gestor, User)
-    assert isinstance(model.suplente, User)
-    assert isinstance(model.observacoes, str)
-    assert isinstance(model.estado_contrato, str)
-    assert isinstance(model.data_encerramento, datetime.date)
-    assert isinstance(model.dotacao_orcamentaria, list)
-    assert model.historico
-    assert isinstance(model.modelo_ateste, ModeloAteste)
+    assert isinstance(contrato_emergencial.termo_contrato, str)
+    assert isinstance(contrato_emergencial, Contrato)
+    assert isinstance(contrato_emergencial.processo, str)
+    assert isinstance(contrato_emergencial.tipo_servico, TipoServico)
+    assert isinstance(contrato_emergencial.nucleo_responsavel, Nucleo)
+    assert isinstance(contrato_emergencial.objeto, str)
+    assert isinstance(contrato_emergencial.empresa_contratada, Empresa)
+    assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
+    assert isinstance(contrato_emergencial.data_ordem_inicio, datetime.date)
+    assert isinstance(contrato_emergencial.vigencia_em_dias, int)
+    assert isinstance(contrato_emergencial.situacao, str)
+    assert isinstance(contrato_emergencial.gestor, User)
+    assert isinstance(contrato_emergencial.suplente, User)
+    assert isinstance(contrato_emergencial.observacoes, str)
+    assert isinstance(contrato_emergencial.estado_contrato, str)
+    assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
+    assert isinstance(contrato_emergencial.dotacao_orcamentaria, list)
+    assert contrato_emergencial.historico
+    assert isinstance(contrato_emergencial.modelo_ateste, ModeloAteste)
+    assert contrato_emergencial.dres == ""
 
 
 def test_srt_model():
@@ -105,12 +140,10 @@ def test_property_total_mensal():
     assert contrato.total_mensal == 300
 
 
-def test_instance_model_detalhe():
-    contrato = mommy.make('Contrato')
-    unidade = mommy.make('Unidade', codigo_eol='123456')
-    model = mommy.make('ContratoUnidade', contrato=contrato, lote='1', unidade=unidade)
-    assert isinstance(model, ContratoUnidade)
+def test_instance_model_detalhe(contrato_xpto123, unidade_123456):
+    model = mommy.make('ContratoUnidade', contrato=contrato_xpto123, lote='1', unidade=unidade_123456)
     assert isinstance(model.contrato, Contrato)
+    assert isinstance(model, ContratoUnidade)
     assert isinstance(model.unidade, Unidade)
     assert isinstance(model.valor_mensal, float)
     assert isinstance(model.valor_total, float)
@@ -118,10 +151,8 @@ def test_instance_model_detalhe():
     assert model.historico
 
 
-def test_srt_model_detalhe():
-    unidade = mommy.make(Unidade, nome='Teste', codigo_eol='123456')
-    contrato = mommy.make('Contrato', termo_contrato='XPTO123')
-    model = mommy.make('ContratoUnidade', contrato=contrato, unidade=unidade)
+def test_srt_model_detalhe(contrato_xpto123, unidade_123456):
+    model = mommy.make('ContratoUnidade', contrato=contrato_xpto123, unidade=unidade_123456)
     assert model.__str__() == f'TC:XPTO123 - Unidade: Teste'
 
 
@@ -131,10 +162,9 @@ def test_admin():
     assert admin.site._registry[Contrato]
     assert model_admin.list_display == (
         'termo_contrato',
-        'processo',
         'tipo_servico',
         'empresa_contratada',
-        'valor_mensal',
+        'dres',
         'data_inicio',
         'data_fim',
         'dias_para_vencer',
@@ -169,3 +199,8 @@ def test_notifica_atribuicao(contrato_emergencial):
 
     assert notificacoes_gestor.exists()
     assert notificacoes_suplente.exists()
+
+
+def test_dres_do_contrato(contrato_unidade_xpto123_123456, contrato_unidade_xpto123_654321):
+    contrato = contrato_unidade_xpto123_123456.contrato
+    assert contrato.dres == 'AA BB'
