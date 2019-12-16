@@ -12,7 +12,7 @@ from django.dispatch import receiver
 from notifications.models import Notification
 from notifications.signals import notify
 
-from sme_coad_apps.core.helpers.enviar_email import enviar_email
+from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from .empresa import Empresa
 from .tipo_servico import TipoServico
 from ...atestes.models import ModeloAteste
@@ -160,7 +160,8 @@ class Contrato(ModeloBase):
 
         if (not notificacoes_lidas.exists()) and (not notificacoes_nao_lidas.exists()):
             env = environ.Env()
-            link = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato?uuid={contrato.uuid}'
+            url = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato?uuid={contrato.uuid}'
+            link = f'<a target="blank" href="{url}">incluir contrato</a>'
             notify.send(
                 contrato,
                 verb=verb,
@@ -168,6 +169,8 @@ class Contrato(ModeloBase):
                 description=f'Atenção! Você foi definido como {papel} do contrato {contrato.termo_contrato}. '
                             f'Você pode acessá-lo por esse link: {link}',
                 target=contrato,
+                papel=papel,
+                url_contrato=url
             )
 
     def notificar_gestor_e_suplente(self):
@@ -185,10 +188,16 @@ class Contrato(ModeloBase):
             Q(verb='tc_atribuido_gestor') | Q(verb='tc_atribuido_suplente'))
         for notificacao in notificacoes_pendentes:
             assunto = f'Alerta de atribuição. Contrato:{notificacao.target.termo_contrato}'
-            print(assunto)  # noqa
-            enviar_email(
+
+            enviar_email_html(
                 assunto,
-                notificacao.description,
+                'email_atribuicao_contrato',
+                {'nome': notificacao.recipient.first_name,
+                 'papel': notificacao.data["papel"],
+                 'contrato': notificacao.target.termo_contrato,
+                 'url_contrato': notificacao.data["url_contrato"],
+                 'mensagem': notificacao.description,
+                 },
                 notificacao.recipient.email
             )
             notificacao.emailed = True
