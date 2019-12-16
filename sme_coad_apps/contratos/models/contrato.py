@@ -20,6 +20,8 @@ from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
 
+env = environ.Env()
+
 
 class Contrato(ModeloBase):
     historico = AuditlogHistoryField()
@@ -160,7 +162,7 @@ class Contrato(ModeloBase):
 
         if (not notificacoes_lidas.exists()) and (not notificacoes_nao_lidas.exists()):
             env = environ.Env()
-            url = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato?uuid={contrato.uuid}'
+            url = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato/?uuid={contrato.uuid}'
             link = f'<a target="blank" href="{url}">incluir contrato</a>'
             notify.send(
                 contrato,
