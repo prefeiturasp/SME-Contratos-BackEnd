@@ -120,6 +120,10 @@ class Contrato(ModeloBase):
             total += unidade.valor_mensal
         return total
 
+    @property
+    def dres(self):
+        return " ".join(list(filter(None, self.unidades.values_list('unidade__dre__sigla', flat=True).distinct())))
+
     def __str__(self):
         return self.termo_contrato
 

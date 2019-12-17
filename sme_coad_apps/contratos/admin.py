@@ -45,8 +45,6 @@ class ContratoAdmin(admin.ModelAdmin):
 
     def valor_mensal(self, contrato):
         return f"R$ {contrato.total_mensal: 20,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-        # locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
-        # return locale.currency(contrato.total_mensal, grouping=True)
 
     valor_mensal.short_description = 'Valor Mensal'
 
@@ -62,10 +60,9 @@ class ContratoAdmin(admin.ModelAdmin):
 
     list_display = (
         'termo_contrato',
-        'processo',
         'tipo_servico',
         'empresa_contratada',
-        'valor_mensal',
+        'dres',
         'data_inicio',
         'data_fim',
         'dias_para_vencer',
