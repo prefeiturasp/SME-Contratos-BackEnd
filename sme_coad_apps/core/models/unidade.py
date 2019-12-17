@@ -49,6 +49,7 @@ class Unidade(ModeloBase, TemNome):
     cep = models.CharField(max_length=15, blank=True, default='')
     dre = models.ForeignKey('Unidade', on_delete=models.PROTECT, related_name='unidades_da_dre', to_field="codigo_eol",
                             blank=True, null=True, limit_choices_to={'tipo_unidade': 'DRE'})
+    sigla = models.CharField(max_length=4, blank=True, default='')
 
     def __str__(self):
         return self.nome

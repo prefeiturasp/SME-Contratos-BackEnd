@@ -14,7 +14,7 @@ def dre():
 
 
 def test_instance_model(dre):
-    model = mommy.make(Unidade, codigo_eol='123456', cep='27600-000', dre=dre)
+    model = mommy.make(Unidade, codigo_eol='123456', cep='27600-000', dre=dre, sigla='abcd')
     assert isinstance(model, Unidade)
     assert isinstance(model.nome, str)
     assert isinstance(model.equipamento, str)
@@ -23,6 +23,7 @@ def test_instance_model(dre):
     assert isinstance(model.cep, str)
     assert isinstance(model.dre, Unidade)
     assert model.historico
+    assert model.sigla == 'abcd'
 
 
 def test_srt_model():
@@ -40,7 +41,7 @@ def test_admin():
     model_admin = UnidadeAdmin(Unidade, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Unidade]
-    assert model_admin.list_display == ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'dre')
+    assert model_admin.list_display == ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'sigla', 'dre')
     assert model_admin.ordering == ('nome',)
-    assert model_admin.search_fields == ('nome', 'codigo_eol')
+    assert model_admin.search_fields == ('nome', 'codigo_eol', 'sigla')
     assert model_admin.list_filter == ('equipamento', 'tipo_unidade', 'dre')

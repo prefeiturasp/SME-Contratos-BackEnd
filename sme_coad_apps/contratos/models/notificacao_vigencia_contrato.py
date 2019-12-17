@@ -4,7 +4,7 @@ from django.db import models
 from notifications.models import Notification
 from notifications.signals import notify
 
-from sme_coad_apps.core.helpers.enviar_email import enviar_email
+from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from .contrato import Contrato
 from .parametro_notificacoes import ParametroNotificacoesVigencia
 from ...core.models_abstracts import ModeloBase
@@ -90,12 +90,16 @@ class NotificacaoVigenciaContrato(ModeloBase):
         notificacoes_pendentes = Notification.objects.unsent().filter(verb='alerta_vigencia_contrato')
         for notificacao in notificacoes_pendentes:
             assunto = f'Alerta de vigência. Contrato:{notificacao.target.termo_contrato}'
-            print(assunto)  # noqa
-            enviar_email(
+
+            enviar_email_html(
                 assunto,
-                notificacao.description,
+                'email_notificacao_vigencia_contrato',
+                {'nome': notificacao.recipient.first_name,
+                 'mensagem': notificacao.description,
+                 },
                 notificacao.recipient.email
             )
+
             notificacao.emailed = True
             notificacao.save()
 

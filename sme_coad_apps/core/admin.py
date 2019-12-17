@@ -33,9 +33,9 @@ class NucleoAdmin(admin.ModelAdmin):
 
 @admin.register(Unidade)
 class UnidadeAdmin(admin.ModelAdmin):
-    list_display = ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'dre')
+    list_display = ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'sigla', 'dre')
     ordering = ('nome',)
-    search_fields = ('nome', 'codigo_eol')
+    search_fields = ('nome', 'codigo_eol', 'sigla')
     list_filter = ('equipamento', 'tipo_unidade', 'dre')
     list_display_links = ('nome',)
 
