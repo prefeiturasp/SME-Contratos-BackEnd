@@ -22,7 +22,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.is_active = False
+            # instance.is_active = False
             instance.hash_redefinicao = instance.encode_hash
             instance.save()
             link = 'http://{}/#/redefinir-senha/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
