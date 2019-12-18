@@ -1,10 +1,13 @@
 import environ
 import pandas as pd
+from auditlog.registry import auditlog
 from brazilnum.cnpj import clean_id
 from django.db.models import F
 
-from sme_coad_apps.contratos.models import Empresa, TipoServico, Contrato, ContratoUnidade
-from sme_coad_apps.core.models import Divisao, Nucleo, Unidade
+from sme_coad_apps.contratos.models import Empresa, TipoServico, Contrato, ContratoUnidade, FiscaisUnidade
+from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from sme_coad_apps.core.models import Divisao, Nucleo, Unidade, Coad
+from utility.carga_de_dados.import_dres import importa_dres
 
 ROOT_DIR = environ.Path(__file__) - 1
 
@@ -181,7 +184,6 @@ def importa_contrato(contrato_data: dict):
         novo_contrato = Contrato(**contrato_data)
         novo_contrato.save()
         return novo_contrato
-        # return Contrato.objects.create(**contrato_data)
     else:
         return contrato.first()
 
@@ -202,9 +204,36 @@ def importa_contrato_detalhe(contrato_detalhe_data: dict):
         contrato_detalhe.update(valor_mensal=F('valor_mensal') + contrato_detalhe_data['valor_mensal'])
 
 
+def grava_dotacoes(dotacoes):
+    for termo_contrato in dotacoes:
+        Contrato.objects.filter(termo_contrato=termo_contrato).update(
+            dotacao_orcamentaria=list(dotacoes[termo_contrato]))
+        print(f'Gravadas dotações do TC: {termo_contrato}', dotacoes[termo_contrato])
+
+
+def cria_coad():
+    if not Coad.objects.exists():
+        return Coad.objects.create()
+    else:
+        return Coad.objects.first()
+
+
 def importa_contratos():
+    auditlog.unregister(Contrato)
+    auditlog.unregister(ContratoUnidade)
+    auditlog.unregister(DocumentoFiscal)
+    auditlog.unregister(FiscaisUnidade)
+    auditlog.unregister(Divisao)
+    auditlog.unregister(Nucleo)
+    auditlog.unregister(Unidade)
+    auditlog.unregister(Coad)
+
+    cria_coad()
+
     digecon = cria_digecon()
     nucleos = cria_nucleos(digecon)
+
+    dotacoes = {}
 
     apaga_contratos()
 
@@ -259,10 +288,19 @@ def importa_contratos():
             # TODO Rever a gravação de dotações em função de mudanças do modelo após importação inicial.
             # 'dotacao_orcamentaria': row['DOTACAO'],
             'lote': row['LOTE'],
-            # 'dre_lote': row['DRE']
         }
 
         importa_contrato_detalhe(contrato_detalhe_data)
+
+        # Grava dotacoes do contrato
+        if contrato.termo_contrato not in dotacoes:
+            dotacoes[contrato.termo_contrato] = set()
+
+        dotacoes[contrato.termo_contrato].add(row['DOTACAO'])
+
+    importa_dres()
+
+    grava_dotacoes(dotacoes)
 
     if __name__ == '__main__':
         importa_contratos()
