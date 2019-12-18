@@ -6,7 +6,7 @@ from django.db.models import F
 
 from sme_coad_apps.contratos.models import Empresa, TipoServico, Contrato, ContratoUnidade, FiscaisUnidade
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
-from sme_coad_apps.core.models import Divisao, Nucleo, Unidade
+from sme_coad_apps.core.models import Divisao, Nucleo, Unidade, Coad
 from utility.carga_de_dados.import_dres import importa_dres
 
 ROOT_DIR = environ.Path(__file__) - 1
@@ -211,6 +211,13 @@ def grava_dotacoes(dotacoes):
         print(f'Gravadas dotações do TC: {termo_contrato}', dotacoes[termo_contrato])
 
 
+def cria_coad():
+    if not Coad.objects.exists():
+        return Coad.objects.create()
+    else:
+        return Coad.objects.first()
+
+
 def importa_contratos():
     auditlog.unregister(Contrato)
     auditlog.unregister(ContratoUnidade)
@@ -219,6 +226,9 @@ def importa_contratos():
     auditlog.unregister(Divisao)
     auditlog.unregister(Nucleo)
     auditlog.unregister(Unidade)
+    auditlog.unregister(Coad)
+
+    cria_coad()
 
     digecon = cria_digecon()
     nucleos = cria_nucleos(digecon)
