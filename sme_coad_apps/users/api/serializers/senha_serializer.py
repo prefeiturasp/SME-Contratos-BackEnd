@@ -41,7 +41,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user_model
-        fields = ['username']
+        fields = ['username', 'email']
 
 
 class RedefinirSenhaSerializer(serializers.ModelSerializer):
