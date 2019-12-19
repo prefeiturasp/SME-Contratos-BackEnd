@@ -1,0 +1,39 @@
+[
+  {
+    "model": "admin_interface.theme",
+    "fields": {
+      "name": "COAD",
+      "active": true,
+      "title": "COAD - Administração do Sistema",
+      "title_color": "#F5DD5D",
+      "title_visible": true,
+      "logo": "",
+      "logo_color": "#CCCCCC",
+      "logo_visible": false,
+      "css_header_background_color": "#602A2A",
+      "css_header_text_color": "#FFFFFF",
+      "css_header_link_color": "#FFFFFF",
+      "css_header_link_hover_color": "#F5DD5D",
+      "css_module_background_color": "#AE9394",
+      "css_module_text_color": "#FFFFFF",
+      "css_module_link_color": "#FFFFFF",
+      "css_module_link_hover_color": "#C9F0DD",
+      "css_module_rounded_corners": true,
+      "css_generic_link_color": "#602A2A",
+      "css_generic_link_hover_color": "#602A2A",
+      "css_save_button_background_color": "#602A2A",
+      "css_save_button_background_hover_color": "#431E1E",
+      "css_save_button_text_color": "#FFFFFF",
+      "css_delete_button_background_color": "#602A2A",
+      "css_delete_button_background_hover_color": "#431E1E",
+      "css_delete_button_text_color": "#FFFFFF",
+      "css": "",
+      "related_modal_active": true,
+      "related_modal_background_color": "#000000",
+      "related_modal_background_opacity": 0.2,
+      "related_modal_rounded_corners": true,
+      "list_filter_dropdown": true,
+      "recent_actions_visible": true
+    }
+  }
+]
