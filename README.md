@@ -65,5 +65,5 @@ pytest
 Para instalar o tema do Admin
 
 ```console
-python manage.py loaddata admin_interface_theme_foundation.json
+python manage.py loaddata utility/fixtures/admin_interface_theme_coad.json
 ```
