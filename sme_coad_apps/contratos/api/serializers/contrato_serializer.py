@@ -29,6 +29,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
+    dres = serializers.SerializerMethodField('get_dres')
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -42,6 +43,9 @@ class ContratoSerializer(serializers.ModelSerializer):
 
     def get_dias_para_o_encerramento(self, obj):
         return obj.dias_para_o_encerramento
+
+    def get_dres(self, obj):
+        return obj.dres
 
     class Meta:
         model = Contrato

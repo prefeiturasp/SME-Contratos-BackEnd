@@ -2,7 +2,7 @@ import environ
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from sme_coad_apps.core.helpers.enviar_email import enviar_email
+from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from ..validations.usuario_validations import (registro_funcional_deve_existir,
                                                usuario_precisa_estar_validado,
                                                hash_redefinicao_deve_existir, senha_nao_pode_ser_nulo,
@@ -22,13 +22,17 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            instance.is_active = False
+            # instance.is_active = False
             instance.hash_redefinicao = instance.encode_hash
             instance.save()
-            link = 'http://{}/#/redefinir-senha/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
-            enviar_email(
+            link = 'http://{}/#/login/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
+            enviar_email_html(
                 'Solicitação de redefinição de senha',
-                'Link: <a href="{}">Clique aqui</a>'.format(link),
+                'email_redefinicao_de_senha',
+                {'url': link,
+                 'nome': instance.nome,
+                 'login': instance.username,
+                 },
                 instance.email
             )
             return instance
@@ -37,7 +41,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = user_model
-        fields = ['username']
+        fields = ['username', 'email']
 
 
 class RedefinirSenhaSerializer(serializers.ModelSerializer):

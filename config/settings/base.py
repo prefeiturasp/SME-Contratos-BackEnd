@@ -14,7 +14,7 @@ APPS_DIR = ROOT_DIR.path("sme_coad_apps")
 
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR.path(".env")))
@@ -234,6 +234,8 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 # EMAIL_BACKEND = env(
 #     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
 # )
+# EMAIL
+EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -307,7 +309,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         # TODO Rever esta CONFIG
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 
@@ -331,10 +333,6 @@ CACHES = {
 # CORS_ORIGIN_WHITELIST = env.list('CORS_ORIGIN_WHITELIST', default="http://localhost:3000")
 CORS_ORIGIN_ALLOW_ALL = True
 
-# EMAIL
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
-
 # sentry_sdk.init(
 #     dsn=env('DSN_SENTRY'),
 #     integrations=[DjangoIntegration()]
@@ -351,3 +349,5 @@ JWT_AUTH = {
 
 # SILENCIANDO MODELOS
 SILENCED_SYSTEM_CHECKS = ["postgres.E003"]
+
+DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True}
