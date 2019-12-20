@@ -9,9 +9,18 @@ Sistema de gestão da Coordenadoria de Administração, Finanças e Infraestrutu
 
 License: MIT
 
-Versão: 0.5.0
+Versão: 1.0.0
+
+
+
 
 ## Release Notes
+
+### 1.0.0 - 19/12/2019 - Sprint 6
+* Aplicação de identidade visual nos emails
+* Coluna DRE's na consulta de contratos
+* Implantação do sistema em produção
+
 ### 0.5.0 - 09/12/2019 - Sprint 5
 * Cadastro de Modelos de Ateste
 * Duplicar um Modelo de Ateste
