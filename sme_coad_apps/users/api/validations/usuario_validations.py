@@ -33,6 +33,12 @@ def usuario_ja_foi_validado(registro_funcional):
         raise serializers.ValidationError({'detail': 'O usuário já foi validado'})
 
 
+def usuario_deve_estar_ativo(registro_funcional):
+    usuario = user_model.objects.get(username=registro_funcional)
+    if not usuario.is_active:
+        raise serializers.ValidationError({'detail': 'O usuário desabilitado'})
+
+
 def hash_redefinicao_deve_existir(hash):
     existe = user_model.objects.filter(hash_redefinicao=hash).exists()
     if not existe:

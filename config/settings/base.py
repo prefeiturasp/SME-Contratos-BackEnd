@@ -29,7 +29,7 @@ DEBUG = False
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = "America/Sao_Paulo"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "pt-BR"
+LANGUAGE_CODE = "pt-br"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -343,7 +343,7 @@ JWT_AUTH = {
     # 'JWT_VERIFY_EXPIRATION': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=env('SAFI_VALIDADE_TOKEN_HORAS', default=12)),
     # Token expires * minutes after being issued
-    # 'JWT_ALLOW_REFRESH': True,
+    'JWT_ALLOW_REFRESH': True,
     # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=1),
     # Token can be refreshed up to * minutes after being issued
 }
