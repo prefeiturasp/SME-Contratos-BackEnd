@@ -58,6 +58,21 @@ class ContratoAdmin(admin.ModelAdmin):
 
     data_fim.short_description = 'Fim'
 
+    def atualiza_tipo_equipamento(self, request, queryset):
+        """
+        Foram criados campos no contrato para permitir a consulta por tipo de equipamento
+        Esses campos são atualizados automaticamente pelo modelo de Contrato, mas para contratos que já existiam
+        esses campos precisam ser atualizados.
+        Essa task foi criada para permitir a atualização desses contratos em produção.
+        """
+
+        for contrato in queryset.all():
+            contrato.save()
+
+        self.message_user(request, "Tipo de equipamento atualizado nos contratos.")
+
+    atualiza_tipo_equipamento.short_description = 'Atualizar tipo de equipamento'
+
     list_display = (
         'termo_contrato',
         'tipo_servico',
@@ -99,6 +114,8 @@ class ContratoAdmin(admin.ModelAdmin):
     )
 
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
+
+    actions = ['atualiza_tipo_equipamento']
 
 
 @admin.register(ColunasContrato)
