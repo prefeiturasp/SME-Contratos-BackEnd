@@ -18,6 +18,7 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         registro_funcional_deve_existir(attrs.get('username'))
         usuario_precisa_estar_validado(attrs.get('username'))
+        usuario_deve_estar_ativo(attrs.get('username'))
         return attrs
 
     def update(self, instance, validated_data):
