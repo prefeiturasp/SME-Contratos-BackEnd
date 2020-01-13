@@ -5,7 +5,7 @@ from rest_framework import serializers
 from ..validations.usuario_validations import (registro_funcional_deve_existir,
                                                usuario_precisa_estar_validado,
                                                hash_redefinicao_deve_existir, senha_nao_pode_ser_nulo,
-                                               senhas_devem_ser_iguais)
+                                               senhas_devem_ser_iguais, usuario_deve_estar_ativo)
 from ...tasks import enviar_email_redefinicao_senha
 
 user_model = get_user_model()
