@@ -2,6 +2,7 @@ pipeline {
     agent {
       node { 
         label 'py-coad'
+	checkout scm      
       }
     }
     
@@ -40,7 +41,7 @@ pipeline {
       stage('CheckOut') {
         steps {
           //git 'https://github.com/prefeiturasp/SME-Contratos-BackEnd.git' 
-          checkout scm		
+          //checkout scm		
           sh "echo MINHA BRANCH É ${GIT_BRANCH}"
         }
       }
