@@ -40,9 +40,9 @@ pipeline {
 	
       stage('CheckOut') {
         steps {
-          //git 'https://github.com/prefeiturasp/SME-Contratos-BackEnd.git' 
-          //checkout scm		
-          sh "echo MINHA BRANCH É ${GIT_BRANCH}"
+           
+          checkout scm		
+          
         }
       }
       
