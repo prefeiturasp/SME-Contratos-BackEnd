@@ -340,8 +340,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 
 JWT_AUTH = {
-    # 'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=env('SAFI_VALIDADE_TOKEN_HORAS', default=12)),
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=env('SAFI_VALIDADE_TOKEN_MINUTOS', default=720)),
     # Token expires * minutes after being issued
     'JWT_ALLOW_REFRESH': True,
     # 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(minutes=1),
