@@ -40,15 +40,13 @@ pipeline {
 	
       stage('CheckOut') {
         steps {
-           
           checkout scm		
-          
         }
       }
       
        stage('Setup ambiente') {
          steps {
-           //sh 'ls -la'    
+               
            sh 'mv env_sample .env'
            sh 'pip install --user -r requirements/local.txt'    
         }
@@ -81,9 +79,7 @@ pipeline {
           
          post {
            success{
-           //  Publicando arquivo de cobertura
-            //publishCoverage adapters: [coberturaAdapter('htmlcov/coverage.xml')], sourceFileResolver: sourceFiles('NEVER_STORE')
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
            }
          }
        }
@@ -149,7 +145,7 @@ pipeline {
       
       stage('Deploy homologacao') {
             when {
-                branch 'release'
+                branch 'homolog'
             }
             steps {
                  timeout(time: 24, unit: "HOURS") {
@@ -203,8 +199,8 @@ pipeline {
             }
         }
 		
-		// LIMPA AMBIENTE CRIADO
-		stage('Limpeza ambiente') {
+    // LIMPA AMBIENTE CRIADO
+    stage('Limpeza ambiente') {
         agent {
           node {
             //utiliza master  
