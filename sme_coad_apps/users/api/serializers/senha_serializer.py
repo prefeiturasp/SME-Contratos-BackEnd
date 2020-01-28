@@ -2,11 +2,11 @@ import environ
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from ..validations.usuario_validations import (registro_funcional_deve_existir,
                                                usuario_precisa_estar_validado,
                                                hash_redefinicao_deve_existir, senha_nao_pode_ser_nulo,
-                                               senhas_devem_ser_iguais)
+                                               senhas_devem_ser_iguais, usuario_deve_estar_ativo)
+from ...tasks import enviar_email_redefinicao_senha
 
 user_model = get_user_model()
 env = environ.Env()
@@ -18,26 +18,16 @@ class EsqueciMinhaSenhaSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         registro_funcional_deve_existir(attrs.get('username'))
         usuario_precisa_estar_validado(attrs.get('username'))
+        usuario_deve_estar_ativo(attrs.get('username'))
         return attrs
 
     def update(self, instance, validated_data):
-        try:
-            # instance.is_active = False
-            instance.hash_redefinicao = instance.encode_hash
-            instance.save()
-            link = 'http://{}/#/login/?hash={}'.format(env('SERVER_NAME'), instance.hash_redefinicao)
-            enviar_email_html(
-                'Solicitação de redefinição de senha',
-                'email_redefinicao_de_senha',
-                {'url': link,
-                 'nome': instance.nome,
-                 'login': instance.username,
-                 },
-                instance.email
-            )
-            return instance
-        except serializers.ValidationError(detail='Ocorreu um error ao tentar lembrar da senha'):
-            pass
+        instance.hash_redefinicao = instance.encode_hash
+        instance.save()
+
+        enviar_email_redefinicao_senha.delay(email=instance.email, username=instance.username, nome=instance.nome,
+                                             hash_redefinicao=instance.hash_redefinicao)
+        return instance
 
     class Meta:
         model = user_model

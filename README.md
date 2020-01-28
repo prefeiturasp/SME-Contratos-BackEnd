@@ -9,12 +9,15 @@ Sistema de gestão da Coordenadoria de Administração, Finanças e Infraestrutu
 
 License: MIT
 
-Versão: 1.0.0
+Versão: 1.1.0
 
 
 
 
 ## Release Notes
+
+### 1.1.0 - 20/01/2019 - Sprint 7
+* Solução de débitos técnicos
 
 ### 1.0.0 - 19/12/2019 - Sprint 6
 * Aplicação de identidade visual nos emails
@@ -76,3 +79,20 @@ Para instalar o tema do Admin
 ```console
 python manage.py loaddata utility/fixtures/admin_interface_theme_coad.json
 ```
+
+### Filas Celery
+**Subir o Celery Worker**
+```console
+celery  -A config worker --loglevel=info
+```
+
+**Subir o Celery Beat**
+```console
+celery  -A config beat --loglevel=info
+```
+
+**Monitorar os processos no celery**
+```console
+flower -A config --port=5555
+```
+
