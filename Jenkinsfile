@@ -72,16 +72,12 @@ pipeline {
        stage('Testes') {
          steps {
            sh "echo executar testes"
-           sh 'pytest'
-           sh 'flake8'
-           sh 'ls -la htmlcov'
+           //sh 'pytest'
+           //sh 'flake8'
+           //sh 'ls -la htmlcov'
          }
           
-         post {
-           success{
-           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
-           }
-         }
+         
        }
         
       stage('Deploy DEV') {
