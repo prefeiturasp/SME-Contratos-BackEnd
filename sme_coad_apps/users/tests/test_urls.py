@@ -1,23 +1,40 @@
 import pytest
-from django.conf import settings
-from django.urls import reverse, resolve
+from faker import Faker
+from rest_framework import status
 
 pytestmark = pytest.mark.django_db
 
-
-def test_detail(user: settings.AUTH_USER_MODEL):
-    assert (
-        reverse("users:detail", kwargs={"username": user.username})
-        == f"/users/{user.username}/"
-    )
-    assert resolve(f"/users/{user.username}/").view_name == "users:detail"
+url = '/api-token-auth/'
+username = Faker().user_name()
+password = Faker().text()
 
 
-def test_update():
-    assert reverse("users:update") == "/users/~update/"
-    assert resolve("/users/~update/").view_name == "users:update"
+def test_redirect(client):
+    response = client.get('/usuarios/')
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_redirect():
-    assert reverse("users:redirect") == "/users/~redirect/"
-    assert resolve("/users/~redirect/").view_name == "users:redirect"
+def test_redirect_authenticated(authencticated_client):
+    response = authencticated_client.get('/usuarios/')
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_login_jwt(client, django_user_model):
+    u = django_user_model.objects.create_user(username=username, password=password)
+    u.is_active = False
+    u.save()
+
+    response = client.post(url, {'username': username, 'password': password}, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    u.is_active = True
+    u.save()
+
+    response = client.post(url, {'username': username, 'password': password}, format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert 'token' in response.data
+
+
+def test_url_lookup(authencticated_client):
+    response = authencticated_client.get('/usuarios/lookup/')
+    assert response.status_code == status.HTTP_200_OK

@@ -3,6 +3,11 @@ python-slugify==3.0.3  # https://github.com/un33k/python-slugify
 Pillow==6.1.0  # https://github.com/python-pillow/Pillow
 argon2-cffi==19.1.0  # https://github.com/hynek/argon2_cffi
 redis==3.3.8  # https://github.com/antirez/redis
+celery==4.3.0  # pyup: < 5.0  # https://github.com/celery/celery
+django-celery-beat==1.5.0  # https://github.com/celery/django-celery-beat
+sentry-sdk==0.10.2 #https://github.com/getsentry/sentry-python
+uuid==1.30
+
 
 # Django
 # ------------------------------------------------------------------------------
@@ -12,7 +17,43 @@ django-model-utils==3.2.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.39.1  # https://github.com/pennersr/django-allauth
 django-crispy-forms==1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-redis==4.10.0  # https://github.com/niwinz/django-redis
+django-rest-swagger==2.2.0  # https://django-rest-swagger.readthedocs.io/en/latest/
+djangorestframework-jwt==1.11.0  # http://jpadilla.github.io/django-rest-framework-jwt/
+django-celery-beat==1.5.0 # https://github.com/celery
+django-celery-results==1.1.2  # https://github.com/celery/django-celery-results
+django-debug-toolbar==2.0  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==2.2.1  # https://github.com/django-extensions/django-extensions
+prometheus-client==0.7.1  # https://github.com/korfuri/django-prometheus
+django-prometheus==1.0.15  # https://github.com/korfuri/django-prometheus
+django-cors-headers==3.1.0  # https://github.com/adamchainz/django-cors-headers
+django-des==2.4.1  # https://github.com/jamiecounsell/django-des
 
 # Django REST Framework
 djangorestframework==3.10.2  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
+
+# Para validação e formatação de CNPJ e CPF
+brazilnum==0.8.8
+
+# Para melhoria da aparência do Django Admin
+# https://github.com/fabiocaccamo/django-admin-interface
+django-admin-interface==0.11.1
+
+# Pandas - Para importação de dados
+# pandas==0.25.1
+
+# Para gravação de log de alterações nos modelos
+# https://django-auditlog.readthedocs.io/en/latest/index.html
+#django-auditlog==0.4.5
+# Pegando última versão diretamente do repositório oficial.
+-e git://github.com/jjkester/django-auditlog.git##egg=auditlog
+
+# Para filtros no DRF
+# https://django-filter.readthedocs.io/en/master/#
+django-filter==2.1.0
+
+# Notification app for Django,
+# https://github.com/django-notifications/django-notifications
+django-notifications-hq==1.5.0
+
+flower==0.9.3

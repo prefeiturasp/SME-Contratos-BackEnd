@@ -1,8 +1,7 @@
 import pytest
-from django.conf import settings
-from django.test import RequestFactory
+from model_mommy import mommy
 
-from sme_coad_apps.users.tests.factories import UserFactory
+from .users.models import User
 
 
 @pytest.fixture(autouse=True)
@@ -11,10 +10,25 @@ def media_storage(settings, tmpdir):
 
 
 @pytest.fixture
-def user() -> settings.AUTH_USER_MODEL:
-    return UserFactory()
+def gestor():
+    return mommy.make(User, username='gestor')
 
 
 @pytest.fixture
-def request_factory() -> RequestFactory:
-    return RequestFactory()
+def suplente():
+    return mommy.make(User, username='suplente')
+
+
+@pytest.fixture
+def tipo_servico():
+    return mommy.make('TipoServico')
+
+
+@pytest.fixture
+def nucleo():
+    return mommy.make('Nucleo')
+
+
+@pytest.fixture
+def empresa():
+    return mommy.make('Empresa')
