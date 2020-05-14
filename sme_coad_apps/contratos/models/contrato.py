@@ -70,6 +70,20 @@ class Contrato(ModeloBase):
         (SITUACAO_RASCUNHO, SITUACAO_NOMES[SITUACAO_RASCUNHO]),
     )
 
+    # Referência para data de encerramento
+    REFERENCIA_DATA_ASSINATURA = 'DATA_ASSINATURA'
+    REFERENCIA_DATA_ORDEM_INICIO = 'DATA_ORDEM_INICIO'
+
+    REFERENCIA_NOMES = {
+        REFERENCIA_DATA_ASSINATURA: 'Data de Assinatura',
+        REFERENCIA_DATA_ORDEM_INICIO: 'Data de Ordem de Inicio',
+    }
+
+    REFERENCIA_CHOICES = (
+        (REFERENCIA_DATA_ASSINATURA, REFERENCIA_NOMES[REFERENCIA_DATA_ASSINATURA]),
+        (REFERENCIA_DATA_ORDEM_INICIO, REFERENCIA_NOMES[REFERENCIA_DATA_ORDEM_INICIO]),
+    )
+
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
@@ -81,6 +95,8 @@ class Contrato(ModeloBase):
                                            blank=True, null=True)
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
+    referencia_encerramento = models.CharField(max_length=20, choices=REFERENCIA_CHOICES,
+                                               default=REFERENCIA_DATA_ORDEM_INICIO)
     vigencia_em_dias = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
