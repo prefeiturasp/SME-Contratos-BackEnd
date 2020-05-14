@@ -81,6 +81,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.empresa_contratada, Empresa)
     assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
     assert isinstance(contrato_emergencial.data_ordem_inicio, datetime.date)
+    assert isinstance(contrato_emergencial.referencia_encerramento, str)
     assert isinstance(contrato_emergencial.vigencia_em_dias, int)
     assert isinstance(contrato_emergencial.situacao, str)
     assert isinstance(contrato_emergencial.gestor, User)
