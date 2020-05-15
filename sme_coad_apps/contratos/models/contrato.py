@@ -120,7 +120,11 @@ class Contrato(ModeloBase):
     @property
     def dias_para_o_encerramento(self):
         if self.data_encerramento:
-            return (self.data_encerramento - datetime.date.today()).days
+            dias = (self.data_encerramento - datetime.date.today()).days
+            if dias > 0:
+                return dias
+            else:
+                return 0
         else:
             return 0
 
