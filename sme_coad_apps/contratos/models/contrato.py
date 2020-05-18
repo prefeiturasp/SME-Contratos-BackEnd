@@ -29,27 +29,27 @@ class Contrato(ModeloBase):
     # Estado do Contrato
     ESTADO_EMERGENCIAL = 'EMERGENCIAL'
     ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
-    ESTADO_ULTIMO_ANO = 'ULTIMO_ANO'
+    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
     ESTADO_VIGENTE = 'VIGENTE'
 
     ESTADO_NOMES = {
         ESTADO_EMERGENCIAL: 'Emergencial',
         ESTADO_EXCEPCIONAL: 'Excepcional',
-        ESTADO_ULTIMO_ANO: 'Último Ano',
+        ESTADO_SUSPENSO_INTERROMPIDO: 'Suspenso / Interrompido',
         ESTADO_VIGENTE: 'Vigente'
     }
 
     ESTADO_CHOICES = (
         (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
         (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
-        (ESTADO_ULTIMO_ANO, ESTADO_NOMES[ESTADO_ULTIMO_ANO]),
+        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
     )
 
     ESTADOS = (
         ESTADO_EMERGENCIAL,
         ESTADO_EXCEPCIONAL,
-        ESTADO_ULTIMO_ANO,
+        ESTADO_SUSPENSO_INTERROMPIDO,
         ESTADO_VIGENTE
     )
 
@@ -107,7 +107,7 @@ class Contrato(ModeloBase):
     modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
                                       blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
-    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, blank=True, default='')
+    estado_contrato = models.CharField('estado', max_length=30, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
