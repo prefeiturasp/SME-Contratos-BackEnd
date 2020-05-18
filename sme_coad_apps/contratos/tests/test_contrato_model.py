@@ -117,7 +117,7 @@ def test_situcoes():
 def test_estado():
     assert Contrato.ESTADO_EMERGENCIAL
     assert Contrato.ESTADO_EXCEPCIONAL
-    assert Contrato.ESTADO_ULTIMO_ANO
+    assert Contrato.ESTADO_SUSPENSO_INTERROMPIDO
     assert Contrato.ESTADO_VIGENTE
 
 
