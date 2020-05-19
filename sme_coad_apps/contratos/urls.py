@@ -10,6 +10,7 @@ from .api.viewsets.empresa_viewsets import EmpresaViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import GeraNotificacoesVigenciaContratosViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import MinhasNotificacoesVigenciaViewSet
 from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
+from .api.viewsets.dotacao_valor_viewset import DotacaoValorViewSet
 
 router = routers.DefaultRouter()
 
@@ -24,6 +25,7 @@ router.register('gera-notificacoes-vigencia-contratos', GeraNotificacoesVigencia
 router.register('minhas-notificacoes-vigencia-contratos', MinhasNotificacoesVigenciaViewSet,
                 basename='minhas-notificacoes-vigencia-contratos')
 router.register('obrigacoes-contratuais', ObrigacaoContratualViewSet)
+router.register('dotacao-orcamentaria', DotacaoValorViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
