@@ -1,3 +1,6 @@
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 from .base import *  # noqa
 from .base import env
 
@@ -168,3 +171,11 @@ JWT_AUTH = {
 
 # EMAIL
 # EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default='des.backends.ConfiguredEmailBackend')
+
+
+# Sentry...
+# -----------------------------------------------------------
+sentry_sdk.init(
+    dsn=env('SENTRY_URL'),
+    integrations=[DjangoIntegration()]
+)
