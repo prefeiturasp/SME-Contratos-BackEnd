@@ -27,30 +27,30 @@ class Contrato(ModeloBase):
     historico = AuditlogHistoryField()
 
     # Estado do Contrato
-    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
-    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
-    ESTADO_ULTIMO_ANO = 'ULTIMO_ANO'
     ESTADO_VIGENTE = 'VIGENTE'
+    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
+    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
+    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
 
     ESTADO_NOMES = {
-        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_VIGENTE: 'Vigente',
         ESTADO_EXCEPCIONAL: 'Excepcional',
-        ESTADO_ULTIMO_ANO: 'Último Ano',
-        ESTADO_VIGENTE: 'Vigente'
+        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_SUSPENSO_INTERROMPIDO: 'Suspenso / Interrompido',
     }
 
     ESTADO_CHOICES = (
-        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
-        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
-        (ESTADO_ULTIMO_ANO, ESTADO_NOMES[ESTADO_ULTIMO_ANO]),
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
+        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
+        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
+        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
     )
 
     ESTADOS = (
-        ESTADO_EMERGENCIAL,
+        ESTADO_VIGENTE,
         ESTADO_EXCEPCIONAL,
-        ESTADO_ULTIMO_ANO,
-        ESTADO_VIGENTE
+        ESTADO_EMERGENCIAL,
+        ESTADO_SUSPENSO_INTERROMPIDO,
     )
 
     # Situações do Contrato Choice
@@ -107,20 +107,23 @@ class Contrato(ModeloBase):
     modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
                                       blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
-    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, blank=True, default='')
+    estado_contrato = models.CharField('estado', max_length=30, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
-                                      default=list)
+    valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
                                     null=True)
 
     @property
     def dias_para_o_encerramento(self):
         if self.data_encerramento:
-            return (self.data_encerramento - datetime.date.today()).days
+            dias = (self.data_encerramento - datetime.date.today()).days
+            if dias > 0:
+                return dias
+            else:
+                return 0
         else:
             return 0
 
