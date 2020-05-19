@@ -27,30 +27,30 @@ class Contrato(ModeloBase):
     historico = AuditlogHistoryField()
 
     # Estado do Contrato
-    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
-    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
-    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
     ESTADO_VIGENTE = 'VIGENTE'
+    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
+    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
+    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
 
     ESTADO_NOMES = {
-        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_VIGENTE: 'Vigente',
         ESTADO_EXCEPCIONAL: 'Excepcional',
+        ESTADO_EMERGENCIAL: 'Emergencial',
         ESTADO_SUSPENSO_INTERROMPIDO: 'Suspenso / Interrompido',
-        ESTADO_VIGENTE: 'Vigente'
     }
 
     ESTADO_CHOICES = (
-        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
-        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
-        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
+        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
+        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
+        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
     )
 
     ESTADOS = (
-        ESTADO_EMERGENCIAL,
+        ESTADO_VIGENTE,
         ESTADO_EXCEPCIONAL,
+        ESTADO_EMERGENCIAL,
         ESTADO_SUSPENSO_INTERROMPIDO,
-        ESTADO_VIGENTE
     )
 
     # Situações do Contrato Choice
@@ -112,8 +112,7 @@ class Contrato(ModeloBase):
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
-                                      default=list)
+    valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
                                     null=True)
 
