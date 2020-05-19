@@ -6,7 +6,7 @@ from ...models.unidade import Unidade
 class UnidadeLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unidade
-        fields = ('uuid', 'codigo_eol', 'tipo_unidade', 'nome', 'sigla')
+        fields = ('uuid', 'codigo_eol', 'tipo_unidade', 'nome', 'logradouro', 'bairro')
 
 
 class UnidadeSerializer(serializers.ModelSerializer):
