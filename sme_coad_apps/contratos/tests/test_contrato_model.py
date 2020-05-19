@@ -89,7 +89,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.observacoes, str)
     assert isinstance(contrato_emergencial.estado_contrato, str)
     assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
-    assert isinstance(contrato_emergencial.dotacao_orcamentaria, list)
+    assert isinstance(contrato_emergencial.valor_total, float)
     assert contrato_emergencial.historico
     assert isinstance(contrato_emergencial.modelo_ateste, ModeloAteste)
     assert contrato_emergencial.dres == ""
