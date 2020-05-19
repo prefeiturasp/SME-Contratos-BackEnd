@@ -25,7 +25,7 @@ router.register('gera-notificacoes-vigencia-contratos', GeraNotificacoesVigencia
 router.register('minhas-notificacoes-vigencia-contratos', MinhasNotificacoesVigenciaViewSet,
                 basename='minhas-notificacoes-vigencia-contratos')
 router.register('obrigacoes-contratuais', ObrigacaoContratualViewSet)
-router.register('dotacao-orcamentaria', DotacaoValorViewSet)
+router.register('dotacoes-orcamentarias', DotacaoValorViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

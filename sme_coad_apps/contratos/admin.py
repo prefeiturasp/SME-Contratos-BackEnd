@@ -3,7 +3,7 @@ from django.contrib import admin
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
 from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
-                     FiscaisUnidade)
+                     FiscaisUnidade, DotacaoValor)
 
 
 @admin.register(TipoServico)
@@ -167,3 +167,9 @@ class ContratoUnidadeAdmin(admin.ModelAdmin):
     ordering = ('contrato',)
     list_filter = ('contrato',)
     inlines = [FiscaisContratoUnidadeInLine]
+
+
+@admin.register(DotacaoValor)
+class DotacaoValorAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'dotacao_orcamentaria', 'valor', ]
+    ordering = ('contrato',)
