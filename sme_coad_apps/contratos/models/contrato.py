@@ -84,6 +84,20 @@ class Contrato(ModeloBase):
         (REFERENCIA_DATA_ORDEM_INICIO, REFERENCIA_NOMES[REFERENCIA_DATA_ORDEM_INICIO]),
     )
 
+    # Unidades de Vigência
+    UNIDADE_VIGENCIA_DIAS = 'DIAS'
+    UNIDADE_VIGENCIA_MESES = 'MESES'
+
+    UNIDADE_VIGENCIA_NOMES = {
+        UNIDADE_VIGENCIA_DIAS: 'dias',
+        UNIDADE_VIGENCIA_MESES: 'meses',
+    }
+
+    UNIDADE_VIGENCIA_CHOICES = (
+        (UNIDADE_VIGENCIA_DIAS, UNIDADE_VIGENCIA_NOMES[UNIDADE_VIGENCIA_DIAS]),
+        (UNIDADE_VIGENCIA_MESES, UNIDADE_VIGENCIA_NOMES[UNIDADE_VIGENCIA_MESES]),
+    )
+
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
@@ -97,7 +111,10 @@ class Contrato(ModeloBase):
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
     referencia_encerramento = models.CharField(max_length=20, choices=REFERENCIA_CHOICES,
                                                default=REFERENCIA_DATA_ORDEM_INICIO)
-    vigencia_em_dias = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    unidade_vigencia = models.CharField(max_length=10, choices=UNIDADE_VIGENCIA_CHOICES,
+                                        default=UNIDADE_VIGENCIA_DIAS)
+    # TODO Renomear esse campo para apenas vigencia uma vez que agora pode ser em dias ou meses
+    vigencia_em_dias = models.PositiveSmallIntegerField('vigência', default=0, blank=True, null=True)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
                                null=True)
@@ -235,8 +252,13 @@ class Contrato(ModeloBase):
 
 @receiver(pre_save, sender=Contrato)
 def contrato_pre_save(instance, *_args, **_kwargs):
+    # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
     if instance.data_ordem_inicio and instance.vigencia_em_dias:
-        instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
+        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_DIAS:
+            instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
+        else:
+            instance.data_encerramento = instance.data_ordem_inicio + relativedelta(
+                months=+instance.vigencia_em_dias) - relativedelta(days=+1)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
