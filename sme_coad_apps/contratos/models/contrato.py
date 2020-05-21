@@ -252,13 +252,18 @@ class Contrato(ModeloBase):
 
 @receiver(pre_save, sender=Contrato)
 def contrato_pre_save(instance, *_args, **_kwargs):
+    if instance.referencia_encerramento == Contrato.REFERENCIA_DATA_ASSINATURA:
+        data_inicio = instance.data_assinatura
+    else:
+        data_inicio = instance.data_ordem_inicio
+
     # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
-    if instance.data_ordem_inicio and instance.vigencia_em_dias:
+    if data_inicio and instance.vigencia_em_dias:
         if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_DIAS:
-            instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
         else:
-            instance.data_encerramento = instance.data_ordem_inicio + relativedelta(
-                months=+instance.vigencia_em_dias) - relativedelta(days=+1)
+            instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
+                days=+1)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
