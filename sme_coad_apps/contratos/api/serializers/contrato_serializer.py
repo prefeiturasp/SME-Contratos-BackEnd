@@ -8,6 +8,7 @@ from ...models import Contrato, Empresa, FiscalLote
 from ...models.contrato import Lote
 from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
+from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Unidade
 from ....core.models.nucleo import Nucleo
@@ -15,6 +16,17 @@ from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 
 user_model = get_user_model()
+
+
+class LoteSerializer(serializers.ModelSerializer):
+    unidades = serializers.SerializerMethodField()
+
+    def get_unidades(self, obj):
+        return UnidadeSerializer(obj.unidades, many=True).data
+
+    class Meta:
+        model = Lote
+        fields = '__all__'
 
 
 class ContratoSerializer(serializers.ModelSerializer):
@@ -33,7 +45,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
-    dres = serializers.SerializerMethodField('get_dres')
+    lotes = LoteSerializer(many=True)
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -123,11 +135,12 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
             else:
                 unidade = Unidade(
                     equipamento=Unidade.get_equipamento_from_unidade(unidade_json),
-                    tipo_unidade=unidade_json.get('tp_unidade_escolar'),
-                    codigo_eol=unidade_json.get('cd_equipamento'),
-                    nome=unidade_json.get('nm_equipamento'),
-                    logradouro=unidade_json.get('logradouro'),
-                    bairro=unidade_json.get('bairro')
+                    tipo_unidade=unidade_json.get('sg_tp_escola', ''),
+                    codigo_eol=unidade_json.get('cd_equipamento', ''),
+                    nome=unidade_json.get('nm_equipamento', ''),
+                    logradouro=unidade_json.get('logradouro', ''),
+                    bairro=unidade_json.get('bairro', ''),
+                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', '')
                 )
                 unidade.save()
             if not FiscalLote.objects.filter(lote=lote).exists():

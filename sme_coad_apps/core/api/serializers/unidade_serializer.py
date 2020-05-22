@@ -10,8 +10,6 @@ class UnidadeLookUpSerializer(serializers.ModelSerializer):
 
 
 class UnidadeSerializer(serializers.ModelSerializer):
-    dre = UnidadeLookUpSerializer()
-
     class Meta:
         model = Unidade
         fields = '__all__'
