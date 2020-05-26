@@ -15,6 +15,13 @@ class DotacaoValorSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'contrato', 'dotacao_orcamentaria', 'valor')
 
 
+class DotacaoValorLookUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DotacaoValor
+        fields = ('uuid', 'dotacao_orcamentaria', 'valor')
+
+
 class DotacaoValorCreatorSerializer(serializers.ModelSerializer):
     contrato = serializers.SlugRelatedField(
         slug_field='uuid',
