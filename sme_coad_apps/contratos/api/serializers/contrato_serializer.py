@@ -18,11 +18,44 @@ from ....users.models import User
 user_model = get_user_model()
 
 
+class FiscalLoteSerializer(serializers.ModelSerializer):
+    nome = serializers.SerializerMethodField()
+    rf = serializers.SerializerMethodField()
+
+    def get_nome(self, obj):
+        return obj.fiscal.nome
+
+    def get_rf(self, obj):
+        return obj.fiscal.username
+
+    class Meta:
+        model = FiscalLote
+        fields = ('nome', 'rf')
+
+
 class LoteSerializer(serializers.ModelSerializer):
     unidades = serializers.SerializerMethodField()
+    nome_fiscal = serializers.SerializerMethodField()
+    rf_fiscal = serializers.SerializerMethodField()
+    suplentes = serializers.SerializerMethodField()
 
     def get_unidades(self, obj):
         return UnidadeSerializer(obj.unidades, many=True).data
+
+    def get_nome_fiscal(self, obj):
+        if obj.fiscais_lote.filter(tipo_fiscal=FiscalLote.FISCAL_TITULAR).exists():
+            fiscal_titular = obj.fiscais_lote.get(tipo_fiscal=FiscalLote.FISCAL_TITULAR)
+            return fiscal_titular.fiscal.nome
+        return None
+
+    def get_rf_fiscal(self, obj):
+        if obj.fiscais_lote.filter(tipo_fiscal=FiscalLote.FISCAL_TITULAR).exists():
+            fiscal_titular = obj.fiscais_lote.get(tipo_fiscal=FiscalLote.FISCAL_TITULAR)
+            return fiscal_titular.fiscal.username
+        return None
+
+    def get_suplentes(self, obj):
+        return FiscalLoteSerializer(obj.fiscais_lote.filter(tipo_fiscal=FiscalLote.FISCAL_SUPLENTE), many=True).data
 
     class Meta:
         model = Lote
@@ -112,6 +145,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         queryset=user_model.objects.all()
     )
     unidades_selecionadas = serializers.ListField(required=False)
+    lotes = LoteSerializer(many=True, required=False)
 
     def validate(self, attrs):
         gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))

@@ -319,7 +319,7 @@ class FiscalLote(ModeloBase):
 
     historico = AuditlogHistoryField()
 
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name="lote", blank=True,
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name="fiscais_lote", blank=True,
                              null=True)
     fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='fiscais')
     tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
