@@ -32,7 +32,8 @@ class ContratoSerializer(serializers.ModelSerializer):
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
     dres = serializers.SerializerMethodField('get_dres')
-    dotacoes = DotacaoValorLookUpSerializer(many=True)
+    # dotacoes = DotacaoValorLookUpSerializer(many=True)
+    dotacoes_orcamentarias = DotacaoValorLookUpSerializer(many=True, source='dotacoes')
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -98,17 +99,17 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         allow_empty=True,
         queryset=user_model.objects.all()
     )
-    dotacoes = serializers.ListField(required=False)
+    dotacoes = DotacaoValorLookUpSerializer(many=True, required=False)
+    dotacoes_orcamentarias = serializers.ListField(required=False)
 
     def validate(self, attrs):
         gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
         return attrs
 
     def update(self, instance, validated_data):
-        dotacoes = validated_data.pop('dotacoes', [])
+        dotacoes = validated_data.pop('dotacoes_orcamentarias', [])
         instance.dotacoes.all().delete()
         update_instance_from_dict(instance, validated_data, save=True)
-
         for dotacao in dotacoes:
             dotacao_valor = DotacaoValor(
                 contrato=instance,
@@ -117,6 +118,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
             )
             dotacao_valor.save()
         return instance
+
     class Meta:
         model = Contrato
         exclude = ('id',)
