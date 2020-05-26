@@ -4,14 +4,13 @@ from rest_framework import serializers
 from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoSerializer
-from ...models import Contrato, Empresa, FiscalLote
-from ...models.contrato import Lote
+from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
+from ...models import Contrato, Empresa, DotacaoValor, FiscalLote, Lote
 from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
-from ....core.models import Unidade
-from ....core.models.nucleo import Nucleo
+from ....core.models import Nucleo, Unidade
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 
@@ -79,6 +78,9 @@ class ContratoSerializer(serializers.ModelSerializer):
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
     lotes = LoteSerializer(many=True)
+    dres = serializers.SerializerMethodField('get_dres')
+    # dotacoes = DotacaoValorLookUpSerializer(many=True)
+    dotacoes_orcamentarias = DotacaoValorLookUpSerializer(many=True, source='dotacoes')
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -146,6 +148,8 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     )
     unidades_selecionadas = serializers.ListField(required=False)
     lotes = LoteSerializer(many=True, required=False)
+    dotacoes = DotacaoValorLookUpSerializer(many=True, required=False)
+    dotacoes_orcamentarias = serializers.ListField(required=False)
 
     def validate(self, attrs):
         gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
@@ -153,8 +157,18 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         unidades_selecionadas = validated_data.pop('unidades_selecionadas', [])
+        dotacoes = validated_data.pop('dotacoes_orcamentarias', [])
         instance.lotes.all().delete()
+        instance.dotacoes.all().delete()
         update_instance_from_dict(instance, validated_data, save=True)
+
+        for dotacao in dotacoes:
+            dotacao_valor = DotacaoValor(
+                contrato=instance,
+                dotacao_orcamentaria=dotacao.get('dotacao_orcamentaria', ''),
+                valor=dotacao.get('valor', '')
+            )
+            dotacao_valor.save()
 
         for unidade_selecionada in unidades_selecionadas:
             lote = unidade_selecionada.get('lote')
