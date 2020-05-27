@@ -179,10 +179,15 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
             unidade_json = unidade_selecionada.get('unidade')
             if Unidade.objects.filter(codigo_eol=unidade_json.get('cd_equipamento')).exists():
                 unidade = Unidade.objects.get(codigo_eol=unidade_json.get('cd_equipamento'))
+                unidade.logradouro = unidade_json.get('logradouro', '')
+                unidade.bairro = unidade_json.get('bairro', '')
+                unidade.dre = unidade_json.get('nm_exibicao_diretoria_referencia', '')
+                unidade.tipo_unidade = unidade_json.get('sg_tp_escola', '') or ''
+                unidade.save()
             else:
                 unidade = Unidade(
                     equipamento=Unidade.get_equipamento_from_unidade(unidade_json),
-                    tipo_unidade=unidade_json.get('sg_tp_escola', ''),
+                    tipo_unidade=unidade_json.get('sg_tp_escola', '') or '',
                     codigo_eol=unidade_json.get('cd_equipamento', ''),
                     nome=unidade_json.get('nm_equipamento', ''),
                     logradouro=unidade_json.get('logradouro', ''),
