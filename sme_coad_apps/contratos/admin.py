@@ -83,6 +83,7 @@ class ContratoAdmin(admin.ModelAdmin):
         'termo_contrato',
         'tipo_servico',
         'empresa_contratada',
+        'dres',
         'data_inicio',
         'data_fim',
         'dias_para_vencer',

@@ -16,7 +16,7 @@ def contrato():
 
 @pytest.fixture
 def dre():
-    return mommy.make('Unidade', tipo_unidade='DRE', nome='DRE Teste')
+    return 'DRE Teste'
 
 
 @pytest.fixture

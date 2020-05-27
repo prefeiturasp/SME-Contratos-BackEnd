@@ -10,20 +10,21 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture
 def dre():
-    return mommy.make(Unidade, codigo_eol='99999', tipo_unidade='DRE')
+    return 'DRE teste'
 
 
 def test_instance_model(dre):
-    model = mommy.make(Unidade, codigo_eol='123456', cep='27600-000', dre=dre, sigla='abcd')
+    model = mommy.make(Unidade, codigo_eol='123456', logradouro='Rua Dr. Diogo de Faria, 1247',
+                       bairro='Vila Clementino', dre=dre)
     assert isinstance(model, Unidade)
     assert isinstance(model.nome, str)
     assert isinstance(model.equipamento, str)
     assert isinstance(model.tipo_unidade, str)
     assert isinstance(model.codigo_eol, str)
-    assert isinstance(model.cep, str)
-    assert isinstance(model.dre, Unidade)
+    assert isinstance(model.logradouro, str)
+    assert isinstance(model.dre, str)
+    assert isinstance(model.bairro, str)
     assert model.historico
-    assert model.sigla == 'abcd'
 
 
 def test_srt_model():
@@ -41,7 +42,7 @@ def test_admin():
     model_admin = UnidadeAdmin(Unidade, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Unidade]
-    assert model_admin.list_display == ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'sigla', 'dre')
+    assert model_admin.list_display == ('nome', 'equipamento', 'tipo_unidade', 'codigo_eol', 'dre')
     assert model_admin.ordering == ('nome',)
-    assert model_admin.search_fields == ('nome', 'codigo_eol', 'sigla')
+    assert model_admin.search_fields == ('nome', 'codigo_eol')
     assert model_admin.list_filter == ('equipamento', 'tipo_unidade', 'dre')
