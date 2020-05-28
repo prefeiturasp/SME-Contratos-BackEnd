@@ -1,10 +1,28 @@
 import pytest
 from faker import Faker
+from model_mommy import mommy
+
+from sme_coad_apps.users.models import User
 
 
 @pytest.fixture(autouse=True)
 def media_storage(settings, tmpdir):
     settings.MEDIA_ROOT = tmpdir.strpath
+
+
+@pytest.fixture
+def contrato():
+    mommy.make(User,
+               username='1111111',
+               nome='Galvão Bueno')
+    mommy.make(User,
+               username='1234567',
+               nome='Calvin Feitosa')
+    mommy.make('TipoServico',
+               nome='Teste tipo servico',
+               uuid='7baa3356-599f-4627-9fed-832ee888de14')
+    return mommy.make('Contrato',
+                      uuid='d0260b07-4ed3-4741-8844-c5c3a9279f55')
 
 
 @pytest.fixture
