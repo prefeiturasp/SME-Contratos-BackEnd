@@ -18,6 +18,8 @@ def contrato():
     mommy.make(User,
                username='1234567',
                nome='Calvin Feitosa')
+    mommy.make('Unidade',
+               codigo_eol='108101')
     mommy.make('TipoServico',
                nome='Teste tipo servico',
                uuid='7baa3356-599f-4627-9fed-832ee888de14')
