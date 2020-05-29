@@ -16,7 +16,7 @@ from .empresa import Empresa
 from .tipo_servico import TipoServico
 from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade, Edital
-from ...core.models_abstracts import ModeloBase
+from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
 
 env = environ.Env()
@@ -159,7 +159,7 @@ class Contrato(ModeloBase):
 
     @property
     def dres(self):
-        return " ".join(list(filter(None, self.unidades.values_list('unidade__dre__sigla', flat=True).distinct())))
+        return ", ".join(list(filter(None, self.lotes.values_list('unidades__dre', flat=True).distinct())))
 
     def __str__(self):
         return self.termo_contrato
@@ -260,16 +260,17 @@ def contrato_pre_save(instance, *_args, **_kwargs):
 
     # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
     if data_inicio and instance.vigencia_em_dias:
-        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_DIAS:
-            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
-        else:
+        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_MESES:
             instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
                 days=+1)
+        else:
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
-
+    instance.data_assinatura += relativedelta(days=+1)
+    instance.data_ordem_inicio += relativedelta(days=+1)
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):
@@ -291,6 +292,50 @@ class DocumentoFiscal(ModeloBase):
     class Meta:
         verbose_name = 'Documento Fiscal'
         verbose_name_plural = 'Documentos Fiscais'
+
+
+class Lote(ModeloBase, TemNome):
+    historico = AuditlogHistoryField()
+
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="lotes")
+    unidades = models.ManyToManyField(Unidade)
+
+    def __str__(self):
+        return f'Lote {self.nome}'
+
+    class Meta:
+        verbose_name = 'Lote'
+        verbose_name_plural = 'Lotes'
+
+
+class FiscalLote(ModeloBase):
+    # Tipos de Fiscal
+    FISCAL_TITULAR = 'TITULAR'
+    FISCAL_SUPLENTE = 'SUPLENTE'
+
+    FISCAL_NOMES = {
+        FISCAL_TITULAR: 'Titular',
+        FISCAL_SUPLENTE: 'Suplente',
+    }
+
+    FISCAL_CHOICES = (
+        (FISCAL_TITULAR, FISCAL_NOMES[FISCAL_TITULAR]),
+        (FISCAL_SUPLENTE, FISCAL_NOMES[FISCAL_SUPLENTE]),
+    )
+
+    historico = AuditlogHistoryField()
+
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name="fiscais_lote", blank=True,
+                             null=True)
+    fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='fiscais')
+    tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
+
+    def __str__(self):
+        return f'{self.fiscal.nome} do {self.lote.nome}'
+
+    class Meta:
+        verbose_name = 'Fiscal do Lote de Contrato'
+        verbose_name_plural = 'Fiscais dos Lotes de Contratos'
 
 
 class ContratoUnidade(ModeloBase):

@@ -1,5 +1,5 @@
 from .colunas_contrato import ColunasContrato
-from .contrato import Contrato, ContratoUnidade, FiscaisUnidade
+from .contrato import Contrato, ContratoUnidade, FiscaisUnidade, Lote, FiscalLote
 from .empresa import Empresa
 from .notificacao_vigencia_contrato import NotificacaoVigenciaContrato
 from .obrigacao_contratual import ObrigacaoContratual
