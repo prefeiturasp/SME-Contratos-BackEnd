@@ -29,9 +29,9 @@ class Unidade(ModeloBase, TemNome):
     equipamento = models.CharField(max_length=3, choices=EQP_CHOICES, default=EQP_UNIDADE_ENSINO)
     tipo_unidade = models.CharField(max_length=20, blank=True)
     codigo_eol = models.CharField(max_length=6, validators=[MinLengthValidator(6)], primary_key=True, unique=True)
-    logradouro = models.CharField(max_length=100, blank=True)
-    bairro = models.CharField(max_length=50, blank=True)
-    dre = models.CharField(max_length=100, blank=True)
+    logradouro = models.CharField(max_length=100, blank=True, default='')
+    bairro = models.CharField(max_length=50, blank=True, default='')
+    dre = models.CharField(max_length=100, blank=True, default='')
 
     @classmethod
     def get_equipamento_from_unidade(self, unidade):
