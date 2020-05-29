@@ -259,16 +259,17 @@ def contrato_pre_save(instance, *_args, **_kwargs):
 
     # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
     if data_inicio and instance.vigencia_em_dias:
-        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_DIAS:
-            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
-        else:
+        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_MESES:
             instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
                 days=+1)
+        else:
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
-
+    instance.data_assinatura += relativedelta(days=+1)
+    instance.data_ordem_inicio += relativedelta(days=+1)
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):
