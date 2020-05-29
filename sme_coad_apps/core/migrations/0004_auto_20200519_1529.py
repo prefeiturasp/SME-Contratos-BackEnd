@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('core', '0003_unidade_sigla'),
     ]
@@ -13,11 +12,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='unidade',
             name='bairro',
-            field=models.CharField(max_length=50, null=True),
+            field=models.CharField(max_length=50, default='', null=True),
         ),
         migrations.AddField(
             model_name='unidade',
             name='logradouro',
-            field=models.CharField(max_length=100, null=True),
+            field=models.CharField(max_length=100, default='', null=True),
         ),
     ]
