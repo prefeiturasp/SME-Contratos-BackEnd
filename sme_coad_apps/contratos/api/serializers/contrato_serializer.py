@@ -8,6 +8,7 @@ from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
 from ...models import Contrato, Empresa, DotacaoValor, FiscalLote, Lote
 from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
+from ....core.api.serializers.edital_serializer import EditalLookUpSerializer
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Nucleo, Unidade
@@ -74,6 +75,7 @@ class ContratoSerializer(serializers.ModelSerializer):
         queryset=user_model.objects.all()
     )
     suplente = UsuarioLookUpSerializer()
+    edital = EditalLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
@@ -139,6 +141,13 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         queryset=user_model.objects.all()
     )
     suplente = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=user_model.objects.all()
+    )
+    edital = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
         allow_null=True,
