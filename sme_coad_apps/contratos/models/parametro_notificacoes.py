@@ -11,7 +11,7 @@ from ...core.models_abstracts import ModeloBase
 class ParametroNotificacoesVigencia(ModeloBase):
     historico = AuditlogHistoryField()
 
-    estado_contrato = models.CharField('Para contratos com estado', max_length=15, choices=Contrato.ESTADO_CHOICES,
+    estado_contrato = models.CharField('Para contratos com estado', max_length=30, choices=Contrato.ESTADO_CHOICES,
                                        blank=True, default='')
     vencendo_em = models.PositiveSmallIntegerField('Vencendo a partir de (dias)', default=0, blank=True, null=True)
     repetir_notificacao_a_cada = models.PositiveSmallIntegerField('Repetir notificação a cada (dias)', default=0,

@@ -3,7 +3,7 @@ from django.contrib import admin
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
 from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
-                     FiscaisUnidade)
+                     FiscaisUnidade, Lote, FiscalLote, DotacaoValor)
 
 
 @admin.register(TipoServico)
@@ -33,6 +33,12 @@ class ContratoUnidadeInLine(admin.TabularInline):
 
     def get_queryset(self, request):
         return super(ContratoUnidadeInLine, self).get_queryset(request).select_related('unidade')
+
+
+class LotesInLine(admin.TabularInline):
+    model = Lote
+    filter_horizontal = ('unidades',)
+    extra = 1  # Quantidade de linhas que serão exibidas.
 
 
 @admin.register(Contrato)
@@ -87,7 +93,7 @@ class ContratoAdmin(admin.ModelAdmin):
     ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
     list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
-    inlines = [ContratoUnidadeInLine]
+    inlines = [ContratoUnidadeInLine, LotesInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
     fieldsets = (
         ('Contrato', {
@@ -99,7 +105,8 @@ class ContratoAdmin(admin.ModelAdmin):
                 'objeto',
                 'empresa_contratada',
                 'modelo_ateste',
-                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
+                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias', 'unidade_vigencia'),
+                'referencia_encerramento',
                 'observacoes',
                 'coordenador',
                 'gestor',
@@ -160,9 +167,27 @@ class FiscaisContratoUnidadeInLine(admin.TabularInline):
     extra = 1  # Quantidade de linhas que serão exibidas.
 
 
+class FiscaisLoteInLine(admin.TabularInline):
+    model = FiscalLote
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
 @admin.register(ContratoUnidade)
 class ContratoUnidadeAdmin(admin.ModelAdmin):
     list_display = ['contrato', 'unidade', 'lote', ]
     ordering = ('contrato',)
     list_filter = ('contrato',)
     inlines = [FiscaisContratoUnidadeInLine]
+
+
+@admin.register(Lote)
+class LoteAdmin(admin.ModelAdmin):
+    filter_horizontal = ('unidades',)
+    inlines = [FiscaisLoteInLine]
+    model = Lote
+
+
+@admin.register(DotacaoValor)
+class DotacaoValorAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'dotacao_orcamentaria', 'valor', ]
+    ordering = ('contrato',)

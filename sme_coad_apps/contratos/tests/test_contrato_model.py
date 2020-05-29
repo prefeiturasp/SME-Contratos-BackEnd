@@ -38,12 +38,12 @@ def contrato_emergencial(gestor, suplente):
 
 @pytest.fixture
 def dre_aa():
-    return mommy.make(Unidade, codigo_eol='99999', tipo_unidade='DRE', sigla='AA')
+    return 'DRE - SA'
 
 
 @pytest.fixture
 def dre_bb():
-    return mommy.make(Unidade, codigo_eol='888888', tipo_unidade='DRE', sigla='BB')
+    return 'DRE - JT'
 
 
 @pytest.fixture
@@ -63,12 +63,16 @@ def contrato_xpto123():
 
 @pytest.fixture
 def contrato_unidade_xpto123_123456(contrato_xpto123, unidade_123456):
-    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, lote='1', unidade=unidade_123456)
+    lote = mommy.make('Lote', nome='1', contrato=contrato_xpto123)
+    lote.unidades.add(unidade_123456)
+    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, unidade=unidade_123456)
 
 
 @pytest.fixture
 def contrato_unidade_xpto123_654321(contrato_xpto123, unidade_654321):
-    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, lote='1', unidade=unidade_654321)
+    lote = mommy.make('Lote', nome='2', contrato=contrato_xpto123)
+    lote.unidades.add(unidade_654321)
+    return mommy.make('ContratoUnidade', contrato=contrato_xpto123, unidade=unidade_654321)
 
 
 def test_instance_model(contrato_emergencial):
@@ -81,6 +85,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.empresa_contratada, Empresa)
     assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
     assert isinstance(contrato_emergencial.data_ordem_inicio, datetime.date)
+    assert isinstance(contrato_emergencial.referencia_encerramento, str)
     assert isinstance(contrato_emergencial.vigencia_em_dias, int)
     assert isinstance(contrato_emergencial.situacao, str)
     assert isinstance(contrato_emergencial.gestor, User)
@@ -88,7 +93,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.observacoes, str)
     assert isinstance(contrato_emergencial.estado_contrato, str)
     assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
-    assert isinstance(contrato_emergencial.dotacao_orcamentaria, list)
+    assert isinstance(contrato_emergencial.valor_total, float)
     assert contrato_emergencial.historico
     assert isinstance(contrato_emergencial.modelo_ateste, ModeloAteste)
     assert contrato_emergencial.dres == ""
@@ -116,7 +121,7 @@ def test_situcoes():
 def test_estado():
     assert Contrato.ESTADO_EMERGENCIAL
     assert Contrato.ESTADO_EXCEPCIONAL
-    assert Contrato.ESTADO_ULTIMO_ANO
+    assert Contrato.ESTADO_SUSPENSO_INTERROMPIDO
     assert Contrato.ESTADO_VIGENTE
 
 
@@ -203,4 +208,4 @@ def test_notifica_atribuicao(contrato_emergencial):
 
 def test_dres_do_contrato(contrato_unidade_xpto123_123456, contrato_unidade_xpto123_654321):
     contrato = contrato_unidade_xpto123_123456.contrato
-    assert contrato.dres == 'AA BB'
+    assert contrato.dres == 'DRE - JT, DRE - SA'
