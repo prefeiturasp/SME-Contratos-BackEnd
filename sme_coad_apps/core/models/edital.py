@@ -7,7 +7,7 @@ from ...core.models_abstracts import ModeloBase
 
 class Edital(ModeloBase):
     historico = AuditlogHistoryField()
-    numero = models.CharField('Número do Edital', max_length=100)
+    numero = models.CharField('Número do Edital', max_length=50, unique=True)
 
     def __str__(self):
         return self.numero
