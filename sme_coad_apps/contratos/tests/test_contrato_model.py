@@ -8,7 +8,7 @@ from model_mommy import mommy
 from ..admin import ContratoAdmin
 from ..models import Contrato, ContratoUnidade, TipoServico, Empresa
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Unidade
+from ...core.models import Nucleo, Unidade, Edital
 from ...users.models import User
 
 # from ..admin import TipoServicoAdmin
@@ -31,7 +31,7 @@ def contrato_emergencial(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
                       suplente=suplente, observacoes='teste', tipo_servico=mommy.make(TipoServico),
-                      nucleo_responsavel=mommy.make(Nucleo), empresa_contratada=mommy.make(Empresa),
+                      nucleo_responsavel=mommy.make(Nucleo), edital=mommy.make(Edital), empresa_contratada=mommy.make(Empresa),
                       estado_contrato=Contrato.ESTADO_EMERGENCIAL, modelo_ateste=mommy.make(ModeloAteste)
                       )
 
@@ -77,6 +77,7 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.processo, str)
     assert isinstance(contrato_emergencial.tipo_servico, TipoServico)
     assert isinstance(contrato_emergencial.nucleo_responsavel, Nucleo)
+    assert isinstance(contrato_emergencial.edital, Edital)
     assert isinstance(contrato_emergencial.objeto, str)
     assert isinstance(contrato_emergencial.empresa_contratada, Empresa)
     assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
