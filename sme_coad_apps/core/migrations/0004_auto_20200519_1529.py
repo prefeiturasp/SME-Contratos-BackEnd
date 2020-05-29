@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='unidade',
             name='bairro',
-            field=models.CharField(max_length=50, default='', null=True),
+            field=models.CharField(max_length=50, default='', blank=True),
         ),
         migrations.AddField(
             model_name='unidade',
             name='logradouro',
-            field=models.CharField(max_length=100, default='', null=True),
+            field=models.CharField(max_length=100, default='', blank=True),
         ),
     ]
