@@ -4,7 +4,6 @@ import environ
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
@@ -16,7 +15,7 @@ from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from .empresa import Empresa
 from .tipo_servico import TipoServico
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Unidade
+from ...core.models import Nucleo, Unidade, Edital
 from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
 
@@ -100,6 +99,8 @@ class Contrato(ModeloBase):
 
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
+    edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contartos_do_edital',
+                                      blank=True, null=True)
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
@@ -259,16 +260,17 @@ def contrato_pre_save(instance, *_args, **_kwargs):
 
     # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
     if data_inicio and instance.vigencia_em_dias:
-        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_DIAS:
-            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
-        else:
+        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_MESES:
             instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
                 days=+1)
+        else:
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
-
+    instance.data_assinatura += relativedelta(days=+1)
+    instance.data_ordem_inicio += relativedelta(days=+1)
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):

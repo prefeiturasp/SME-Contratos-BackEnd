@@ -100,6 +100,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'fields': (
                 'termo_contrato',
                 'processo',
+                'edital',
                 'tipo_servico',
                 'nucleo_responsavel',
                 'objeto',
