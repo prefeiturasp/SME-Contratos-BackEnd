@@ -1,5 +1,4 @@
 import datetime
-
 import environ
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
@@ -10,6 +9,8 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from notifications.models import Notification
 from notifications.signals import notify
+from rest_framework import viewsets
+from rest_framework.response import Response
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from .empresa import Empresa
@@ -20,6 +21,12 @@ from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
 
 env = environ.Env()
+
+
+class SafiToken(viewsets.ViewSet):
+
+    def list(self, request):
+        return Response({'safi_token': env("SAFI_TOKEN")})
 
 
 class Contrato(ModeloBase):
