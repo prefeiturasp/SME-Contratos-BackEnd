@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils import timezone
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
@@ -79,6 +80,17 @@ class ContratoAdmin(admin.ModelAdmin):
 
     atualiza_tipo_equipamento.short_description = 'Atualizar tipo de equipamento'
 
+    def encerra_contratos_vencidos(self, request, queryset):
+        contratos = queryset.filter(data_encerramento__lt=timezone.now()).exclude(
+            situacao=Contrato.SITUACAO_ENCERRADO)
+
+        for contrato in contratos:
+            contrato.situacao = Contrato.SITUACAO_ENCERRADO
+            contrato.save()
+        self.message_user(request, "Contratos vencidos encerrados.")
+
+    encerra_contratos_vencidos.short_description = 'Encerrar contratos vencidos'
+
     list_display = (
         'termo_contrato',
         'tipo_servico',
@@ -123,7 +135,7 @@ class ContratoAdmin(admin.ModelAdmin):
 
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
 
-    actions = ['atualiza_tipo_equipamento']
+    actions = ['atualiza_tipo_equipamento', 'encerra_contratos_vencidos']
 
 
 @admin.register(ColunasContrato)

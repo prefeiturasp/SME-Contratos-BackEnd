@@ -158,6 +158,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     lotes = LoteSerializer(many=True, required=False)
     dotacoes = DotacaoValorLookUpSerializer(many=True, required=False)
     dotacoes_orcamentarias = serializers.ListField(required=False)
+    dias_para_o_encerramento = serializers.CharField(required=False)
 
     def validate(self, attrs):
         gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
