@@ -269,8 +269,10 @@ def contrato_pre_save(instance, *_args, **_kwargs):
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
-    instance.data_assinatura += relativedelta(days=+1)
-    instance.data_ordem_inicio += relativedelta(days=+1)
+    if instance.data_encerramento and instance.data_assinatura:
+        instance.data_assinatura += relativedelta(days=+1)
+    if instance.data_encerramento and instance.data_ordem_inicio:
+        instance.data_ordem_inicio += relativedelta(days=+1)
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):
