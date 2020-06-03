@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models import Obrigacao, GrupoObrigacao
+from ...models import ItemObrigacao, GrupoObrigacao
 
 
-class ObrigacaoSerializer(serializers.ModelSerializer):
+class ItemObrigacaoSerializer(serializers.ModelSerializer):
     grupo = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
@@ -11,11 +11,11 @@ class ObrigacaoSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Obrigacao
+        model = ItemObrigacao
         fields = ('uuid', 'item', 'descricao', 'grupo')
 
 
-class ObrigacaoSerializeCreate(serializers.ModelSerializer):
+class ItemObrigacaoSerializeCreate(serializers.ModelSerializer):
     grupo = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
@@ -23,9 +23,9 @@ class ObrigacaoSerializeCreate(serializers.ModelSerializer):
     )
 
     def create(self, validated_data):
-        item = Obrigacao.objects.create(**validated_data)
+        item = ItemObrigacao.objects.create(**validated_data)
         return item
 
     class Meta:
-        model = Obrigacao
+        model = ItemObrigacao
         fields = ('uuid', 'item', 'descricao', 'grupo')

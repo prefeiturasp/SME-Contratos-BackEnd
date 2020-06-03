@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .obrigacao_serializer import ObrigacaoSerializer
+from .obrigacao_serializer import ItemObrigacaoSerializer
 from ...models import GrupoObrigacao, Edital
 
 
@@ -10,7 +10,7 @@ class GrupoObrigacaoSerializer(serializers.ModelSerializer):
         required=False,
         queryset=Edital.objects.all()
     )
-    itens_de_obrigacao = ObrigacaoSerializer(many=True)
+    itens_de_obrigacao = ItemObrigacaoSerializer(many=True)
 
     class Meta:
         model = GrupoObrigacao
@@ -23,7 +23,7 @@ class GrupoObrigacaoSerializerCreate(serializers.ModelSerializer):
         required=False,
         queryset=Edital.objects.all()
     )
-    itens_de_obrigacao = ObrigacaoSerializer(many=True)
+    itens_de_obrigacao = ItemObrigacaoSerializer(many=True)
 
     def create(self, validated_data):
         grupo = GrupoObrigacao.objects.create(**validated_data)

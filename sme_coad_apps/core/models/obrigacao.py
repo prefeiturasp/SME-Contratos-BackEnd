@@ -8,12 +8,12 @@ from ...core.models.edital import Edital
 
 class ClausulaObrigacao(ModeloBase):
     historico = AuditlogHistoryField()
-    item = models.CharField(max_length=15)
-    nome = models.CharField('Nome da Cláusula', max_length=350)
+    numero = models.CharField(max_length=15)
+    descricao = models.CharField('Nome da Cláusula', max_length=350)
     edital = models.ForeignKey(Edital, on_delete=models.CASCADE, related_name="clausulas_de_obrigacao")
 
     def __str__(self):
-        return f'{self.edital.numero} - {self.item} {self.nome}'
+        return f'{self.edital.numero} - {self.numero} {self.descricao}'
 
     class Meta:
         verbose_name = 'Cláusula de Obrigação'
@@ -22,12 +22,12 @@ class ClausulaObrigacao(ModeloBase):
 
 class GrupoObrigacao(ModeloBase):
     historico = AuditlogHistoryField()
-    item = models.CharField(max_length=15)
-    nome = models.CharField('Nome do Grupo', max_length=350)
+    numero = models.CharField(max_length=15, default='')
+    descricao = models.CharField('Nome do Grupo', max_length=350, default='')
     clausula = models.ForeignKey(ClausulaObrigacao, on_delete=models.CASCADE, related_name="grupos_de_obrigacao")
 
     def __str__(self):
-        return f'{self.item} - {self.nome}'
+        return f'{self.numero} - {self.descricao}'
 
     class Meta:
         verbose_name = 'Grupo de Obrigação'
@@ -37,11 +37,11 @@ class GrupoObrigacao(ModeloBase):
 class ItemObrigacao(ModeloBase):
     historico = AuditlogHistoryField()
     descricao = models.TextField('Descrição do Item')
-    item = models.CharField(max_length=15)
+    numero = models.CharField(max_length=15, default='')
     grupo = models.ForeignKey(GrupoObrigacao, on_delete=models.CASCADE, related_name="itens_de_obrigacao")
 
     def __str__(self):
-        return f'{self.item} - {self.descricao}'
+        return f'{self.numero} - {self.descricao}'
 
     class Meta:
         verbose_name = 'Item de Obrigação'
@@ -51,11 +51,11 @@ class ItemObrigacao(ModeloBase):
 class SubItemObrigacao(ModeloBase):
     historico = AuditlogHistoryField()
     descricao = models.TextField('Descrição do Sub Item')
-    item = models.CharField(max_length=15)
-    item_obrigacao = models.ForeignKey(ItemObrigacao, on_delete=models.CASCADE, related_name="sub_itens_de_obrigacao")
+    numero = models.CharField(max_length=15)
+    item = models.ForeignKey(ItemObrigacao, on_delete=models.CASCADE, related_name="sub_itens_de_obrigacao")
 
     def __str__(self):
-        return f'{self.item} - {self.descricao}'
+        return f'{self.numero} - {self.descricao}'
 
     class Meta:
         verbose_name = 'Sub Item de Obrigação'

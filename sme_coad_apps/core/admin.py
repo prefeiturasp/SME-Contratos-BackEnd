@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Divisao, Nucleo, Unidade, Coad, CoadAssessor, Servidor, Edital, GrupoObrigacao, Obrigacao
+from .models import Divisao, Nucleo, Unidade, Coad, CoadAssessor, Servidor, Edital, GrupoObrigacao, ItemObrigacao
 
 
 class NucleoInLine(admin.TabularInline):
@@ -60,9 +60,9 @@ class GrupoObrigacoesInline(admin.StackedInline):
     model = GrupoObrigacao
 
 
-class ObrigacaoInline(admin.StackedInline):
+class ItemObrigacaoInline(admin.StackedInline):
     extra = 1
-    model = Obrigacao
+    model = ItemObrigacao
     fieldsets = (
         (None, {
             'fields': ('item', 'descricao')
@@ -86,5 +86,5 @@ class GrupoObrigacaoAdmin(admin.ModelAdmin):
     ordering = ('nome',)
     search_fields = ('nome',)
     inlines = [
-        ObrigacaoInline
+        ItemObrigacaoInline
     ]
