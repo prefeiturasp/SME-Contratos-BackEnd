@@ -9,12 +9,12 @@ pytestmark = pytest.mark.django_db
 
 @pytest.fixture
 def dre():
-    return mommy.make(Unidade, tipo_unidade='DRE', nome='DRE Teste')
+    return 'DRE Teste'
 
 
 @pytest.fixture
 def unidade(dre):
-    return mommy.make(Unidade, tipo_unidade='CEU', dre=dre, sigla='abcd')
+    return mommy.make(Unidade, tipo_unidade='CEU', dre=dre)
 
 
 def test_unidade_lookup_serializer(unidade):
@@ -22,7 +22,6 @@ def test_unidade_lookup_serializer(unidade):
 
     assert unidade_serializer.data is not None
     assert 'id' not in unidade_serializer.data
-    assert 'sigla' in unidade_serializer.data
 
 
 def test_unidade_serializer(unidade):
@@ -31,4 +30,3 @@ def test_unidade_serializer(unidade):
     assert unidade_serializer.data is not None
     assert 'id' not in unidade_serializer.data
     assert unidade_serializer.data['dre']
-    assert 'sigla' in unidade_serializer.data

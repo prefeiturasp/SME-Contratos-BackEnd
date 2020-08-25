@@ -8,7 +8,9 @@ from .api.viewsets.coad_assessor_viewset import CoadAssessorViewSet
 from .api.viewsets.coad_viewset import CoadViewSet
 from .api.viewsets.divisao_viewset import DivisaoViewSet
 from .api.viewsets.nucleo_viewsets import NucleoViewSet
+from ..contratos.models.contrato import SafiToken
 from ..core.api.viewsets.unidade_viewset import UnidadeViewSet
+from ..core.api.viewsets.edital_viewset import EditalViewSet
 
 router = routers.DefaultRouter()
 
@@ -17,6 +19,8 @@ router.register('nucleos', NucleoViewSet)
 router.register('coad', CoadViewSet)
 router.register('coad-assessores', CoadAssessorViewSet)
 router.register('unidades', UnidadeViewSet)
+router.register('editais', EditalViewSet)
+router.register('safi-token', SafiToken, basename='Version')
 
 router.registry.extend(contratos_router.registry)
 router.registry.extend(usuarios_router.registry)

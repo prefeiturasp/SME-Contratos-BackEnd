@@ -1,9 +1,8 @@
 pipeline {
     agent {
-      node { 
+      node {
         label 'py-coad'
-	      
-      }
+	  }
     }
     
     options {
@@ -11,88 +10,37 @@ pipeline {
       disableConcurrentBuilds()              
     }
     
-        
     stages {
-	 stage('BD') {
-        agent {
-          label 'master'
-        }  
-     steps {
-        script {
-          CONTAINER_ID = sh (
-          script: 'docker ps -q --filter "name=coad-db"',
-          returnStdout: true
-          ).trim()
-           if (CONTAINER_ID) {
-            sh "echo nome é: ${CONTAINER_ID}"
-            sh "docker rm -f ${CONTAINER_ID}"
-            sh 'docker run -d --rm --cap-add SYS_TIME --name coad-db --network python-network -p 5432 -e TZ="America/Sao_Paulo" -e POSTGRES_DB=coad -e POSTGRES_PASSWORD=adminadmin -e POSTGRES_USER=postgres postgres:11-alpine'
-        } else {
-        //    sh "echo nome é: ${CONTAINER_ID}"
-            sh 'docker run -d --rm --cap-add SYS_TIME --name coad-db --network python-network -p 5432 -e TZ="America/Sao_Paulo" -e POSTGRES_DB=coad -e POSTGRES_PASSWORD=adminadmin -e POSTGRES_USER=postgres postgres:11-alpine'
-       }
-        }
-
-        }
-      }
-	
-	
-	
+	  
       stage('CheckOut') {
         steps {
           checkout scm		
         }
       }
       
-       stage('Setup ambiente') {
-         steps {
-               
-           sh 'mv env_sample .env'
-           sh 'pip install --user -r requirements/local.txt'    
-        }
-      } 
-        
-             
       stage('Analise Codigo') {
-          when {
-                branch 'release'
-          }
+        when {
+          branch 'develop'
+        }
          steps {
            sh 'sonar-scanner \
                 -Dsonar.projectKey=SME-Contratos-BackEnd \
                 -Dsonar.sources=. \
                 -Dsonar.exclusions=htmlcov \
-                -Dsonar.host.url=http://automation.educacao.intranet:9000 \
+                -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
                 -Dsonar.login=1426bd14e5f9a2d6a3e5af46ba81d196b936e1ce \
                 -Dsonar.language=py \
                 -Dsonar.sourceEncoding=UTF-8'
          }
-       }
+      }
       
-       stage('Testes') {
-         steps {
-           sh "echo executar testes"
-           sh 'pytest'
-           sh 'flake8'
-           sh 'ls -la htmlcov'
-         }
-          
-         post {
-           success{
-           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'htmlcov', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
-           }
-         }
-       }
-        
-      stage('Deploy DEV') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                 
-                 sh 'echo Deploying desenvolvimento'
-                
-                // Start JOB Rundeck para build das imagens Docker e push SME Registry
+      stage('Docker Build DEV') {
+        when {
+          branch 'develop'
+        }
+        steps {
+           sh 'echo Deploying desenvolvimento'
+           // Start JOB para build das imagens Docker e push SME Registry
       
           script {
             step([$class: "RundeckNotifier",
@@ -109,11 +57,19 @@ pipeline {
               shouldWaitForRundeckJob: true,
               tags: "",
               tailLog: true])
-           }
+          }
+        }
+      }
+
+      stage('Deploy Dev') {
+        when {
+          branch 'develop'
+        }
+        steps {    
                 
-       //Start JOB Rundeck para update de deploy Kubernetes 
+         //Start JOB para update de deploy Kubernetes 
          
-         script {
+          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
               jobId: "819496ff-aaf3-480c-b871-ad0d1a1f3c54",
@@ -128,41 +84,22 @@ pipeline {
               shouldWaitForRundeckJob: true,
               tags: "",
               tailLog: true])
-           }
-      
-       
-            }
+          }
         }
+      }
         
-        stage('Deploy QA') {
-            when {
-                branch 'develop'
-            }
-            steps {
-                sh 'echo Deploying QA'
-            }
+      stage('Docker Build HOM') {
+        when {
+          branch 'homolog'
         }
-      
-      stage('Deploy homologacao') {
-            when {
-                branch 'homolog'
-            }
-            steps {
-                 timeout(time: 24, unit: "HOURS") {
-               
-                 telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\nBranch name: ${GIT_BRANCH}\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
-                 input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'marcos_costa,danieli_paula,everton_nogueira'
-            }
-                 sh 'echo Deploying homologacao'
-                
-                // Start JOB Rundeck para build das imagens Docker e push SME Registry
-      
+        steps {
+          
           script {
-           step([$class: "RundeckNotifier",
+            step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
                              
               //JOB DE BUILD
-              jobId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              jobId: "7c291d48-4b0a-4a6c-856c-d745afaeda9a",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -174,14 +111,26 @@ pipeline {
               shouldWaitForRundeckJob: true,
               tags: "",
               tailLog: true])
-           }
+          }
+        }
+      }
+
+      stage('Deploy HOM') {
+        when {
+          branch 'homolog'
+        }
+        steps {
+          timeout(time: 24, unit: "HOURS") {
+          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\nBranch name: ${GIT_BRANCH}\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
+          input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'ebufaino, marcos_nastri, calvin_rossinhole, kelwy_oliveira'
+          }    
                 
        //Start JOB Rundeck para update de imagens no host homologação 
          
-         script {
+          script {
             step([$class: "RundeckNotifier",
               includeRundeckLogs: true,
-              jobId: "xxxxxxxxxxxxxxxxxxxxxxxx",
+              jobId: "87787c11-4511-4e65-aaf6-b3ae1117980c",
               nodeFilters: "",
               //options: """
               //     PARAM_1=value1
@@ -193,56 +142,92 @@ pipeline {
               shouldWaitForRundeckJob: true,
               tags: "",
               tailLog: true])
-           }
-      
-       
-            }
-        }
-		
-    // LIMPA AMBIENTE CRIADO
-    stage('Limpeza ambiente') {
-        agent {
-          node {
-            //utiliza master  
-            label 'master'
           }
         }
-        steps {
-          sh 'docker rm -f coad-db'   
-        }
-        
       }
-     
-}
+      
+      stage('Docker Build PROD') {
+        when {
+          branch 'master'
+        }
+        steps {
+          
+          script {
+            step([$class: "RundeckNotifier",
+              includeRundeckLogs: true,
+                             
+              //JOB DE BUILD
+              jobId: "97a55759-175f-4c1c-b4c3-8923e69bc357",
+              nodeFilters: "",
+              //options: """
+              //     PARAM_1=value1
+               //    PARAM_2=value2
+              //     PARAM_3=
+              //     """,
+              rundeckInstance: "Rundeck-SME",
+              shouldFailTheBuild: true,
+              shouldWaitForRundeckJob: true,
+              tags: "",
+              tailLog: true])
+          }
+        }
+      }
 
-    
+      stage('Deploy Prod') {
+        when {
+          branch 'master'
+        }
+        steps {
+          timeout(time: 24, unit: "HOURS") {
+          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Requer uma aprovação para deploy !!!\nBranch name: ${GIT_BRANCH}\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n")
+          input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'ebufaino, marcos_nastri, calvin_rossinhole, kelwy_oliveira'
+          }    
+                
+       //Start JOB Rundeck para update de imagens no host homologação 
+         
+          script {
+            step([$class: "RundeckNotifier",
+              includeRundeckLogs: true,
+              jobId: "83c351fd-c566-4ec2-b313-f18c3e53eafe",
+              nodeFilters: "",
+              //options: """
+              //     PARAM_1=value1
+               //    PARAM_2=value2
+              //     PARAM_3=
+              //     """,
+              rundeckInstance: "Rundeck-SME",
+              shouldFailTheBuild: true,
+              shouldWaitForRundeckJob: true,
+              tags: "",
+              tailLog: true])
+          }
+        }
+      }
+
+    }
+
 post {
         always {
-            
-            echo 'One way or another, I have finished'
-            
-            
+          echo 'One way or another, I have finished'
         }
         success {
-           
-            telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Esta ok !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n\n Uma nova versão da aplicação esta disponivel!!!")
+	  	    step([$class: 'GitHubCommitStatusSetter'])
+          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME} - Esta ok !!!\n Consulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)\n\n Uma nova versão da aplicação esta disponivel!!!")
         }
         unstable {
-           
-            telegramSend("O Build ${BUILD_DISPLAY_NAME} <${env.BUILD_URL}> - Esta instavel ...\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
+          step([$class: 'GitHubCommitStatusSetter'])
+          telegramSend("O Build ${BUILD_DISPLAY_NAME} <${env.BUILD_URL}> - Esta instavel ...\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
         }
         failure {
-            
-             telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME}  - Quebrou. \nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
+          step([$class: 'GitHubCommitStatusSetter'])
+          telegramSend("${JOB_NAME}...O Build ${BUILD_DISPLAY_NAME}  - Quebrou. \nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
         }
         changed {
-             
-               echo 'Things were different before...'
-            
+          echo 'Things were different before...'
         }
-       aborted {
-             
-             telegramSend("O Build ${BUILD_DISPLAY_NAME} - Foi abortado.\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
+        aborted {
+          step([$class: 'GitHubCommitStatusSetter'])
+          telegramSend("O Build ${BUILD_DISPLAY_NAME} - Foi abortado.\nConsulte o log para detalhes -> [Job logs](${env.BUILD_URL}console)")
         }
     }
 }

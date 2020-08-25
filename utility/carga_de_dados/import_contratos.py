@@ -259,7 +259,6 @@ def importa_contratos():
 
         unidade_data = {
             'codigo_eol': eol_unidade,
-            'cep': row['CEP_UNIDADE'],
             'nome': row['NOME_UNIDADE'],
             'equipamento': equipamento,
             'tipo_unidade': row['EQP']
@@ -298,9 +297,9 @@ def importa_contratos():
 
         dotacoes[contrato.termo_contrato].add(row['DOTACAO'])
 
-    importa_dres()
+    # importa_dres()
 
-    grava_dotacoes(dotacoes)
+    # grava_dotacoes(dotacoes)
 
     if __name__ == '__main__':
         importa_contratos()

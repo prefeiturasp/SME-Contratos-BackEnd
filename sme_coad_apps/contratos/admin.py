@@ -1,9 +1,10 @@
 from django.contrib import admin
+from django.utils import timezone
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
 from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
-                     FiscaisUnidade)
+                     FiscaisUnidade, Lote, FiscalLote, DotacaoValor)
 
 
 @admin.register(TipoServico)
@@ -33,6 +34,12 @@ class ContratoUnidadeInLine(admin.TabularInline):
 
     def get_queryset(self, request):
         return super(ContratoUnidadeInLine, self).get_queryset(request).select_related('unidade')
+
+
+class LotesInLine(admin.TabularInline):
+    model = Lote
+    filter_horizontal = ('unidades',)
+    extra = 1  # Quantidade de linhas que serão exibidas.
 
 
 @admin.register(Contrato)
@@ -73,6 +80,17 @@ class ContratoAdmin(admin.ModelAdmin):
 
     atualiza_tipo_equipamento.short_description = 'Atualizar tipo de equipamento'
 
+    def encerra_contratos_vencidos(self, request, queryset):
+        contratos = queryset.filter(data_encerramento__lt=timezone.now()).exclude(
+            situacao=Contrato.SITUACAO_ENCERRADO)
+
+        for contrato in contratos:
+            contrato.situacao = Contrato.SITUACAO_ENCERRADO
+            contrato.save()
+        self.message_user(request, "Contratos vencidos encerrados.")
+
+    encerra_contratos_vencidos.short_description = 'Encerrar contratos vencidos'
+
     list_display = (
         'termo_contrato',
         'tipo_servico',
@@ -87,19 +105,21 @@ class ContratoAdmin(admin.ModelAdmin):
     ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
     list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
-    inlines = [ContratoUnidadeInLine]
+    inlines = [ContratoUnidadeInLine, LotesInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
     fieldsets = (
         ('Contrato', {
             'fields': (
                 'termo_contrato',
                 'processo',
+                'edital',
                 'tipo_servico',
                 'nucleo_responsavel',
                 'objeto',
                 'empresa_contratada',
                 'modelo_ateste',
-                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias'),
+                ('data_assinatura', 'data_ordem_inicio', 'vigencia_em_dias', 'unidade_vigencia'),
+                'referencia_encerramento',
                 'observacoes',
                 'coordenador',
                 'gestor',
@@ -115,7 +135,7 @@ class ContratoAdmin(admin.ModelAdmin):
 
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
 
-    actions = ['atualiza_tipo_equipamento']
+    actions = ['atualiza_tipo_equipamento', 'encerra_contratos_vencidos']
 
 
 @admin.register(ColunasContrato)
@@ -160,9 +180,27 @@ class FiscaisContratoUnidadeInLine(admin.TabularInline):
     extra = 1  # Quantidade de linhas que serão exibidas.
 
 
+class FiscaisLoteInLine(admin.TabularInline):
+    model = FiscalLote
+    extra = 1  # Quantidade de linhas que serão exibidas.
+
+
 @admin.register(ContratoUnidade)
 class ContratoUnidadeAdmin(admin.ModelAdmin):
     list_display = ['contrato', 'unidade', 'lote', ]
     ordering = ('contrato',)
     list_filter = ('contrato',)
     inlines = [FiscaisContratoUnidadeInLine]
+
+
+@admin.register(Lote)
+class LoteAdmin(admin.ModelAdmin):
+    filter_horizontal = ('unidades',)
+    inlines = [FiscaisLoteInLine]
+    model = Lote
+
+
+@admin.register(DotacaoValor)
+class DotacaoValorAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'dotacao_orcamentaria', 'valor', ]
+    ordering = ('contrato',)

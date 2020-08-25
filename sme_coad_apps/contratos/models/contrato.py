@@ -1,56 +1,62 @@
 import datetime
-
 import environ
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from notifications.models import Notification
 from notifications.signals import notify
+from rest_framework import viewsets
+from rest_framework.response import Response
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 from .empresa import Empresa
 from .tipo_servico import TipoServico
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Unidade
-from ...core.models_abstracts import ModeloBase
+from ...core.models import Nucleo, Unidade, Edital
+from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
 
 env = environ.Env()
+
+
+class SafiToken(viewsets.ViewSet):
+
+    def list(self, request):
+        return Response({'safi_token': env("SAFI_TOKEN")})
 
 
 class Contrato(ModeloBase):
     historico = AuditlogHistoryField()
 
     # Estado do Contrato
-    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
-    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
-    ESTADO_ULTIMO_ANO = 'ULTIMO_ANO'
     ESTADO_VIGENTE = 'VIGENTE'
+    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
+    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
+    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
 
     ESTADO_NOMES = {
-        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_VIGENTE: 'Vigente',
         ESTADO_EXCEPCIONAL: 'Excepcional',
-        ESTADO_ULTIMO_ANO: 'Último Ano',
-        ESTADO_VIGENTE: 'Vigente'
+        ESTADO_EMERGENCIAL: 'Emergencial',
+        ESTADO_SUSPENSO_INTERROMPIDO: 'Suspenso / Interrompido',
     }
 
     ESTADO_CHOICES = (
-        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
-        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
-        (ESTADO_ULTIMO_ANO, ESTADO_NOMES[ESTADO_ULTIMO_ANO]),
         (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
+        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
+        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
+        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
     )
 
     ESTADOS = (
-        ESTADO_EMERGENCIAL,
+        ESTADO_VIGENTE,
         ESTADO_EXCEPCIONAL,
-        ESTADO_ULTIMO_ANO,
-        ESTADO_VIGENTE
+        ESTADO_EMERGENCIAL,
+        ESTADO_SUSPENSO_INTERROMPIDO,
     )
 
     # Situações do Contrato Choice
@@ -70,8 +76,38 @@ class Contrato(ModeloBase):
         (SITUACAO_RASCUNHO, SITUACAO_NOMES[SITUACAO_RASCUNHO]),
     )
 
+    # Referência para data de encerramento
+    REFERENCIA_DATA_ASSINATURA = 'DATA_ASSINATURA'
+    REFERENCIA_DATA_ORDEM_INICIO = 'DATA_ORDEM_INICIO'
+
+    REFERENCIA_NOMES = {
+        REFERENCIA_DATA_ASSINATURA: 'Data de Assinatura',
+        REFERENCIA_DATA_ORDEM_INICIO: 'Data de Ordem de Inicio',
+    }
+
+    REFERENCIA_CHOICES = (
+        (REFERENCIA_DATA_ASSINATURA, REFERENCIA_NOMES[REFERENCIA_DATA_ASSINATURA]),
+        (REFERENCIA_DATA_ORDEM_INICIO, REFERENCIA_NOMES[REFERENCIA_DATA_ORDEM_INICIO]),
+    )
+
+    # Unidades de Vigência
+    UNIDADE_VIGENCIA_DIAS = 'DIAS'
+    UNIDADE_VIGENCIA_MESES = 'MESES'
+
+    UNIDADE_VIGENCIA_NOMES = {
+        UNIDADE_VIGENCIA_DIAS: 'dias',
+        UNIDADE_VIGENCIA_MESES: 'meses',
+    }
+
+    UNIDADE_VIGENCIA_CHOICES = (
+        (UNIDADE_VIGENCIA_DIAS, UNIDADE_VIGENCIA_NOMES[UNIDADE_VIGENCIA_DIAS]),
+        (UNIDADE_VIGENCIA_MESES, UNIDADE_VIGENCIA_NOMES[UNIDADE_VIGENCIA_MESES]),
+    )
+
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
+    edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contartos_do_edital',
+                                      blank=True, null=True)
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
@@ -81,7 +117,12 @@ class Contrato(ModeloBase):
                                            blank=True, null=True)
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)
     data_ordem_inicio = models.DateField('data da ordem de início', blank=True, null=True)
-    vigencia_em_dias = models.PositiveSmallIntegerField(default=0, blank=True, null=True)
+    referencia_encerramento = models.CharField(max_length=20, choices=REFERENCIA_CHOICES,
+                                               default=REFERENCIA_DATA_ORDEM_INICIO)
+    unidade_vigencia = models.CharField(max_length=10, choices=UNIDADE_VIGENCIA_CHOICES,
+                                        default=UNIDADE_VIGENCIA_DIAS)
+    # TODO Renomear esse campo para apenas vigencia uma vez que agora pode ser em dias ou meses
+    vigencia_em_dias = models.PositiveSmallIntegerField('vigência', default=0, blank=True, null=True)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
                                null=True)
@@ -91,20 +132,23 @@ class Contrato(ModeloBase):
     modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
                                       blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
-    estado_contrato = models.CharField('estado', max_length=15, choices=ESTADO_CHOICES, blank=True, default='')
+    estado_contrato = models.CharField('estado', max_length=30, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    dotacao_orcamentaria = ArrayField(models.CharField('Dotação Orçamentária', max_length=200), blank=True,
-                                      default=list)
+    valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
                                     null=True)
 
     @property
     def dias_para_o_encerramento(self):
         if self.data_encerramento:
-            return (self.data_encerramento - datetime.date.today()).days
+            dias = (self.data_encerramento - datetime.date.today()).days
+            if dias > 0:
+                return dias
+            else:
+                return 0
         else:
             return 0
 
@@ -122,7 +166,7 @@ class Contrato(ModeloBase):
 
     @property
     def dres(self):
-        return " ".join(list(filter(None, self.unidades.values_list('unidade__dre__sigla', flat=True).distinct())))
+        return ", ".join(list(filter(None, self.lotes.values_list('unidades__dre', flat=True).distinct())))
 
     def __str__(self):
         return self.termo_contrato
@@ -216,13 +260,26 @@ class Contrato(ModeloBase):
 
 @receiver(pre_save, sender=Contrato)
 def contrato_pre_save(instance, *_args, **_kwargs):
-    if instance.data_ordem_inicio and instance.vigencia_em_dias:
-        instance.data_encerramento = instance.data_ordem_inicio + relativedelta(days=+instance.vigencia_em_dias)
+    if instance.referencia_encerramento == Contrato.REFERENCIA_DATA_ASSINATURA:
+        data_inicio = instance.data_assinatura
+    else:
+        data_inicio = instance.data_ordem_inicio
+
+    # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
+    if data_inicio and instance.vigencia_em_dias:
+        if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_MESES:
+            instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
+                days=+1)
+        else:
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
     instance.tem_ceu = instance.unidades.filter(unidade__equipamento='CEU').exists()
-
+    if instance.data_encerramento and instance.data_assinatura:
+        instance.data_assinatura += relativedelta(days=+1)
+    if instance.data_encerramento and instance.data_ordem_inicio:
+        instance.data_ordem_inicio += relativedelta(days=+1)
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):
@@ -244,6 +301,50 @@ class DocumentoFiscal(ModeloBase):
     class Meta:
         verbose_name = 'Documento Fiscal'
         verbose_name_plural = 'Documentos Fiscais'
+
+
+class Lote(ModeloBase, TemNome):
+    historico = AuditlogHistoryField()
+
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="lotes")
+    unidades = models.ManyToManyField(Unidade)
+
+    def __str__(self):
+        return f'Lote {self.nome}'
+
+    class Meta:
+        verbose_name = 'Lote'
+        verbose_name_plural = 'Lotes'
+
+
+class FiscalLote(ModeloBase):
+    # Tipos de Fiscal
+    FISCAL_TITULAR = 'TITULAR'
+    FISCAL_SUPLENTE = 'SUPLENTE'
+
+    FISCAL_NOMES = {
+        FISCAL_TITULAR: 'Titular',
+        FISCAL_SUPLENTE: 'Suplente',
+    }
+
+    FISCAL_CHOICES = (
+        (FISCAL_TITULAR, FISCAL_NOMES[FISCAL_TITULAR]),
+        (FISCAL_SUPLENTE, FISCAL_NOMES[FISCAL_SUPLENTE]),
+    )
+
+    historico = AuditlogHistoryField()
+
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name="fiscais_lote", blank=True,
+                             null=True)
+    fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='fiscais')
+    tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
+
+    def __str__(self):
+        return f'{self.fiscal.nome} do {self.lote.nome}'
+
+    class Meta:
+        verbose_name = 'Fiscal do Lote de Contrato'
+        verbose_name_plural = 'Fiscais dos Lotes de Contratos'
 
 
 class ContratoUnidade(ModeloBase):

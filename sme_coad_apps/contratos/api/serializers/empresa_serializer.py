@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import Empresa
+from ...models import Empresa, Lote
 
 
 class EmpresaSerializer(serializers.ModelSerializer):
@@ -18,3 +18,5 @@ class EmpresaLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Empresa
         fields = ('nome', 'uuid', 'id', 'cnpj')
+
+
