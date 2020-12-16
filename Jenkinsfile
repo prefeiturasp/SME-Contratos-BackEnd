@@ -28,7 +28,7 @@ pipeline {
                 -Dsonar.sources=. \
                 -Dsonar.exclusions=htmlcov \
                 -Dsonar.host.url=http://sonar.sme.prefeitura.sp.gov.br \
-                -Dsonar.login=1426bd14e5f9a2d6a3e5af46ba81d196b936e1ce \
+                -Dsonar.login=2ba27cb4b3d1e2c7cfbfc400eeb7fa5d5a314e12 \
                 -Dsonar.language=py \
                 -Dsonar.sourceEncoding=UTF-8'
          }
