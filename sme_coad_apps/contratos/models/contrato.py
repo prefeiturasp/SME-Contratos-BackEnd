@@ -243,9 +243,9 @@ class Contrato(ModeloBase):
                 assunto,
                 'email_atribuicao_contrato',
                 {'nome': notificacao.recipient.first_name,
-                 'papel': notificacao.data["papel"],
+                 'papel': notificacao.data['papel'],
                  'contrato': notificacao.target.termo_contrato,
-                 'url_contrato': notificacao.data["url_contrato"],
+                 'url_contrato': notificacao.data['url_contrato'],
                  'mensagem': notificacao.description,
                  },
                 notificacao.recipient.email
