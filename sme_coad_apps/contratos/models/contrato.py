@@ -1,5 +1,6 @@
 import datetime
 import environ
+import json
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
@@ -107,7 +108,7 @@ class Contrato(ModeloBase):
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
     edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contartos_do_edital',
-                                      blank=True, null=True)
+                               blank=True, null=True)
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
@@ -243,9 +244,9 @@ class Contrato(ModeloBase):
                 assunto,
                 'email_atribuicao_contrato',
                 {'nome': notificacao.recipient.first_name,
-                 'papel': notificacao.data["papel"],
+                 'papel': json.loads(notificacao.data)['papel'],
                  'contrato': notificacao.target.termo_contrato,
-                 'url_contrato': notificacao.data["url_contrato"],
+                 'url_contrato': json.loads(notificacao.data)['url_contrato'],
                  'mensagem': notificacao.description,
                  },
                 notificacao.recipient.email
@@ -280,6 +281,7 @@ def contrato_pre_save(instance, *_args, **_kwargs):
         instance.data_assinatura += relativedelta(days=+1)
     if instance.data_encerramento and instance.data_ordem_inicio:
         instance.data_ordem_inicio += relativedelta(days=+1)
+
 
 @receiver(post_save, sender=Contrato)
 def contrato_post_save(instance, **kwargs):
