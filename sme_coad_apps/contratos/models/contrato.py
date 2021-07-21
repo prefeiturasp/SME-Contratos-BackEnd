@@ -138,7 +138,7 @@ class Contrato(ModeloBase):
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
-    valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+    valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
                                     null=True)
 
@@ -354,8 +354,8 @@ class ContratoUnidade(ModeloBase):
 
     contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="unidades")
     unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
-    valor_mensal = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
-    valor_total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
+    valor_mensal = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     lote = models.CharField(max_length=20, blank=True, default='')
 
     def __str__(self):
