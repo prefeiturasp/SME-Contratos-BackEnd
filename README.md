@@ -7,7 +7,7 @@ SME-COAD-BackEnd
 
 Sistema de gestão da Coordenadoria de Administração, Finanças e Infraestrutura (COAD) da Secretaria de Educação da cidade de São Paulo.
 
-License: MIT
+License: AGPL3.0
 
 Versão: 1.1.0
 
