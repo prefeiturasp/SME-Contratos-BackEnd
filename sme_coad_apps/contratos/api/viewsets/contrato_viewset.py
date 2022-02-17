@@ -2,11 +2,11 @@ from django.db.models import Q
 from django_filters import rest_framework as filters
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
 
 from sme_coad_apps.contratos.models import ContratoUnidade
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from .filters import ContratoFilter
 from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer, ContratoLookUpSerializer
 from ...models import Contrato
 from ....core.viewsets_abstracts import ComHistoricoViewSet
@@ -26,9 +26,8 @@ class ContratoViewSet(ComHistoricoViewSet):
 
     serializer_class = ContratoSerializer
 
-    filter_backends = (filters.DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filter_fields = (
-        'situacao', 'tipo_servico', 'gestor', 'suplente', 'empresa_contratada', 'estado_contrato', 'termo_contrato')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ContratoFilter
     ordering_fields = ('data_ordem_inicio',)
     search_fields = ('processo',)
 
