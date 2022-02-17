@@ -1,7 +1,5 @@
 from django_filters import rest_framework as filters
 
-
-
 class ContratoFilter(filters.FilterSet):
     uuid = filters.CharFilter(
         field_name='uuid',
