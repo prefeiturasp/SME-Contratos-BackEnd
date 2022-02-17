@@ -13,10 +13,11 @@ from sme_coad_apps.contratos.urls import urlpatterns as contrato_url
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
 
-schema_view = get_swagger_view(title='API SME COAD')
+schema_view = get_swagger_view(title='API SME SAFI')
 
 urlpatterns = [
-                  path("docs/", schema_view),
+                  path("docs/", schema_view, name='docs'),
+                  path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                   path("api-token-auth/", obtain_jwt_token),
                   path("api-token-refresh/", refresh_jwt_token),
                   path("api-token-verify/", verify_jwt_token),
