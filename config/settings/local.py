@@ -64,14 +64,6 @@ CELERY_TASK_EAGER_PROPAGATES = False
 
 EMAIL_BACKEND = 'des.backends.ConfiguredEmailBackend'
 
-# DRF
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-
-}
-
 SWAGGER_SETTINGS = {
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout',
@@ -80,3 +72,4 @@ SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
     'SECURITY_DEFINITIONS': None,
 }
+
