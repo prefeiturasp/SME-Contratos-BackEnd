@@ -72,6 +72,3 @@ SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
     'SECURITY_DEFINITIONS': None,
 }
-
-
-

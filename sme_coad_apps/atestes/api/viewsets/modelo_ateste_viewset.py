@@ -1,4 +1,5 @@
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ..serializers.modelo_ateste_serializer import (ModeloAtesteSerializer, ModeloAtesteLookUpSerializer,
@@ -11,6 +12,7 @@ class ModeloAtesteViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
     queryset = ModeloAteste.objects.all()
     serializer_class = ModeloAtesteSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
