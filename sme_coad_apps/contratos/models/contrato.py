@@ -1,6 +1,7 @@
 import datetime
-import environ
 import json
+
+import environ
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
@@ -238,15 +239,21 @@ class Contrato(ModeloBase):
         notificacoes_pendentes = Notification.objects.unsent().filter(
             Q(verb='tc_atribuido_gestor') | Q(verb='tc_atribuido_suplente'))
         for notificacao in notificacoes_pendentes:
+            if type(notificacao.data) is dict:
+                papel = notificacao.data['papel']
+                url_contrato = notificacao.data['url_contrato']
+            else:
+                papel = json.loads(notificacao.data)['papel']
+                url_contrato = json.loads(notificacao.data)['url_contrato']
             assunto = f'Alerta de atribuição. Contrato:{notificacao.target.termo_contrato}'
 
             enviar_email_html(
                 assunto,
                 'email_atribuicao_contrato',
                 {'nome': notificacao.recipient.first_name,
-                 'papel': json.loads(notificacao.data)['papel'],
+                 'papel': papel,
                  'contrato': notificacao.target.termo_contrato,
-                 'url_contrato': json.loads(notificacao.data)['url_contrato'],
+                 'url_contrato': url_contrato,
                  'mensagem': notificacao.description,
                  },
                 notificacao.recipient.email

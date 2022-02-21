@@ -49,3 +49,20 @@ def fake_user(client, django_user_model):
                                                  email=email)
     client.login(username=username, password=password)
     return user
+
+
+@pytest.fixture
+def colunas_contrato(fake_user):
+    return mommy.make('ColunasContrato',
+                      uuid='d0260b07-4ed3-4741-8844-c5c3a9279f55',
+                      usuario=fake_user,
+                      colunas_array=[
+                        {
+                            "field": "termo_contrato",
+                            "header": "TC"
+                        },
+                        {
+                            "field": "processo",
+                            "header": "Processo"
+                        }
+                      ])
