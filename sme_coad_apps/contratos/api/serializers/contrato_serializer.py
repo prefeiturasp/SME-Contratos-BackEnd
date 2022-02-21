@@ -8,7 +8,7 @@ from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
 from ...models import Contrato, Empresa, DotacaoValor, FiscalLote, Lote
 from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
-from ....core.api.serializers.edital_serializer import EditalLookUpSerializer, EditalSerializer
+from ....core.api.serializers.edital_serializer import EditalSerializer
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Nucleo, Unidade, Edital

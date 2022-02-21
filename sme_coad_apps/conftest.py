@@ -32,3 +32,13 @@ def nucleo():
 @pytest.fixture
 def empresa():
     return mommy.make('Empresa')
+
+
+@pytest.fixture
+def client_autenticado(client, django_user_model):
+    username = '123456'
+    password = 'teste'
+    validado = True
+    django_user_model.objects.create_user(password=password, username=username, validado=validado)
+    client.login(username=username, password=password)
+    return client
