@@ -60,17 +60,8 @@ pipeline {
                     if ( env.branchname == 'main' ||  env.branchname == 'master' || env.branchname == 'homolog' || env.branchname == 'release' ) {
                         sendTelegram("🤩 [Deploy ${env.branchname}] Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nMe aprove! \nLog: \n${env.BUILD_URL}")
                         timeout(time: 24, unit: "HOURS") {
-                            input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'rodolpho_azeredo'
+                            input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'rodolpho_azeredo, luis_zimmermann, kelwy_oliveira'
                         }
-                        withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
-                            sh('cp $config '+"$home"+'/.kube/config')
-                            sh 'kubectl rollout restart deployment/celery-beat-safi -n sme-safi'
-                            sh 'kubectl rollout restart deployment/celery-safi -n sme-safi'
-                            sh 'kubectl rollout restart deployment/safi-backend -n sme-safi'
-                            sh('rm -f '+"$home"+'/.kube/config')
-                        }
-                    }
-                    else{
                         withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
                             sh('cp $config '+"$home"+'/.kube/config')
                             sh 'kubectl rollout restart deployment/celery-beat-safi -n sme-safi'
