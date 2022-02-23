@@ -1,10 +1,10 @@
+import pytest
 from model_mommy import mommy
 
 from ..api.serializers.colunas_contrato_serializer import ColunasContratoSerializer
 from ..models.colunas_contrato import ColunasContrato
 
-
-# pytestmark = pytest.mark.django_db
+pytestmark = pytest.mark.django_db
 
 
 def test_colunas_contrato_serializer(fake_user):
