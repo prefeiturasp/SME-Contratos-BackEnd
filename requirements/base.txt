@@ -44,9 +44,9 @@ django-admin-interface==0.11.1
 
 # Para gravação de log de alterações nos modelos
 # https://django-auditlog.readthedocs.io/en/latest/index.html
-#django-auditlog==0.4.5
+django-auditlog
 # Pegando última versão diretamente do repositório oficial.
--e git://github.com/jjkester/django-auditlog.git##egg=django-auditlog
+#-e git://github.com/jjkester/django-auditlog.git##egg=django-auditlog
 
 # Para filtros no DRF
 # https://django-filter.readthedocs.io/en/master/#

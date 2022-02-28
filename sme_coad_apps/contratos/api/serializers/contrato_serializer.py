@@ -228,3 +228,22 @@ class ContratoLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrato
         fields = ('uuid', 'termo_contrato', 'gestor', 'coordenador', 'suplente', 'alterado_em')
+
+
+class ContratoSimplesSerializer(serializers.ModelSerializer):
+    nome_empresa = serializers.SerializerMethodField()
+    data_encerramento = serializers.SerializerMethodField()
+    objeto = serializers.SerializerMethodField()
+
+    def get_nome_empresa(self, obj):
+        return obj.empresa_contratada.nome
+
+    def get_data_encerramento(self, obj):
+        return obj.data_encerramento.strftime('%d/%m/%Y')
+
+    def get_objeto(self, obj):
+        return obj.tipo_servico.nome
+
+    class Meta:
+        model = Contrato
+        fields = ('uuid', 'nome_empresa', 'termo_contrato', 'situacao', 'objeto', 'data_encerramento')
