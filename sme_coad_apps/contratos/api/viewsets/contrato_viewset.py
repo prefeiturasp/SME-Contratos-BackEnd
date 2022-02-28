@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from sme_coad_apps.contratos.models import ContratoUnidade
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from .filters import ContratoFilter
+from ..utils.pagination import ContratoPagination
 from ..serializers.contrato_serializer import ContratoSerializer, ContratoCreateSerializer, ContratoLookUpSerializer
 from ...models import Contrato
 from ....core.viewsets_abstracts import ComHistoricoViewSet
@@ -23,9 +24,8 @@ class ContratoViewSet(ComHistoricoViewSet):
         'edital').all()
 
     queryset = contratos_queryset
-
     serializer_class = ContratoSerializer
-
+    pagination_class = ContratoPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ContratoFilter
     ordering_fields = ('data_ordem_inicio',)
