@@ -3,6 +3,7 @@ from django.contrib import admin
 from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
+
 from ..admin import DivisaoAdmin
 from ..models import Divisao
 

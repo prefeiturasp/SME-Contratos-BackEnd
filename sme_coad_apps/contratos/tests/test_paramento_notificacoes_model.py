@@ -6,7 +6,7 @@ from freezegun import freeze_time
 from model_mommy import mommy
 
 from ..admin import ParametroNotificacoesVigenciaAdmin
-from ..models import ParametroNotificacoesVigencia, Contrato
+from ..models import Contrato, ParametroNotificacoesVigencia
 
 pytestmark = pytest.mark.django_db
 

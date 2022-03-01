@@ -3,10 +3,10 @@ import datetime
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.contrato_serializer import ContratoSerializer, ContratoLookUpSerializer
-from ..models.contrato import Contrato, TipoServico, Empresa
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Edital
+from ...core.models import Edital, Nucleo
+from ..api.serializers.contrato_serializer import ContratoLookUpSerializer, ContratoSerializer
+from ..models.contrato import Contrato, Empresa, TipoServico
 
 pytestmark = pytest.mark.django_db
 

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
+from ...models import Edital, GrupoObrigacao
 from .obrigacao_serializer import ObrigacaoSerializer
-from ...models import GrupoObrigacao, Edital
 
 
 class GrupoObrigacaoSerializer(serializers.ModelSerializer):

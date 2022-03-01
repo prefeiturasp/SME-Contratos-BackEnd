@@ -1,9 +1,12 @@
-from ..serializers.obrigacao_contratual_serializer import (ObrigacaoContratualSerializer,
-                                                           ObrigacaoContratualCreatorSerializer)
-from ...models.obrigacao_contratual import ObrigacaoContratual
-from ....core.viewsets_abstracts import ComHistoricoViewSet
-from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as filters
+from rest_framework.filters import SearchFilter
+
+from ....core.viewsets_abstracts import ComHistoricoViewSet
+from ...models.obrigacao_contratual import ObrigacaoContratual
+from ..serializers.obrigacao_contratual_serializer import (
+    ObrigacaoContratualCreatorSerializer,
+    ObrigacaoContratualSerializer
+)
 
 
 class ObrigacaoContratualViewSet(ComHistoricoViewSet):

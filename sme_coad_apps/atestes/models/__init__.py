@@ -1,1 +1,1 @@
-from .modelo_ateste import ModeloAteste, GrupoVerificacao, ItensVerificacao
+from .modelo_ateste import GrupoVerificacao, ItensVerificacao, ModeloAteste

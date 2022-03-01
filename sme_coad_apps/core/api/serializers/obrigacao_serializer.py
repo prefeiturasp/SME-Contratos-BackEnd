@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import Obrigacao, GrupoObrigacao
+from ...models import GrupoObrigacao, Obrigacao
 
 
 class ObrigacaoSerializer(serializers.ModelSerializer):

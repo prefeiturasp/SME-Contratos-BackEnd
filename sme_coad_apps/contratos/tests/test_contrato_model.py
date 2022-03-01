@@ -5,11 +5,11 @@ from django.contrib import admin
 from freezegun import freeze_time
 from model_mommy import mommy
 
-from ..admin import ContratoAdmin
-from ..models import Contrato, ContratoUnidade, TipoServico, Empresa
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Unidade, Edital
+from ...core.models import Edital, Nucleo, Unidade
 from ...users.models import User
+from ..admin import ContratoAdmin
+from ..models import Contrato, ContratoUnidade, Empresa, TipoServico
 
 # from ..admin import TipoServicoAdmin
 

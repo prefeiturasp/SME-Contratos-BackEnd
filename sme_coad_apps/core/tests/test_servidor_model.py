@@ -3,9 +3,10 @@ from django.contrib import admin
 from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
+
+from ...core.models import Divisao, Nucleo
 from ..admin import ServidorAdmin
 from ..models.servidor import Servidor
-from ...core.models import Divisao, Nucleo
 
 pytestmark = pytest.mark.django_db
 

@@ -3,7 +3,7 @@ from auditlog.registry import auditlog
 from django.core.validators import MinLengthValidator
 from django.db import models
 
-from ..models_abstracts import TemNome, ModeloBase
+from ..models_abstracts import ModeloBase, TemNome
 
 
 class Unidade(ModeloBase, TemNome):

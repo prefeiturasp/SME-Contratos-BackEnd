@@ -2,10 +2,13 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..serializers.modelo_ateste_serializer import (ModeloAtesteSerializer, ModeloAtesteLookUpSerializer,
-                                                    ModeloAtesteSerializerCreate)
-from ...models.modelo_ateste import ModeloAteste
 from ....core.viewsets_abstracts import ComHistoricoViewSet
+from ...models.modelo_ateste import ModeloAteste
+from ..serializers.modelo_ateste_serializer import (
+    ModeloAtesteLookUpSerializer,
+    ModeloAtesteSerializer,
+    ModeloAtesteSerializerCreate
+)
 
 
 class ModeloAtesteViewSet(ComHistoricoViewSet):

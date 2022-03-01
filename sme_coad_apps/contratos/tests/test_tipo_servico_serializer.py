@@ -1,7 +1,7 @@
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.tipo_servico_serializer import TipoServicoSerializer, TipoServicoLookupSerializer
+from ..api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer, TipoServicoSerializer
 from ..models.contrato import TipoServico
 
 pytestmark = pytest.mark.django_db

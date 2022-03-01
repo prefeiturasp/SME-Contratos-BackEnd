@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import ObrigacaoContratual, Contrato
+from ...models import Contrato, ObrigacaoContratual
 
 
 class ObrigacaoContratualSerializer(serializers.ModelSerializer):

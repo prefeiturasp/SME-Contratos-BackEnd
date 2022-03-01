@@ -3,7 +3,7 @@ from django.contrib import admin
 from model_mommy import mommy
 
 from ..admin import ObrigacaoContratualAdmin
-from ..models import ObrigacaoContratual, Contrato
+from ..models import Contrato, ObrigacaoContratual
 
 pytestmark = pytest.mark.django_db
 

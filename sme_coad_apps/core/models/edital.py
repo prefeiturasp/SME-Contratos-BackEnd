@@ -1,6 +1,6 @@
-from django.db import models
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
+from django.db import models
 
 from ...core.models_abstracts import ModeloBase
 

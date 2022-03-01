@@ -1,16 +1,18 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
 
 from .api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
 from .api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 from .api.viewsets.contrato_viewset import ContratoViewSet
-from .api.viewsets.obricacao_contratual_viewset import ObrigacaoContratualViewSet
 from .api.viewsets.documento_fiscal_viewset import DocumentoFiscalViewSet
-from .api.viewsets.empresa_viewsets import EmpresaViewSet
-from .api.viewsets.notificacao_vigencia_contrato_viewsets import GeraNotificacoesVigenciaContratosViewSet
-from .api.viewsets.notificacao_vigencia_contrato_viewsets import MinhasNotificacoesVigenciaViewSet
-from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
 from .api.viewsets.dotacao_valor_viewset import DotacaoValorViewSet
+from .api.viewsets.empresa_viewsets import EmpresaViewSet
+from .api.viewsets.notificacao_vigencia_contrato_viewsets import (
+    GeraNotificacoesVigenciaContratosViewSet,
+    MinhasNotificacoesVigenciaViewSet
+)
+from .api.viewsets.obricacao_contratual_viewset import ObrigacaoContratualViewSet
+from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
 
 router = routers.DefaultRouter()
 

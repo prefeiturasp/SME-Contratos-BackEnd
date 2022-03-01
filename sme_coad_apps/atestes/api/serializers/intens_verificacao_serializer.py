@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import ItensVerificacao, GrupoVerificacao
+from ...models import GrupoVerificacao, ItensVerificacao
 
 
 class ItensVerificacaoSerializer(serializers.ModelSerializer):

@@ -1,9 +1,10 @@
 from rest_framework import status
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
+from rest_framework.test import APIRequestFactory, force_authenticate
 
-from ..api.viewsets.notificacao_vigencia_contrato_viewsets import GeraNotificacoesVigenciaContratosViewSet
-from ..api.viewsets.notificacao_vigencia_contrato_viewsets import MinhasNotificacoesVigenciaViewSet
+from ..api.viewsets.notificacao_vigencia_contrato_viewsets import (
+    GeraNotificacoesVigenciaContratosViewSet,
+    MinhasNotificacoesVigenciaViewSet
+)
 
 
 def test_gera_notificacoes_contratos_view_set(fake_user):

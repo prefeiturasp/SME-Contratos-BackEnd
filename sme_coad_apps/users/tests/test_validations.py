@@ -1,7 +1,7 @@
 import pytest
 from rest_framework import serializers
 
-from sme_coad_apps.users.api.validations.usuario_validations import senhas_devem_ser_iguais, senha_nao_pode_ser_nulo
+from sme_coad_apps.users.api.validations.usuario_validations import senha_nao_pode_ser_nulo, senhas_devem_ser_iguais
 
 pytestmark = pytest.mark.django_db
 

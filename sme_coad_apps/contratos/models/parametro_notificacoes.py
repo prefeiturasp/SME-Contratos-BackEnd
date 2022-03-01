@@ -4,8 +4,8 @@ from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from django.db import models
 
-from .contrato import Contrato
 from ...core.models_abstracts import ModeloBase
+from .contrato import Contrato
 
 
 class ParametroNotificacoesVigencia(ModeloBase):
@@ -18,10 +18,10 @@ class ParametroNotificacoesVigencia(ModeloBase):
                                                                   blank=True, null=True)
 
     def __str__(self):
-        contratos_no_estado = f"Contratos {Contrato.ESTADO_NOMES[self.estado_contrato]}"
-        notificar_a_partir_de = f"notificar a partir de {self.vencendo_em} dias"
-        repetir_a_cada = f"repetindo a cada {self.repetir_notificacao_a_cada} dias"
-        return f"{contratos_no_estado} {notificar_a_partir_de} {repetir_a_cada}."
+        contratos_no_estado = f'Contratos {Contrato.ESTADO_NOMES[self.estado_contrato]}'
+        notificar_a_partir_de = f'notificar a partir de {self.vencendo_em} dias'
+        repetir_a_cada = f'repetindo a cada {self.repetir_notificacao_a_cada} dias'
+        return f'{contratos_no_estado} {notificar_a_partir_de} {repetir_a_cada}.'
 
     @classmethod
     def parametros_do_estado(cls, estado, crescente=False):
@@ -49,8 +49,8 @@ class ParametroNotificacoesVigencia(ModeloBase):
         return frequencia
 
     class Meta:
-        verbose_name = "Parâmetro de notificação de vigência"
-        verbose_name_plural = "Parâmetros de notificação de vigência"
+        verbose_name = 'Parâmetro de notificação de vigência'
+        verbose_name_plural = 'Parâmetros de notificação de vigência'
 
         unique_together = [['estado_contrato', 'vencendo_em']]
 

@@ -5,9 +5,9 @@ from django.contrib import admin
 from freezegun import freeze_time
 from model_mommy import mommy
 
-from ..admin import NotificacaoVigenciaContratoAdmin
-from ..models import NotificacaoVigenciaContrato, Contrato
 from ...users.models import User
+from ..admin import NotificacaoVigenciaContratoAdmin
+from ..models import Contrato, NotificacaoVigenciaContrato
 
 pytestmark = pytest.mark.django_db
 
