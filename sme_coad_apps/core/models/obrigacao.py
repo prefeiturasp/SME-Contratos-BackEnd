@@ -1,15 +1,15 @@
-from django.db import models
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
+from django.db import models
 
-from ...core.models_abstracts import ModeloBase
 from ...core.models.edital import Edital
+from ...core.models_abstracts import ModeloBase
 
 
 class GrupoObrigacao(ModeloBase):
     historico = AuditlogHistoryField()
     nome = models.CharField('Nome do Grupo', max_length=100)
-    edital = models.ForeignKey(Edital, on_delete=models.CASCADE, related_name="grupos_de_obrigacao")
+    edital = models.ForeignKey(Edital, on_delete=models.CASCADE, related_name='grupos_de_obrigacao')
 
     def __str__(self):
         return f'{self.edital.numero} - {self.nome}'
@@ -23,7 +23,7 @@ class Obrigacao(ModeloBase):
     historico = AuditlogHistoryField()
     descricao = models.TextField('Descrição')
     item = models.CharField(max_length=15)
-    grupo = models.ForeignKey(GrupoObrigacao, on_delete=models.CASCADE, related_name="itens_de_obrigacao")
+    grupo = models.ForeignKey(GrupoObrigacao, on_delete=models.CASCADE, related_name='itens_de_obrigacao')
 
     def __str__(self):
         return f'{self.item} - {self.descricao}'

@@ -1,8 +1,8 @@
-from ...core.models_abstracts import ModeloBase
 from django.contrib.auth import get_user_model
-from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.db import models
 
+from ...core.models_abstracts import ModeloBase
 
 model_user = get_user_model()
 
@@ -10,28 +10,28 @@ model_user = get_user_model()
 class ColunasContrato(ModeloBase):
     CAMPOS = [
         {
-            "field": "termo_contrato",
-            "header": "TC"
+            'field': 'termo_contrato',
+            'header': 'TC'
         },
         {
-            "field": "processo",
-            "header": "Processo"
+            'field': 'processo',
+            'header': 'Processo'
         },
         {
-            "field": "tipo_servico.nome",
-            "header": "Tipo de Serviço"
+            'field': 'tipo_servico.nome',
+            'header': 'Tipo de Serviço'
         },
         {
-            "field": "empresa_contratada.nome",
-            "header": "Empresa"
+            'field': 'empresa_contratada.nome',
+            'header': 'Empresa'
         },
         {
-            "field": "estado_contrato",
-            "header": "Estado do Contrato"
+            'field': 'estado_contrato',
+            'header': 'Estado do Contrato'
         },
         {
-            "field": "data_encerramento",
-            "header": "Data Encerramento"
+            'field': 'data_encerramento',
+            'header': 'Data Encerramento'
         }
     ]
 

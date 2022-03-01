@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from ...models import Divisao
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+from ...models import Divisao
 
 
 class DivisaoSerializer(serializers.ModelSerializer):

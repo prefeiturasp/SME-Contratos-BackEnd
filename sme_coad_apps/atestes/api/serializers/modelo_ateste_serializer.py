@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
 from sme_coad_apps.core.helpers.update_instance_from_dict import update_instance_from_dict
+
+from ...models import ModeloAteste
+from ..helpers.update_modelo_ateste import salvar_grupo
 from .grupo_verificacao_serializer import GrupoVerificacaoSerializer
 from .intens_verificacao_serializer import ItensVerificacaoSerializer
-from ..helpers.update_modelo_ateste import salvar_grupo
-from ...models import ModeloAteste
 
 
 class ModeloAtesteSerializer(serializers.ModelSerializer):

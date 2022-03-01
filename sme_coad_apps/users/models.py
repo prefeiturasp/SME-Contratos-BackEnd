@@ -17,7 +17,7 @@ class User(AbstractUser):
                                         help_text='Campo utilizado para registrar hash na redefinição de senhas')
 
     def get_absolute_url(self):
-        return reverse("users:detail", kwargs={"username": self.username})
+        return reverse('users:detail', kwargs={'username': self.username})
 
     @property
     def encode_hash(self):

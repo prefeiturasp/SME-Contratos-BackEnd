@@ -4,7 +4,7 @@ import pytest
 from model_mommy import mommy
 from rest_framework import status
 
-from ..models.contrato import FiscaisUnidade, ContratoUnidade
+from ..models.contrato import ContratoUnidade, FiscaisUnidade
 
 pytestmark = pytest.mark.django_db
 

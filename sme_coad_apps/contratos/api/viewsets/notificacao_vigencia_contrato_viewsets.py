@@ -1,5 +1,4 @@
-from rest_framework import status
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 
 from ...models.notificacao_vigencia_contrato import NotificacaoVigenciaContrato

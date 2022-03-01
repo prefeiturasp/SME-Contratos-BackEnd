@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from ...models import CoadAssessor
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+from ...models import CoadAssessor
 
 user_model = get_user_model()
 

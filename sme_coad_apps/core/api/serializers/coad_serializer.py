@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .coad_assessor_serializer import CoadAssessorSerializer
-from ...models import Coad
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+from ...models import Coad
+from .coad_assessor_serializer import CoadAssessorSerializer
 
 
 class CoadSerializer(serializers.ModelSerializer):

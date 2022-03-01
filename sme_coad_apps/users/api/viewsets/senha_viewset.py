@@ -3,9 +3,11 @@ from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from ..serializers.senha_serializer import (EsqueciMinhaSenhaSerializer,
-                                            RedefinirSenhaSerializer,
-                                            RedefinirSenhaSerializerCreator)
+from ..serializers.senha_serializer import (
+    EsqueciMinhaSenhaSerializer,
+    RedefinirSenhaSerializer,
+    RedefinirSenhaSerializerCreator
+)
 
 user_model = get_user_model()
 

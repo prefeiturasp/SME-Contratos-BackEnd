@@ -1,11 +1,11 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..serializers.nucleo_serializer import NucleoSerializer, NucleoLookUpSerializer, NucleoCreateSerializer
-from ..serializers.servidor_serializer import ServidorSerializer
 from ...models import Nucleo
 from ...services import limpa_servidores_nucleo, update_servidores_nucleo
 from ...viewsets_abstracts import ComHistoricoViewSet
+from ..serializers.nucleo_serializer import NucleoCreateSerializer, NucleoLookUpSerializer, NucleoSerializer
+from ..serializers.servidor_serializer import ServidorSerializer
 
 
 class NucleoViewSet(ComHistoricoViewSet):

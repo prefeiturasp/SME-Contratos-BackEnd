@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models.contrato import DocumentoFiscal, Contrato
+from ...models.contrato import Contrato, DocumentoFiscal
 
 
 class DocumentoFiscalSerializer(serializers.ModelSerializer):

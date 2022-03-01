@@ -2,11 +2,15 @@ import environ
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from ..validations.usuario_validations import (registro_funcional_deve_existir,
-                                               usuario_precisa_estar_validado,
-                                               hash_redefinicao_deve_existir, senha_nao_pode_ser_nulo,
-                                               senhas_devem_ser_iguais, usuario_deve_estar_ativo)
 from ...tasks import enviar_email_redefinicao_senha
+from ..validations.usuario_validations import (
+    hash_redefinicao_deve_existir,
+    registro_funcional_deve_existir,
+    senha_nao_pode_ser_nulo,
+    senhas_devem_ser_iguais,
+    usuario_deve_estar_ativo,
+    usuario_precisa_estar_validado
+)
 
 user_model = get_user_model()
 env = environ.Env()

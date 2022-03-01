@@ -3,6 +3,7 @@ from auditlog.registry import auditlog
 from django.db import models
 
 from sme_coad_apps.users.models import User
+
 from ..models_abstracts import SingletonModel
 
 
@@ -12,11 +13,11 @@ class Coad(SingletonModel):
                                     null=True)
 
     def __str__(self):
-        return "COAD (Registro Único)"
+        return 'COAD (Registro Único)'
 
     class Meta:
-        verbose_name = "COAD"
-        verbose_name_plural = "COAD"
+        verbose_name = 'COAD'
+        verbose_name_plural = 'COAD'
 
 
 auditlog.register(Coad)

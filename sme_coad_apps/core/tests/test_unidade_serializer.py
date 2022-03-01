@@ -1,7 +1,7 @@
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.unidade_serializer import UnidadeSerializer, UnidadeLookUpSerializer
+from ..api.serializers.unidade_serializer import UnidadeLookUpSerializer, UnidadeSerializer
 from ..models.unidade import Unidade
 
 pytestmark = pytest.mark.django_db

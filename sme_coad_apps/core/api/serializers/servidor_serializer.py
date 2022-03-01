@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from ...models import Servidor
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+from ...models import Servidor
 
 user_model = get_user_model()
 

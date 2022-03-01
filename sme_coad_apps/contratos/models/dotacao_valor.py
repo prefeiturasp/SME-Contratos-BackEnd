@@ -1,14 +1,14 @@
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
-
-from .contrato import Contrato
-from ...core.models_abstracts import ModeloBase
 from django.db import models
+
+from ...core.models_abstracts import ModeloBase
+from .contrato import Contrato
 
 
 class DotacaoValor(ModeloBase):
     historico = AuditlogHistoryField()
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="dotacoes")
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='dotacoes')
     dotacao_orcamentaria = models.TextField('Dotação Orçamentária', default='')
     valor = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
 

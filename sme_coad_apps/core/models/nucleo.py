@@ -3,8 +3,9 @@ from auditlog.registry import auditlog
 from django.db import models
 
 from sme_coad_apps.users.models import User
+
 from ..models import Divisao
-from ..models_abstracts import TemNome, ModeloBase
+from ..models_abstracts import ModeloBase, TemNome
 
 
 class Nucleo(ModeloBase, TemNome):

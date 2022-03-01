@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Divisao, Nucleo, Unidade, Coad, CoadAssessor, Servidor, Edital, GrupoObrigacao, Obrigacao
+from .models import Coad, CoadAssessor, Divisao, Edital, GrupoObrigacao, Nucleo, Obrigacao, Servidor, Unidade
 
 
 class NucleoInLine(admin.TabularInline):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .intens_verificacao_serializer import ItensVerificacaoSerializer
 from ...models import GrupoVerificacao, ModeloAteste
+from .intens_verificacao_serializer import ItensVerificacaoSerializer
 
 
 class GrupoVerificacaoSerializer(serializers.ModelSerializer):

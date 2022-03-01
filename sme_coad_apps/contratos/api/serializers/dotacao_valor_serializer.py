@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ...models import DotacaoValor, Contrato
+from ...models import Contrato, DotacaoValor
 
 
 class DotacaoValorSerializer(serializers.ModelSerializer):

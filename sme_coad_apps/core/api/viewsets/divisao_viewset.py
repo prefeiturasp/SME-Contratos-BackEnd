@@ -1,10 +1,10 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..serializers.divisao_serializer import DivisaoSerializer, DivisaoSerializerCreator
-from ..serializers.nucleo_serializer import NucleoSerializer
 from ...models import Divisao
 from ...viewsets_abstracts import ComHistoricoViewSet
+from ..serializers.divisao_serializer import DivisaoSerializer, DivisaoSerializerCreator
+from ..serializers.nucleo_serializer import NucleoSerializer
 
 
 class DivisaoViewSet(ComHistoricoViewSet):

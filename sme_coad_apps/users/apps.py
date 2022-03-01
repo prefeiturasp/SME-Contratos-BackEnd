@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class UsersConfig(AppConfig):
-    name = "sme_coad_apps.users"
+    name = 'sme_coad_apps.users'
     verbose_name = 'Usuário'
     verbose_name_plural = 'Usuários'
 

@@ -1,10 +1,10 @@
 import logging
 
+from config import celery_app
 from django.utils import timezone
 
-from config import celery_app
-from .models.notificacao_vigencia_contrato import NotificacaoVigenciaContrato
 from .models.contrato import Contrato
+from .models.notificacao_vigencia_contrato import NotificacaoVigenciaContrato
 
 logger = logging.getLogger('safi.tasks_contratos')
 
