@@ -17,6 +17,7 @@ line_length=120
 known_first_party=sme_coad_apps
 multi_line_output=3
 default_section=THIRDPARTY
+src_paths=isort,test
 
 [*.{html,css,scss,json,yml}]
 indent_style = space
