@@ -2,8 +2,8 @@ from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from django.db import models
 
-from ...core.models.edital import Edital
 from ...core.models_abstracts import ModeloBase
+from .edital import Edital
 
 
 class GrupoObrigacao(ModeloBase):

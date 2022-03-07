@@ -6,10 +6,10 @@ from freezegun import freeze_time
 from model_mommy import mommy
 
 from ...atestes.models import ModeloAteste
-from ...core.models import Edital, Nucleo, Unidade
+from ...core.models import Nucleo, Unidade
 from ...users.models import User
 from ..admin import ContratoAdmin
-from ..models import Contrato, ContratoUnidade, Empresa, TipoServico
+from ..models import Contrato, ContratoUnidade, Empresa, TipoServico, Edital
 
 # from ..admin import TipoServicoAdmin
 

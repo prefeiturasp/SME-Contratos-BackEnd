@@ -1,5 +1,5 @@
-from ..serializers.grupo_obrigacao_serializer import GrupoObrigacaoSerializerCreate
-from ..serializers.obrigacao_serializer import ObrigacaoSerializeCreate
+from ...api.serializers.grupo_obrigacao_serializer import GrupoObrigacaoSerializerCreate
+from ...api.serializers.obrigacao_serializer import ObrigacaoSerializeCreate
 
 
 def salvar_itens_de_grupo(edital, grupo_obrigacao):

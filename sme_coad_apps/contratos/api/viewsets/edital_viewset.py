@@ -1,6 +1,6 @@
 from ....core.viewsets_abstracts import ComHistoricoViewSet
+from ...api.serializers.edital_serializer import EditalLookUpSerializer, EditalSerializer, EditalSerializerCreate
 from ...models.edital import Edital
-from ..serializers.edital_serializer import EditalLookUpSerializer, EditalSerializer, EditalSerializerCreate
 
 
 class EditalViewSet(ComHistoricoViewSet):

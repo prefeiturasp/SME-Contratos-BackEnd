@@ -2,8 +2,8 @@ from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
 from django.db import models
 
-from ...contratos.models import TipoServico
 from ...core.models_abstracts import ModeloBase
+from ..models.tipo_servico import TipoServico
 
 
 class Edital(ModeloBase):
@@ -38,13 +38,11 @@ class Edital(ModeloBase):
     processo = models.CharField(max_length=19, default='')
     tipo_contratacao = models.CharField(max_length=15, choices=TIPO_CONTRATACAO_CHOICES, default=TIPO_LICITACAO)
     subtipo = models.TextField(blank=True, default='')
-    outro_subtipo = models.TextField(blank=True, default='')
     status = models.CharField(choices=STATUS_CHOICES, max_length=10, default=ATIVO)
     data_homologacao = models.DateField('Data de homologação', blank=True, null=True)
-    categoria_objeto = models.ForeignKey(TipoServico, 'Categoria de Objeto', on_delete=models.PROTECT,
-                                         related_name='objetos', verbose_name='Categoria de objeto',
-                                         blank=True, null=True)
-    objeto = models.TextField(blank=True, default='')
+    objeto = models.ForeignKey(TipoServico, related_name='objetos', verbose_name='Categoria de objeto',
+                               on_delete=models.PROTECT, blank=True, null=True)
+    descricao_objeto = models.TextField(blank=True, default='')
 
     def __str__(self):
         return self.numero
