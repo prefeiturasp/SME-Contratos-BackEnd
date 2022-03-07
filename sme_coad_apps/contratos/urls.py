@@ -6,6 +6,7 @@ from .api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 from .api.viewsets.contrato_viewset import ContratoViewSet
 from .api.viewsets.documento_fiscal_viewset import DocumentoFiscalViewSet
 from .api.viewsets.dotacao_valor_viewset import DotacaoValorViewSet
+from .api.viewsets.edital_viewset import EditalViewSet
 from .api.viewsets.empresa_viewsets import EmpresaViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import (
     GeraNotificacoesVigenciaContratosViewSet,
@@ -19,6 +20,7 @@ router = routers.DefaultRouter()
 router.register('colunas-contrato', ColunasContratoViewSet)
 router.register('tipos-servico', TipoServicoViewSet)
 router.register('empresas', EmpresaViewSet)
+router.register('editais', EditalViewSet)
 router.register('contratos', ContratoViewSet)
 router.register('unidades-contratos', ContratoUnidadeViewSet)
 router.register('documentos-fiscais', DocumentoFiscalViewSet)

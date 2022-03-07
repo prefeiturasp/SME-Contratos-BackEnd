@@ -62,7 +62,7 @@ class NotificacaoVigenciaContrato(ModeloBase):
                     elif contrato.dias_para_o_encerramento < 0:
                         texto_notificacao = f'encerrou-se à {abs(contrato.dias_para_o_encerramento)} dias'
                     else:
-                        texto_notificacao = f'encerrou-se'
+                        texto_notificacao = 'encerrou-se'
 
                     notificacao = NotificacaoVigenciaContrato.objects.create(
                         contrato=contrato,
