@@ -6,7 +6,7 @@ from model_mommy import mommy
 from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo
 from ..api.serializers.contrato_serializer import ContratoLookUpSerializer, ContratoSerializer
-from ..models.contrato import Contrato, Empresa, Edital, TipoServico
+from ..models.contrato import Contrato, Edital, Empresa, TipoServico
 
 pytestmark = pytest.mark.django_db
 

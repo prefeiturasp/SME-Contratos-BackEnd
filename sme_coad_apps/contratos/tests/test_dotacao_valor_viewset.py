@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_dotacao_valor_viewset(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     dotacao_valor_detalhe = DotacaoValorViewSet.as_view({'get': 'retrieve'})
     dotacao_valor_lista = DotacaoValorViewSet.as_view({'get': 'list'})
     force_authenticate(request, user=fake_user)

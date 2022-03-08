@@ -24,7 +24,7 @@ def test_instance_assessor_model():
 def test_srt_assessor_model():
     assessor = mommy.make(User, nome='Teste')
     model = mommy.make(CoadAssessor, assessor=assessor)
-    assert model.__str__() == "Teste"
+    assert model.__str__() == 'Teste'
 
 
 def test_meta_assessor_modelo():

@@ -20,7 +20,7 @@ def test_campos_vazios_devem_ser_preenchidos():
     valor1 = '123456'
     valor2 = ''
     valor3 = None
-    esperado = 'O Campo {} deve ser preenchido'.format(campo1)
+    esperado = f'O Campo {campo1} deve ser preenchido'
     with pytest.raises(serializers.ValidationError, match=esperado):
         senha_nao_pode_ser_nulo(valor2, campo1)
         senha_nao_pode_ser_nulo(valor3, campo1)

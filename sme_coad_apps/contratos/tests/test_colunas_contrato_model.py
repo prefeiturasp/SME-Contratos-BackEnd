@@ -8,6 +8,7 @@ from ..models import ColunasContrato
 
 pytestmark = pytest.mark.django_db
 
+
 def test_instance_model():
     usuario = mommy.make(User)
     array_campos = ['teste1', 'teste2']

@@ -9,7 +9,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_obrigacao_contratual_viewset(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     obrigacao_contratual_detalhe = ObrigacaoContratualViewSet.as_view({'get': 'retrieve'})
     obrigacao_contratual_lista = ObrigacaoContratualViewSet.as_view({'get': 'list'})
     force_authenticate(request, user=fake_user)

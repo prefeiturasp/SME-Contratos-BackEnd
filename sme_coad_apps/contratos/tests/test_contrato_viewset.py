@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_contrato_view_set(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     contrato_detalhe = ContratoViewSet.as_view({'get': 'retrieve'})
     force_authenticate(request, user=fake_user)
     contrato = mommy.make(Contrato)
