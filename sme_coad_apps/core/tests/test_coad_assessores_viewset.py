@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_view_set(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     detalhe = CoadAssessorViewSet.as_view({'get': 'retrieve'})
     force_authenticate(request, user=fake_user)
     model = mommy.make(CoadAssessor)

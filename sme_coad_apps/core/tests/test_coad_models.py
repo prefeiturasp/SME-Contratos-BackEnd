@@ -4,7 +4,6 @@ from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
 
-from ..admin import CoadAdmin
 from ..models import Coad
 from ..models_abstracts import SingletonModel
 
@@ -23,7 +22,7 @@ def test_instance_model():
 
 def test_srt_model():
     model = Coad.objects.create()
-    assert model.__str__() == "COAD (Registro Único)"
+    assert model.__str__() == 'COAD (Registro Único)'
 
 
 def test_meta_modelo():
@@ -33,6 +32,5 @@ def test_meta_modelo():
 
 
 def test_admin():
-    model_admin = CoadAdmin(Coad, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Coad]

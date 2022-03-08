@@ -8,7 +8,7 @@ from ..api.viewsets.notificacao_vigencia_contrato_viewsets import (
 
 
 def test_gera_notificacoes_contratos_view_set(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     viewset = GeraNotificacoesVigenciaContratosViewSet.as_view({'get': 'list'})
     force_authenticate(request, user=fake_user)
 
@@ -18,7 +18,7 @@ def test_gera_notificacoes_contratos_view_set(fake_user):
 
 
 def test_minhas_notificacoes_view_set(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     viewset = MinhasNotificacoesVigenciaViewSet.as_view({'get': 'list'})
     force_authenticate(request, user=fake_user)
 

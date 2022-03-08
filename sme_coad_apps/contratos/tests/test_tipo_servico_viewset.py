@@ -10,7 +10,7 @@ pytestmark = pytest.mark.django_db
 
 
 def test_tipo_servico_view_set(fake_user):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     tipo_servico_detalhe = TipoServicoViewSet.as_view({'get': 'retrieve'})
     force_authenticate(request, user=fake_user)
     tipo_servico = mommy.make(TipoServico)

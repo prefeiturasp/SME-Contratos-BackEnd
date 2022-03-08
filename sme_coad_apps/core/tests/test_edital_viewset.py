@@ -26,10 +26,9 @@ def payload_edital():
         'grupos_de_obrigacao': [
             {'nome': Faker().name(),
              'itens_de_obrigacao': [
-                 {'item': "1", 'descricao': Faker().text()},
-                 {'item': "2", 'descricao': Faker().text()},
-                 {'item': "3", 'descricao': Faker().text()},
-             ]
+                 {'item': '1', 'descricao': Faker().text()},
+                 {'item': '2', 'descricao': Faker().text()},
+                 {'item': '3', 'descricao': Faker().text()}]
              }
         ]
     }
