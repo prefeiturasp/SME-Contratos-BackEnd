@@ -9,7 +9,7 @@ from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
 from ..admin import ContratoAdmin
-from ..models import Contrato, ContratoUnidade, Empresa, TipoServico, Edital
+from ..models import Contrato, ContratoUnidade, Edital, Empresa, TipoServico
 
 pytestmark = pytest.mark.django_db
 
