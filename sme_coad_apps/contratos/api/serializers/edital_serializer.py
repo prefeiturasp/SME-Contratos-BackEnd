@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from sme_coad_apps.core.helpers.update_instance_from_dict import update_instance_from_dict
 
-from ...models import Edital
-from ..helpers.update_edital import salvar_itens_de_grupo
+from ...api.utils.edital_utils import salvar_itens_de_grupo
+from ...models.edital import Edital
 from .grupo_obrigacao_serializer import GrupoObrigacaoSerializer
 from .obrigacao_serializer import ObrigacaoSerializer
 

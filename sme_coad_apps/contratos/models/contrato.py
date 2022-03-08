@@ -17,9 +17,10 @@ from rest_framework.response import Response
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 
 from ...atestes.models import ModeloAteste
-from ...core.models import Edital, Nucleo, Unidade
+from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
+from .edital import Edital
 from .empresa import Empresa
 from .tipo_servico import TipoServico
 
