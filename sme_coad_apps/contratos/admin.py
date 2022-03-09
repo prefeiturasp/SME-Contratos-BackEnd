@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 
+from .forms import TipoServicoForm
 from .models import (
     ColunasContrato,
     Contrato,
@@ -24,6 +25,8 @@ from .models import (
 
 @admin.register(TipoServico)
 class TipoServicoAdmin(admin.ModelAdmin):
+    form = TipoServicoForm
+
     list_display = ('nome',)
     ordering = ('nome',)
     search_fields = ('nome',)
