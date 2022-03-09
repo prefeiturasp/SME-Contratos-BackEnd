@@ -290,3 +290,6 @@ sme_coad_apps/media/
 
 /utility/carga_de_dados/contratos.xlsx
 /utility/carga_de_dados/.~lock.contratos.xlsx#
+
+#docker-compose
+local.yml
