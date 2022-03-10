@@ -1,19 +1,36 @@
 from rest_framework import serializers
 
-from sme_coad_apps.core.helpers.update_instance_from_dict import update_instance_from_dict
-
+from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ...api.utils.edital_utils import salvar_itens_de_grupo
+from ...models import TipoServico
 from ...models.edital import Edital
 from .grupo_obrigacao_serializer import GrupoObrigacaoSerializer
 from .obrigacao_serializer import ObrigacaoSerializer
+from .tipo_servico_serializer import TipoServicoLookupSerializer
 
 
 class EditalSerializer(serializers.ModelSerializer):
     grupos_de_obrigacao = serializers.SerializerMethodField()
+    objeto = TipoServicoLookupSerializer()
+    tipo_contratacao = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+
+    def get_tipo_contratacao(self, obj):
+        return {
+            'id': obj.tipo_contratacao,
+            'nome': obj.get_tipo_contratacao_display()
+        }
+
+    def get_status(self, obj):
+        return {
+            'id': obj.status,
+            'nome': obj.get_status_display()
+        }
 
     class Meta:
         model = Edital
-        fields = ('uuid', 'numero', 'criado_em', 'grupos_de_obrigacao')
+        fields = ('uuid', 'numero', 'processo', 'tipo_contratacao', 'subtipo', 'status', 'data_homologacao', 'objeto',
+                  'descricao_objeto', 'criado_em', 'grupos_de_obrigacao')
 
     def get_grupos_de_obrigacao(self, instance):
         grupo = instance.grupos_de_obrigacao.all().order_by('id')
@@ -29,6 +46,13 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
 class EditalSerializerCreate(serializers.ModelSerializer):
     grupos_de_obrigacao = GrupoObrigacaoSerializer(many=True, required=False)
     itens_de_obrigacao = ObrigacaoSerializer(many=True, required=False)
+    objeto = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=TipoServico.objects.all()
+    )
 
     def create(self, validated_data):
         grupos_de_obrigacao_list = []
@@ -54,4 +78,5 @@ class EditalSerializerCreate(serializers.ModelSerializer):
 
     class Meta:
         model = Edital
-        fields = ('uuid', 'numero', 'criado_em', 'grupos_de_obrigacao', 'itens_de_obrigacao')
+        fields = ('uuid', 'numero', 'processo', 'tipo_contratacao', 'subtipo', 'status', 'data_homologacao', 'objeto',
+                  'descricao_objeto', 'criado_em', 'grupos_de_obrigacao', 'itens_de_obrigacao')

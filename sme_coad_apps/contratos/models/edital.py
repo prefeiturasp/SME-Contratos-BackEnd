@@ -36,7 +36,7 @@ class Edital(ModeloBase):
     historico = AuditlogHistoryField()
     numero = models.CharField('Número do Edital', max_length=50, unique=True)
     processo = models.CharField(max_length=19, default='')
-    tipo_contratacao = models.CharField(max_length=15, choices=TIPO_CONTRATACAO_CHOICES, default=TIPO_LICITACAO)
+    tipo_contratacao = models.CharField(max_length=25, choices=TIPO_CONTRATACAO_CHOICES, default=TIPO_LICITACAO)
     subtipo = models.TextField(blank=True, default='')
     status = models.CharField(choices=STATUS_CHOICES, max_length=10, default=ATIVO)
     data_homologacao = models.DateField('Data de homologação', blank=True, null=True)
