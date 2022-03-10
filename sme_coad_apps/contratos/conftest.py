@@ -1,7 +1,10 @@
+import datetime
+
 import pytest
 from faker import Faker
 from model_mommy import mommy
 
+from sme_coad_apps.contratos.models import Edital, TipoServico
 from sme_coad_apps.users.models import User
 
 
@@ -64,3 +67,12 @@ def colunas_contrato(fake_user):
                           'header': 'Processo'
                       }
                       ])
+
+
+@pytest.fixture
+def edital(gestor, suplente):
+    return mommy.make(Edital, numero='0123456', processo='6543210', status=Edital.ATIVO,
+                      tipo_contratacao=Edital.TIPO_LICITACAO, subtipo='esse é um subtipo',
+                      data_homologacao=datetime.date(2023, 1, 1), objeto=mommy.make(TipoServico),
+                      descricao_objeto='essa é uma descrição do objeto'
+                      )
