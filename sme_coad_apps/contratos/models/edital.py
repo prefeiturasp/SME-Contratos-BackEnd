@@ -12,7 +12,7 @@ class Edital(ModeloBase):
     INATIVO = 'INATIVO'
 
     STATUS_CHOICES = (
-        (ATIVO, 'AtivO'),
+        (ATIVO, 'Ativo'),
         (INATIVO, 'Inativo'),
     )
 
@@ -50,6 +50,17 @@ class Edital(ModeloBase):
     class Meta:
         verbose_name = 'Edital'
         verbose_name_plural = 'Editais'
+
+    @classmethod
+    def tipo_contratacao_to_json(cls):
+        result = []
+        for tipo_contratacao in cls.TIPO_CONTRATACAO_CHOICES:
+            choice = {
+                'id': tipo_contratacao[0],
+                'nome': tipo_contratacao[1]
+            }
+            result.append(choice)
+        return result
 
 
 auditlog.register(Edital)
