@@ -6,14 +6,26 @@ from ...models import TipoServico
 from ...models.edital import Edital
 from .grupo_obrigacao_serializer import GrupoObrigacaoSerializer
 from .obrigacao_serializer import ObrigacaoSerializer
-from .tipo_servico_serializer import TipoServicoSerializer
+from .tipo_servico_serializer import TipoServicoLookupSerializer
 
 
 class EditalSerializer(serializers.ModelSerializer):
     grupos_de_obrigacao = serializers.SerializerMethodField()
-    objeto = TipoServicoSerializer()
-    tipo_contratacao = serializers.CharField(source='get_tipo_contratacao_display')
-    status = serializers.CharField(source='get_status_display')
+    objeto = TipoServicoLookupSerializer()
+    tipo_contratacao = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+
+    def get_tipo_contratacao(self, obj):
+        return {
+            'id': obj.tipo_contratacao,
+            'nome': obj.get_tipo_contratacao_display()
+        }
+
+    def get_status(self, obj):
+        return {
+            'id': obj.status,
+            'nome': obj.get_status_display()
+        }
 
     class Meta:
         model = Edital

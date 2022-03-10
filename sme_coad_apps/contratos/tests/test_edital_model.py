@@ -9,6 +9,7 @@ from ..models import Edital, TipoServico
 
 pytestmark = pytest.mark.django_db
 
+
 def test_instance_model(edital):
     assert isinstance(edital, Edital)
     assert isinstance(edital.numero, str)
