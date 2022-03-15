@@ -41,9 +41,13 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
     status = serializers.CharField(source='get_status_display')
     tipo_contratacao = serializers.CharField(source='get_tipo_contratacao_display')
     objeto = serializers.SerializerMethodField()
+    data_homologacao = serializers.SerializerMethodField()
 
     def get_objeto(self, obj):
         return obj.objeto.nome if obj.objeto else None
+
+    def get_data_homologacao(self, obj):
+        return obj.data_homologacao.strftime('%d/%m/%Y')
 
     class Meta:
         model = Edital
