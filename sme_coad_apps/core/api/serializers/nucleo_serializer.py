@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from ..serializers.divisao_serializer import DivisaoLookUpSerializer
-from ...models import Nucleo
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
+from ...models import Nucleo
+from ..serializers.divisao_serializer import DivisaoLookUpSerializer
 
 
 class NucleoSerializer(serializers.ModelSerializer):

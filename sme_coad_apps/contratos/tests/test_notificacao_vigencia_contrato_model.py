@@ -5,9 +5,9 @@ from django.contrib import admin
 from freezegun import freeze_time
 from model_mommy import mommy
 
-from ..admin import NotificacaoVigenciaContratoAdmin
-from ..models import NotificacaoVigenciaContrato, Contrato
 from ...users.models import User
+from ..admin import NotificacaoVigenciaContratoAdmin
+from ..models import Contrato, NotificacaoVigenciaContrato
 
 pytestmark = pytest.mark.django_db
 
@@ -49,8 +49,8 @@ def test_instance_model(notificacao_vigencia_contrato):
 
 
 def test_srt_model(notificacao_vigencia_contrato):
-    expected = f"TC:{notificacao_vigencia_contrato.contrato.termo_contrato} " \
-        f"Notificado:{notificacao_vigencia_contrato.notificado.username}"
+    expected = (f'TC:{notificacao_vigencia_contrato.contrato.termo_contrato} '
+                f'Notificado:{notificacao_vigencia_contrato.notificado.username}')
     assert notificacao_vigencia_contrato.__str__() == expected
 
 

@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
 
 from .api.viewsets.modelo_ateste_viewset import ModeloAtesteViewSet

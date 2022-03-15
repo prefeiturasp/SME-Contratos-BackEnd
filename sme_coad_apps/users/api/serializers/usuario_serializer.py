@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from ..validations.usuario_validations import (senhas_devem_ser_iguais,
-                                               registro_funcional_deve_existir,
-                                               senha_nao_pode_ser_nulo)
+from ..validations.usuario_validations import (
+    registro_funcional_deve_existir,
+    senha_nao_pode_ser_nulo,
+    senhas_devem_ser_iguais
+)
 
 user_model = get_user_model()
 

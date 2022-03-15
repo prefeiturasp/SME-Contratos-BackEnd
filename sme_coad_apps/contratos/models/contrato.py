@@ -7,7 +7,7 @@ from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from notifications.models import Notification
 from notifications.signals import notify
@@ -15,12 +15,14 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
-from .empresa import Empresa
-from .tipo_servico import TipoServico
+
 from ...atestes.models import ModeloAteste
-from ...core.models import Nucleo, Unidade, Edital
+from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
+from .edital import Edital
+from .empresa import Empresa
+from .tipo_servico import TipoServico
 
 env = environ.Env()
 
@@ -28,7 +30,7 @@ env = environ.Env()
 class SafiToken(viewsets.ViewSet):
 
     def list(self, request):
-        return Response({'safi_token': env("SAFI_TOKEN")})
+        return Response({'safi_token': env('SAFI_TOKEN')})
 
 
 class Contrato(ModeloBase):
@@ -168,7 +170,7 @@ class Contrato(ModeloBase):
 
     @property
     def dres(self):
-        return ", ".join(list(filter(None, self.lotes.values_list('unidades__dre', flat=True).distinct())))
+        return ', '.join(list(filter(None, self.lotes.values_list('unidades__dre', flat=True).distinct())))
 
     def __str__(self):
         return self.termo_contrato
@@ -212,7 +214,7 @@ class Contrato(ModeloBase):
 
         if (not notificacoes_lidas.exists()) and (not notificacoes_nao_lidas.exists()):
             env = environ.Env()
-            url = f'http://{env("SERVER_NAME")}/#/cadastro-unico-contrato/?uuid={contrato.uuid}'
+            url = f'https://{env("SERVER_NAME")}/#/cadastro-unico-contrato/?uuid={contrato.uuid}'
             link = f'<a target="blank" href="{url}">incluir contrato</a>'
             notify.send(
                 contrato,
@@ -315,7 +317,7 @@ class DocumentoFiscal(ModeloBase):
 class Lote(ModeloBase, TemNome):
     historico = AuditlogHistoryField()
 
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="lotes")
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='lotes')
     unidades = models.ManyToManyField(Unidade)
 
     def __str__(self):
@@ -343,7 +345,7 @@ class FiscalLote(ModeloBase):
 
     historico = AuditlogHistoryField()
 
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name="fiscais_lote", blank=True,
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, related_name='fiscais_lote', blank=True,
                              null=True)
     fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='fiscais')
     tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)
@@ -359,8 +361,8 @@ class FiscalLote(ModeloBase):
 class ContratoUnidade(ModeloBase):
     historico = AuditlogHistoryField()
 
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="unidades")
-    unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name="contratos", to_field="codigo_eol")
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='unidades')
+    unidade = models.ForeignKey(Unidade, on_delete=models.PROTECT, related_name='contratos', to_field='codigo_eol')
     valor_mensal = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     lote = models.CharField(max_length=20, blank=True, default='')
@@ -398,7 +400,7 @@ class FiscaisUnidade(ModeloBase):
 
     historico = AuditlogHistoryField()
 
-    contrato_unidade = models.ForeignKey(ContratoUnidade, on_delete=models.CASCADE, related_name="fiscais", blank=True,
+    contrato_unidade = models.ForeignKey(ContratoUnidade, on_delete=models.CASCADE, related_name='fiscais', blank=True,
                                          null=True)
     fiscal = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_fiscalizados')
     tipo_fiscal = models.CharField(max_length=15, choices=FISCAL_CHOICES, default=FISCAL_SUPLENTE)

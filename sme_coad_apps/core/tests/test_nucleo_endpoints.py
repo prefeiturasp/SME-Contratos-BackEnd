@@ -42,9 +42,9 @@ def test_url_limpa_servidores(authencticated_client, fake_user, nucleo):
     assert response.status_code == status.HTTP_200_OK
 
 # TODO Fazer funcionar esse teste
-# def test_url_update_servidores(authencticated_client, fake_user, nucleo, servidor):
-#     servidor_json = ServidorSerializer(servidor, many=True).data
-#     # servidores = [json.dumps(servidor_json), ]
+# def test_url_update_servidores(authencticated_client, fake_user, nucleo, servidor):  # noqa E800
+#     servidor_json = ServidorSerializer(servidor, many=True).data  # noqa E800
+#     # servidores = [json.dumps(servidor_json), ]  # noqa E800
 #     response = authencticated_client.post(f'/nucleos/{nucleo.uuid}/update-servidores/',
-#     servidor_json, content_type="application/json")
-#     assert response.status_code == status.HTTP_200_OK
+#     servidor_json, content_type='application/json')
+#     assert response.status_code == status.HTTP_200_OK  # noqa E800

@@ -15,7 +15,7 @@ env = environ.Env()
     retry_kwargs={'max_retries': 8},
 )
 def enviar_email_redefinicao_senha(email, username, nome, hash_redefinicao):
-    link = 'http://{}/#/login/?hash={}'.format(env('SERVER_NAME'), hash_redefinicao)
+    link = f'http://{env("SERVER_NAME")}/#/login/?hash={hash_redefinicao}'
     return enviar_email_html(
         'Solicitação de redefinição de senha',
         'email_redefinicao_de_senha',

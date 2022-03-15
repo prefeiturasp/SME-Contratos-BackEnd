@@ -1,19 +1,20 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
-from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
-from ...api.serializers.tipo_servico_serializer import TipoServicoSerializer
-from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
-from ...models import Contrato, Empresa, DotacaoValor, FiscalLote, Lote
-from ...models.tipo_servico import TipoServico
 from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
-from ....core.api.serializers.edital_serializer import EditalSerializer
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
-from ....core.models import Nucleo, Unidade, Edital
+from ....core.models import Nucleo, Unidade
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
+from ...api.serializers.edital_serializer import EditalSerializer
+from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
+from ...api.serializers.tipo_servico_serializer import TipoServicoSerializer
+from ...models import Contrato, DotacaoValor, Empresa, FiscalLote, Lote
+from ...models.edital import Edital
+from ...models.tipo_servico import TipoServico
+from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
+from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
 
 user_model = get_user_model()
 

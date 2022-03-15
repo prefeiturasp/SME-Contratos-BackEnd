@@ -1,7 +1,6 @@
-from ..serializers.coad_assessor_serializer import CoadAssessorSerializer, CoadAssessorCreateSerializer
-
 from ...models import CoadAssessor
 from ...viewsets_abstracts import ComHistoricoViewSet
+from ..serializers.coad_assessor_serializer import CoadAssessorCreateSerializer, CoadAssessorSerializer
 
 
 class CoadAssessorViewSet(ComHistoricoViewSet):

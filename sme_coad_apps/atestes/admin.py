@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import ModeloAteste, GrupoVerificacao, ItensVerificacao
+
+from .models import GrupoVerificacao, ItensVerificacao, ModeloAteste
 
 
 class GrupoVerificacaoInline(admin.StackedInline):

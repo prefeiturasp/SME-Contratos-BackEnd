@@ -2,7 +2,8 @@ import pytest
 from model_mommy import mommy
 
 from sme_coad_apps.core.models import Unidade
-from ..models.contrato import ContratoUnidade, Contrato, FiscaisUnidade
+
+from ..models.contrato import Contrato, ContratoUnidade, FiscaisUnidade
 
 pytestmark = pytest.mark.django_db
 

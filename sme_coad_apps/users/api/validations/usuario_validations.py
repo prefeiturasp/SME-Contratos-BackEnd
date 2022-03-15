@@ -18,7 +18,7 @@ def registro_funcional_deve_existir(registro_funcional):
 
 def senha_nao_pode_ser_nulo(senha, campo='Senha'):
     if senha is None or senha == 'string' or len(senha) == 0:
-        raise serializers.ValidationError({'detail': 'O Campo {} deve ser preenchido'.format(campo)})
+        raise serializers.ValidationError({'detail': f'O Campo {campo} deve ser preenchido'})
 
 
 def usuario_precisa_estar_validado(registro_funcional):

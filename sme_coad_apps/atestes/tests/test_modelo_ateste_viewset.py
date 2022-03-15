@@ -28,8 +28,7 @@ def payload_modelo_ateste():
              'itens_de_verificacao': [
                  {'item': 1, 'descricao': Faker().text()},
                  {'item': 2, 'descricao': Faker().text()},
-                 {'item': 3, 'descricao': Faker().text()},
-             ]
+                 {'item': 3, 'descricao': Faker().text()}]
              }
         ]
     }

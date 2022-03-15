@@ -4,5 +4,3 @@ from .divisao import Divisao
 from .nucleo import Nucleo
 from .servidor import Servidor
 from .unidade import Unidade
-from .edital import Edital
-from .obrigacao import GrupoObrigacao, Obrigacao

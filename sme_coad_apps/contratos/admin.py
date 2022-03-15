@@ -2,13 +2,31 @@ from django.contrib import admin
 from django.utils import timezone
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
-from .models import NotificacaoVigenciaContrato, ObrigacaoContratual
-from .models import (TipoServico, Empresa, Contrato, ContratoUnidade, ColunasContrato, ParametroNotificacoesVigencia,
-                     FiscaisUnidade, Lote, FiscalLote, DotacaoValor)
+
+from .forms import TipoServicoForm
+from .models import (
+    ColunasContrato,
+    Contrato,
+    ContratoUnidade,
+    DotacaoValor,
+    Edital,
+    Empresa,
+    FiscaisUnidade,
+    FiscalLote,
+    GrupoObrigacao,
+    Lote,
+    NotificacaoVigenciaContrato,
+    Obrigacao,
+    ObrigacaoContratual,
+    ParametroNotificacoesVigencia,
+    TipoServico
+)
 
 
 @admin.register(TipoServico)
 class TipoServicoAdmin(admin.ModelAdmin):
+    form = TipoServicoForm
+
     list_display = ('nome',)
     ordering = ('nome',)
     search_fields = ('nome',)
@@ -19,17 +37,16 @@ class EmpresaAdmin(admin.ModelAdmin):
     def get_cnpj_formatado(self, empresa):
         return empresa.cnpj_formatado
 
-    get_cnpj_formatado.short_description = "CNPJ"
+    get_cnpj_formatado.short_description = 'CNPJ'
 
     list_display = ('nome', 'get_cnpj_formatado')
     ordering = ('nome',)
     search_fields = ('nome', 'cnpj')
 
 
-# class ContratoUnidadeInLine(admin.StackedInline):
 class ContratoUnidadeInLine(admin.TabularInline):
     model = ContratoUnidade
-    raw_id_fields = ("unidade",)
+    raw_id_fields = ('unidade',)
     extra = 1  # Quantidade de linhas que serão exibidas.
 
     def get_queryset(self, request):
@@ -51,7 +68,7 @@ class ContratoAdmin(admin.ModelAdmin):
     dias_para_vencer.short_description = 'Dias para vencer'
 
     def valor_mensal(self, contrato):
-        return f"R$ {contrato.total_mensal: 20,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        return f'R$ {contrato.total_mensal: 20,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
 
     valor_mensal.short_description = 'Valor Mensal'
 
@@ -66,17 +83,14 @@ class ContratoAdmin(admin.ModelAdmin):
     data_fim.short_description = 'Fim'
 
     def atualiza_tipo_equipamento(self, request, queryset):
-        """
-        Foram criados campos no contrato para permitir a consulta por tipo de equipamento
-        Esses campos são atualizados automaticamente pelo modelo de Contrato, mas para contratos que já existiam
-        esses campos precisam ser atualizados.
-        Essa task foi criada para permitir a atualização desses contratos em produção.
-        """
-
+        # Foram criados campos no contrato para permitir a consulta por tipo de equipamento
+        # Esses campos são atualizados automaticamente pelo modelo de Contrato, mas para contratos que já existiam
+        # esses campos precisam ser atualizados.
+        # Essa task foi criada para permitir a atualização desses contratos em produção.
         for contrato in queryset.all():
             contrato.save()
 
-        self.message_user(request, "Tipo de equipamento atualizado nos contratos.")
+        self.message_user(request, 'Tipo de equipamento atualizado nos contratos.')
 
     atualiza_tipo_equipamento.short_description = 'Atualizar tipo de equipamento'
 
@@ -87,7 +101,7 @@ class ContratoAdmin(admin.ModelAdmin):
         for contrato in contratos:
             contrato.situacao = Contrato.SITUACAO_ENCERRADO
             contrato.save()
-        self.message_user(request, "Contratos vencidos encerrados.")
+        self.message_user(request, 'Contratos vencidos encerrados.')
 
     encerra_contratos_vencidos.short_description = 'Encerrar contratos vencidos'
 
@@ -129,8 +143,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 'tem_ceu',
                 'tem_ua',
             )
-        }
-         ),
+        }),
     )
 
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
@@ -204,3 +217,38 @@ class LoteAdmin(admin.ModelAdmin):
 class DotacaoValorAdmin(admin.ModelAdmin):
     list_display = ['contrato', 'dotacao_orcamentaria', 'valor', ]
     ordering = ('contrato',)
+
+
+class GrupoObrigacoesInline(admin.StackedInline):
+    extra = 1
+    model = GrupoObrigacao
+
+
+class ObrigacaoInline(admin.StackedInline):
+    extra = 1
+    model = Obrigacao
+    fieldsets = (
+        (None, {
+            'fields': ('item', 'descricao')
+        }),
+    )
+
+
+@admin.register(Edital)
+class EditalAdmin(admin.ModelAdmin):
+    list_display = ('numero',)
+    ordering = ('numero',)
+    search_fields = ('numero',)
+    inlines = [
+        GrupoObrigacoesInline
+    ]
+
+
+@admin.register(GrupoObrigacao)
+class GrupoObrigacaoAdmin(admin.ModelAdmin):
+    list_display = ('nome',)
+    ordering = ('nome',)
+    search_fields = ('nome',)
+    inlines = [
+        ObrigacaoInline
+    ]

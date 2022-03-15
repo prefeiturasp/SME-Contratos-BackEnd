@@ -1,10 +1,10 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from ..serializers.coad_serializer import CoadSerializer, CoadCreateSerializer
 from ...models.coad import Coad
 from ...services import limpa_assessores_coad, update_assessores_coad
 from ...viewsets_abstracts import ComHistoricoViewSet
+from ..serializers.coad_serializer import CoadCreateSerializer, CoadSerializer
 
 
 class CoadViewSet(ComHistoricoViewSet):

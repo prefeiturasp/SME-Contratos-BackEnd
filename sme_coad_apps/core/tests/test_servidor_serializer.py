@@ -2,6 +2,7 @@ import pytest
 from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
+
 from ..api.serializers.servidor_serializer import ServidorSerializer
 from ..models import Servidor
 

@@ -3,9 +3,9 @@ from django.contrib import admin
 from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
-from ..admin import ServidorAdmin
-from ..models.servidor import Servidor
+
 from ...core.models import Divisao, Nucleo
+from ..models.servidor import Servidor
 
 pytestmark = pytest.mark.django_db
 
@@ -32,7 +32,7 @@ def test_instance_model():
 def test_srt_model():
     servidor = mommy.make(User, nome='Teste')
     model = mommy.make(Servidor, servidor=servidor)
-    assert model.__str__() == "Teste"
+    assert model.__str__() == 'Teste'
 
 
 def test_meta_modelo():
@@ -43,7 +43,6 @@ def test_meta_modelo():
 
 
 def test_admin():
-    model_admin = ServidorAdmin(Servidor, admin.site)
     # pylint: disable=W0212
     assert admin.site._registry[Servidor]
 

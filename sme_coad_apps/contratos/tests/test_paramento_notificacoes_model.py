@@ -6,7 +6,7 @@ from freezegun import freeze_time
 from model_mommy import mommy
 
 from ..admin import ParametroNotificacoesVigenciaAdmin
-from ..models import ParametroNotificacoesVigencia, Contrato
+from ..models import Contrato, ParametroNotificacoesVigencia
 
 pytestmark = pytest.mark.django_db
 
@@ -42,9 +42,9 @@ def test_instance_model(parametro_notificacao):
 
 
 def test_srt_model(parametro_notificacao):
-    expected = f"Contratos {Contrato.ESTADO_NOMES[parametro_notificacao.estado_contrato]} " \
-        f"notificar a partir de {parametro_notificacao.vencendo_em} dias " \
-        f"repetindo a cada {parametro_notificacao.repetir_notificacao_a_cada} dias."
+    expected = (f'Contratos {Contrato.ESTADO_NOMES[parametro_notificacao.estado_contrato]} '
+                f'notificar a partir de {parametro_notificacao.vencendo_em} dias '
+                f'repetindo a cada {parametro_notificacao.repetir_notificacao_a_cada} dias.')
     assert parametro_notificacao.__str__() == expected
 
 

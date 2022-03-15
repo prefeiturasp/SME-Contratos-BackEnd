@@ -1,7 +1,7 @@
 import pytest
-from model_mommy import mommy
-from faker import Faker
 from django.conf import settings
+from faker import Faker
+from model_mommy import mommy
 
 from sme_coad_apps.users.models import User
 

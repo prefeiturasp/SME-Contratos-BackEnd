@@ -5,14 +5,15 @@ from notifications.models import Notification
 from notifications.signals import notify
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
-from .contrato import Contrato
-from .parametro_notificacoes import ParametroNotificacoesVigencia
+
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
+from .contrato import Contrato
+from .parametro_notificacoes import ParametroNotificacoesVigencia
 
 
 class NotificacaoVigenciaContrato(ModeloBase):
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name="notificacoes_vigencia")
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='notificacoes_vigencia')
     notificado = models.ForeignKey(User, on_delete=models.PROTECT, related_name='notificacoes_vigencia', blank=True,
                                    null=True)
 
@@ -21,12 +22,12 @@ class NotificacaoVigenciaContrato(ModeloBase):
 
     @classmethod
     def ultima_notificacao_para_o_gestor_do_contrato(cls, contrato):
-        notificacoes_do_gestor = cls.objects.filter(contrato=contrato, notificado=contrato.gestor).all().order_by("-id")
+        notificacoes_do_gestor = cls.objects.filter(contrato=contrato, notificado=contrato.gestor).all().order_by('-id')
         return notificacoes_do_gestor[0] if notificacoes_do_gestor else None
 
     @classmethod
     def ultima_notificacao_para_o_suplente_do_contrato(cls, contrato):
-        return cls.objects.filter(contrato=contrato, notificado=contrato.suplente).all().order_by("-id")[0]
+        return cls.objects.filter(contrato=contrato, notificado=contrato.suplente).all().order_by('-id')[0]
 
     @property
     def idade(self):
@@ -61,7 +62,7 @@ class NotificacaoVigenciaContrato(ModeloBase):
                     elif contrato.dias_para_o_encerramento < 0:
                         texto_notificacao = f'encerrou-se à {abs(contrato.dias_para_o_encerramento)} dias'
                     else:
-                        texto_notificacao = f'encerrou-se'
+                        texto_notificacao = 'encerrou-se'
 
                     notificacao = NotificacaoVigenciaContrato.objects.create(
                         contrato=contrato,

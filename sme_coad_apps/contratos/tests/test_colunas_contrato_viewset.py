@@ -6,8 +6,9 @@ from ..api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
 
 pytestmark = pytest.mark.django_db
 
+
 def test_colunas_contrato_view_set(fake_user, colunas_contrato):
-    request = APIRequestFactory().get("")
+    request = APIRequestFactory().get('')
     colunas_contrato_detalhe = ColunasContratoViewSet.as_view({'get': 'retrieve'})
     force_authenticate(request, user=fake_user)
 

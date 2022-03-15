@@ -2,10 +2,12 @@ from django_filters import rest_framework as filters
 from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 
-from ..serializers.contrato_unidade_serializer import (ContratoUnidadeSerializer,
-                                                       ContratoUnidadeLookUpSerializer,
-                                                       ContratoUnidadeCreatorSerializer)
 from ...models.contrato import ContratoUnidade
+from ..serializers.contrato_unidade_serializer import (
+    ContratoUnidadeCreatorSerializer,
+    ContratoUnidadeLookUpSerializer,
+    ContratoUnidadeSerializer
+)
 
 
 class ContratoUnidadeViewSet(viewsets.ModelViewSet):
