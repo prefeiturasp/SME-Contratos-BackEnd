@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...api.serializers.edital_serializer import EditalLookUpSerializer, EditalSerializer, EditalSerializerCreate
 from ...models.edital import Edital
+from ..utils.pagination import EditalPagination
 from .filters import EditalFilter
 
 
@@ -12,6 +13,7 @@ class EditalViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
     queryset = Edital.objects.all()
     serializer_class = EditalSerializer
+    pagination_class = EditalPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = EditalFilter
 

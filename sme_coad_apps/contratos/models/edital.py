@@ -24,7 +24,7 @@ class Edital(ModeloBase):
     TIPO_NOMES = {
         TIPO_LICITACAO: 'Licitação',
         TIPO_DISPENSA_LICITACAO: 'Dispensa de Licitação',
-        TIPO_INEXIGIBILIDADE_LICITACAO: 'Inexigibilidade de Licitação"',
+        TIPO_INEXIGIBILIDADE_LICITACAO: 'Inexigibilidade de Licitação',
     }
 
     TIPO_CONTRATACAO_CHOICES = (
