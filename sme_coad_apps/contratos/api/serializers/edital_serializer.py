@@ -47,7 +47,7 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
         return obj.objeto.nome if obj.objeto else None
 
     def get_data_homologacao(self, obj):
-        return obj.data_homologacao.strftime('%d/%m/%Y')
+        return obj.data_homologacao.strftime('%d/%m/%Y') if obj.data_homologacao else None
 
     class Meta:
         model = Edital
