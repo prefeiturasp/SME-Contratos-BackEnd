@@ -38,9 +38,16 @@ class EditalSerializer(serializers.ModelSerializer):
 
 
 class EditalLookUpSerializer(serializers.ModelSerializer):
+    status = serializers.CharField(source='get_status_display')
+    tipo_contratacao = serializers.CharField(source='get_tipo_contratacao_display')
+    objeto = serializers.SerializerMethodField()
+
+    def get_objeto(self, obj):
+        return obj.objeto.nome if obj.objeto else None
+
     class Meta:
         model = Edital
-        fields = ('uuid', 'numero', 'criado_em')
+        fields = ('uuid', 'numero', 'status', 'tipo_contratacao', 'data_homologacao', 'criado_em', 'objeto')
 
 
 class EditalSerializerCreate(serializers.ModelSerializer):
