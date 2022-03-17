@@ -25,7 +25,7 @@ class TipoServicoCreateSerializer(serializers.Serializer):
             tipo_servico = TipoServico.objects.create(**validated_data)
 
         except IntegrityError:
-            raise serializers.ValidationError('Está categoria de objeto já está cadastrada!')
+            raise serializers.ValidationError('Esta categoria de objeto já está cadastrada!')
         return tipo_servico
 
     class Meta:
