@@ -11,7 +11,7 @@ uuid==1.30
 
 # Django
 # ------------------------------------------------------------------------------
-django==2.2.4  # pyup: < 3.0  # https://www.djangoproject.com/
+django==2.2.16  # pyup: < 3.0  # https://www.djangoproject.com/
 django-environ==0.4.5  # https://github.com/joke2k/django-environ
 django-model-utils==3.2.0  # https://github.com/jazzband/django-model-utils
 django-allauth==0.39.1  # https://github.com/pennersr/django-allauth
@@ -29,8 +29,10 @@ django-cors-headers==3.1.0  # https://github.com/adamchainz/django-cors-headers
 django-des==2.4.1  # https://github.com/jamiecounsell/django-des
 
 # Django REST Framework
-djangorestframework==3.10.2  # https://github.com/encode/django-rest-framework
+djangorestframework==3.10.3  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
+
+drf-yasg==1.20.0
 
 # Para validação e formatação de CNPJ e CPF
 brazilnum==0.8.8
@@ -97,4 +99,3 @@ flake8-string-format==0.2.3 # https://github.com/xZise/flake8-string-format
 flake8-mutable==1.2.0       # https://github.com/ebeweber/flake8-mutable
 flake8-docstrings==1.4.0    # https://github.com/PyCQA/flake8-docstrings
 flake8-isort==2.8.0
-
