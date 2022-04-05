@@ -5,6 +5,7 @@ from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 
 from .forms import TipoServicoForm
 from .models import (
+    Ata,
     ColunasContrato,
     Contrato,
     ContratoUnidade,
@@ -252,3 +253,9 @@ class GrupoObrigacaoAdmin(admin.ModelAdmin):
     inlines = [
         ObrigacaoInline
     ]
+
+
+@admin.register(Ata)
+class AtaAdmin(admin.ModelAdmin):
+    list_display = ('numero', 'status', 'empresa', 'data_assinatura', 'data_encerramento')
+    search_fields = ('numero',)

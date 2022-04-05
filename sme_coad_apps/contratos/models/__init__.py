@@ -1,3 +1,4 @@
+from .ata import Ata
 from .colunas_contrato import ColunasContrato
 from .contrato import Contrato, ContratoUnidade, FiscaisUnidade, FiscalLote, Lote
 from .dotacao_valor import DotacaoValor
