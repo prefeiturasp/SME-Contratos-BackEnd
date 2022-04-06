@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Edital, TipoServico
+from sme_coad_apps.contratos.models import Ata, Edital, TipoServico
 from sme_coad_apps.users.models import User
 
 
@@ -75,4 +75,16 @@ def edital(gestor, suplente):
                       tipo_contratacao=Edital.TIPO_LICITACAO, subtipo='esse é um subtipo',
                       data_homologacao=datetime.date(2023, 1, 1), objeto=mommy.make(TipoServico),
                       descricao_objeto='essa é uma descrição do objeto'
+                      )
+
+
+@pytest.fixture
+def ata():
+    return mommy.make(Ata, numero='0123456/2022',
+                      vigencia=15,
+                      status=Ata.ATIVA,
+                      data_assinatura=datetime.date(2023, 1, 1),
+                      data_encerramento=datetime.date(2023, 1, 15),
+                      edital=mommy.make(Edital),
+                      unidade_vigencia=Ata.UNIDADE_VIGENCIA_DIAS
                       )
