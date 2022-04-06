@@ -3,8 +3,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
-from ...api.serializers.edital_serializer import EditalListaSerializer, EditalLookUpSerializer, EditalSerializer,\
+from ...api.serializers.edital_serializer import (
+    EditalListaSerializer,
+    EditalLookUpSerializer,
+    EditalSerializer,
     EditalSerializerCreate
+)
 from ...models.edital import Edital
 from ..utils.pagination import EditalPagination
 from .filters import EditalFilter
