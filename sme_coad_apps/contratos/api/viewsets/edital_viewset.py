@@ -3,7 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
-from ...api.serializers.edital_serializer import EditalLookUpSerializer, EditalSerializer, EditalSerializerCreate
+from ...api.serializers.edital_serializer import EditalListaSerializer, EditalLookUpSerializer, EditalSerializer,\
+    EditalSerializerCreate
 from ...models.edital import Edital
 from ..utils.pagination import EditalPagination
 from .filters import EditalFilter
@@ -28,3 +29,7 @@ class EditalViewSet(ComHistoricoViewSet):
     @action(detail=False)
     def tipo_contratacao(self, _):
         return Response(Edital.tipo_contratacao_to_json())
+
+    @action(detail=False)
+    def lista(self, _):
+        return Response(EditalListaSerializer(self.queryset.order_by('-id'), many=True).data)
