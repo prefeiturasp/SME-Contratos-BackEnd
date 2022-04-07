@@ -59,7 +59,7 @@ class EditalListaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Edital
-        fields = ('uuid', 'numero', 'id', 'objeto', 'processo')
+        fields = ('uuid', 'numero', 'id', 'objeto', 'descricao_objeto', 'processo')
 
 
 class EditalSerializerCreate(serializers.ModelSerializer):
