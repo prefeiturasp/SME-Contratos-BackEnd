@@ -54,6 +54,14 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'numero', 'status', 'tipo_contratacao', 'data_homologacao', 'criado_em', 'objeto')
 
 
+class EditalListaSerializer(serializers.ModelSerializer):
+    objeto = TipoServicoLookupSerializer()
+
+    class Meta:
+        model = Edital
+        fields = ('uuid', 'numero', 'id', 'objeto', 'descricao_objeto', 'processo')
+
+
 class EditalSerializerCreate(serializers.ModelSerializer):
     grupos_de_obrigacao = GrupoObrigacaoSerializer(many=True, required=False)
     itens_de_obrigacao = ObrigacaoSerializer(many=True, required=False)
