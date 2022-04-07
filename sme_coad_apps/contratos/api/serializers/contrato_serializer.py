@@ -243,7 +243,7 @@ class ContratoSimplesSerializer(serializers.ModelSerializer):
         return obj.data_encerramento.strftime('%d/%m/%Y')
 
     def get_objeto(self, obj):
-        return obj.tipo_servico.nome if obj.tipo_servico else None
+        return obj.tipo_servico.nome
 
     class Meta:
         model = Contrato
