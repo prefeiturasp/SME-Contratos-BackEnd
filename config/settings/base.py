@@ -90,6 +90,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "notifications",
     "django_prometheus",
+    "drf_yasg",
 ]
 
 LOCAL_APPS = [
@@ -115,9 +116,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-# LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "/swagger/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-# LOGIN_URL = "account_login"
+LOGIN_URL = "/api-auth/login/"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -352,3 +353,9 @@ JWT_AUTH = {
 SILENCED_SYSTEM_CHECKS = ["postgres.E003"]
 
 DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True}
+
+SWAGGER_SETTINGS = {
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout',
+    'USE_SESSION_AUTH': True,
+}

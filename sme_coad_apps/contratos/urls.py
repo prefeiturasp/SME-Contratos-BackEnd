@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
+from .api.viewsets.ata_viewset import AtaViewSet
 from .api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
 from .api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 from .api.viewsets.contrato_viewset import ContratoViewSet
@@ -17,6 +18,7 @@ from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
 
 router = routers.DefaultRouter()
 
+router.register('atas', AtaViewSet)
 router.register('colunas-contrato', ColunasContratoViewSet)
 router.register('tipos-servico', TipoServicoViewSet)
 router.register('empresas', EmpresaViewSet)
