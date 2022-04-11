@@ -36,11 +36,40 @@ def payload_ata():
         'data_encerramento': '2022-05-01',
         'edital': str(edital.uuid),
     }
-
     return payload
 
 
-def test_edital_serializer_create(authencticated_client, payload_ata):
+@pytest.fixture
+def test_ata_serializer_create(authencticated_client, payload_ata):
     response = authencticated_client.post('/atas/', data=json.dumps(payload_ata),
                                           content_type='application/json')
     assert response.status_code == status.HTTP_201_CREATED
+    return response
+
+
+def test_get_ata_filters(authencticated_client, test_ata_serializer_create):
+    result = json.loads(test_ata_serializer_create.content)
+    rota = f"""/atas/?data_final={result['data_encerramento']}
+                &status=ATIVA
+                &data_final={result['data_encerramento']}
+                &numero={result['numero']}"""
+
+    url = rota.replace('\n', '')
+    response = authencticated_client.get(url, content_type='application/json')
+    resposta = json.loads(response.content)
+    data = result['data_encerramento'].split('-')
+    esperado = {
+        'count': 1,
+        'next': None,
+        'previous': None,
+        'results': [
+            {
+                'uuid': f"{result['uuid']}",
+                'numero': f"{result['numero']}",
+                'nome_empresa': None,
+                'status': 'Ativa',
+                'data_encerramento': f'{data[2]}/{data[1]}/{data[0]}'
+            }
+        ]
+    }
+    assert resposta == esperado
