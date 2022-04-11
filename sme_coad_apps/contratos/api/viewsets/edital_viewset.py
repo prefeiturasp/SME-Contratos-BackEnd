@@ -4,10 +4,10 @@ from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...api.serializers.edital_serializer import (
-    EditalListaSerializer,
     EditalLookUpSerializer,
     EditalSerializer,
-    EditalSerializerCreate
+    EditalSerializerCreate,
+    EditalSimplesSerializer
 )
 from ...models.edital import Edital
 from ..utils.pagination import EditalPagination
@@ -36,4 +36,4 @@ class EditalViewSet(ComHistoricoViewSet):
 
     @action(detail=False)
     def lista(self, _):
-        return Response(EditalListaSerializer(self.queryset.order_by('-id'), many=True).data)
+        return Response(EditalSimplesSerializer(self.queryset.order_by('-id'), many=True).data)
