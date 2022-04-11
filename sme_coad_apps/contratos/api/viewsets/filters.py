@@ -80,6 +80,14 @@ class AtaFilter(filters.FilterSet):
         field_name='uuid',
         lookup_expr='exact',
     )
+    numero = filters.CharFilter(
+        field_name='numero',
+        lookup_expr='exact',
+    )
+    cnpj_empresa = filters.CharFilter(
+        field_name='empresa__cnpj',
+        lookup_expr='exact',
+    )
     nome_empresa = filters.CharFilter(
         field_name='empresa__nome',
         lookup_expr='icontains',
