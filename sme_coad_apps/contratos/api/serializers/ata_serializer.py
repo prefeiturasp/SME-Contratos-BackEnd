@@ -65,15 +65,19 @@ class AtaCreateSerializer(serializers.ModelSerializer):
 
 class AtaLookUpSerializer(serializers.ModelSerializer):
     nome_empresa = serializers.SerializerMethodField()
+    objeto = serializers.SerializerMethodField()
     data_encerramento = serializers.SerializerMethodField()
     status = serializers.CharField(source='get_status_display')
 
     def get_nome_empresa(self, obj):
         return obj.empresa.nome if obj.empresa else None
 
+    def get_objeto(self, obj):
+        return obj.edital.objeto.nome if obj.edital else None
+
     def get_data_encerramento(self, obj):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
 
     class Meta:
         model = Ata
-        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento')
+        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto')
