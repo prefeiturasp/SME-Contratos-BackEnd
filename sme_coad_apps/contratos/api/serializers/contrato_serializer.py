@@ -7,7 +7,7 @@ from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Nucleo, Unidade
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
-from ...api.serializers.edital_serializer import EditalListaSerializer
+from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer
 from ...models import Contrato, DotacaoValor, Empresa, FiscalLote, Lote
@@ -76,7 +76,7 @@ class ContratoSerializer(serializers.ModelSerializer):
         queryset=user_model.objects.all()
     )
     suplente = UsuarioLookUpSerializer()
-    edital = EditalListaSerializer()
+    edital = EditalSimplesSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
