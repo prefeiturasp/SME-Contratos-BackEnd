@@ -73,7 +73,7 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
         return obj.empresa.nome if obj.empresa else None
 
     def get_objeto(self, obj):
-        return obj.edital.objeto.nome if obj.edital else None
+        return obj.edital.objeto.nome if obj.edital and obj.edital.objeto else None
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
