@@ -54,7 +54,7 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'numero', 'status', 'tipo_contratacao', 'data_homologacao', 'criado_em', 'objeto')
 
 
-class EditalListaSerializer(serializers.ModelSerializer):
+class EditalSimplesSerializer(serializers.ModelSerializer):
     objeto = TipoServicoLookupSerializer()
 
     class Meta:
