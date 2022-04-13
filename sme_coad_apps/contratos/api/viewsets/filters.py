@@ -82,7 +82,7 @@ class AtaFilter(filters.FilterSet):
     )
     numero = filters.CharFilter(
         field_name='numero',
-        lookup_expr='exact',
+        lookup_expr='icontains',
     )
     cnpj_empresa = filters.CharFilter(
         field_name='empresa__cnpj',
