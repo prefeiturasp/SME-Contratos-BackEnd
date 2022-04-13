@@ -68,7 +68,8 @@ def test_get_ata_filters(authencticated_client, test_ata_serializer_create):
                 'numero': f"{result['numero']}",
                 'nome_empresa': None,
                 'status': 'Ativa',
-                'data_encerramento': f'{data[2]}/{data[1]}/{data[0]}'
+                'data_encerramento': f'{data[2]}/{data[1]}/{data[0]}',
+                'objeto': None
             }
         ]
     }
