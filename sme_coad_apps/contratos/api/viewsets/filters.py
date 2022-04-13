@@ -49,6 +49,10 @@ class EditalFilter(filters.FilterSet):
         field_name='numero',
         lookup_expr='exact',
     )
+    cnpj_empresa = filters.CharFilter(
+        field_name='empresa__cnpj',
+        lookup_expr='exact',
+    )
     status = filters.CharFilter(
         field_name='status',
         lookup_expr='exact',
@@ -67,5 +71,40 @@ class EditalFilter(filters.FilterSet):
     )
     data_final = filters.DateFilter(
         field_name='data_homologacao',
+        lookup_expr='lte',
+    )
+
+
+class AtaFilter(filters.FilterSet):
+    uuid = filters.CharFilter(
+        field_name='uuid',
+        lookup_expr='exact',
+    )
+    numero = filters.CharFilter(
+        field_name='numero',
+        lookup_expr='icontains',
+    )
+    cnpj_empresa = filters.CharFilter(
+        field_name='empresa__cnpj',
+        lookup_expr='exact',
+    )
+    empresa = filters.CharFilter(
+        field_name='empresa__uuid',
+        lookup_expr='exact',
+    )
+    status = filters.CharFilter(
+        field_name='status',
+        lookup_expr='exact',
+    )
+    objeto = filters.CharFilter(
+        field_name='edital__objeto__id',
+        lookup_expr='exact',
+    )
+    data_inicial = filters.DateFilter(
+        field_name='data_encerramento',
+        lookup_expr='gte',
+    )
+    data_final = filters.DateFilter(
+        field_name='data_encerramento',
         lookup_expr='lte',
     )
