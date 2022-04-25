@@ -88,6 +88,9 @@ class EmpresaCreateSerializer(serializers.ModelSerializer):
 
 
 class EmpresaLookUpSerializer(serializers.ModelSerializer):
+    situacao = serializers.CharField(source='get_situacao_display')
+    tipo_servico = serializers.CharField(source='get_tipo_servico_display')
+
     class Meta:
         model = Empresa
-        fields = ('nome', 'uuid', 'id', 'cnpj')
+        fields = ('nome', 'uuid', 'id', 'cnpj', 'situacao', 'tipo_servico')
