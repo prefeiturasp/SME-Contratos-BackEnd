@@ -13,6 +13,17 @@ def test_instance_model():
     assert isinstance(model, Empresa)
     assert isinstance(model.nome, str)
     assert isinstance(model.cnpj, str)
+    assert isinstance(model.razao_social, str)
+    assert isinstance(model.tipo_servico, str)
+    assert isinstance(model.tipo_fornecedor, str)
+    assert isinstance(model.situacao, str)
+    assert isinstance(model.cep, str)
+    assert isinstance(model.endereco, str)
+    assert isinstance(model.bairro, str)
+    assert isinstance(model.cidade, str)
+    assert isinstance(model.estado, str)
+    assert isinstance(model.numero, str)
+    assert isinstance(model.complemento, str)
     assert model.historico
 
 
@@ -23,8 +34,8 @@ def test_srt_model():
 
 def test_meta_modelo():
     model = mommy.make('Empresa')
-    assert model._meta.verbose_name == 'Empresa Contratada'
-    assert model._meta.verbose_name_plural == 'Empresas Contratadas'
+    assert model._meta.verbose_name == 'Empresa'
+    assert model._meta.verbose_name_plural == 'Empresas'
 
 
 def test_admin():
