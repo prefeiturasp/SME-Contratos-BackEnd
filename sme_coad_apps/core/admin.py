@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Coad, CoadAssessor, Divisao, Nucleo, Servidor, Unidade
+from .models import Coad, CoadAssessor, Contato, Divisao, Nucleo, Servidor, Unidade
 
 
 class NucleoInLine(admin.TabularInline):
@@ -53,3 +53,10 @@ class CoadAdmin(admin.ModelAdmin):
 @admin.register(Servidor)
 class ServidorAdmin(admin.ModelAdmin):
     ...
+
+
+@admin.register(Contato)
+class ContatoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'telefone', 'email', 'cargo')
+    ordering = ('nome',)
+    search_fields = ('nome', 'email')
