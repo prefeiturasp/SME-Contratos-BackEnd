@@ -9,7 +9,7 @@ from ..utils.pagination import EmpresaPagination
 
 class EmpresaViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
-    queryset = Empresa.objects.all()
+    queryset = Empresa.objects.all().order_by('nome')
     serializer_class = EmpresaSerializer
     pagination_class = EmpresaPagination
 
