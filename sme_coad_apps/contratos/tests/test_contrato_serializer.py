@@ -33,6 +33,10 @@ def test_contrato_serializer(fake_user):
 
     contrato_serializer = ContratoSerializer(contrato)
 
+    cnpj = empresa.cnpj
+    fmt = '{0}.{1}.{2}/{3}-{4}'
+    cnpj_empresa = fmt.format(cnpj[:2], cnpj[2:5], cnpj[5:8], cnpj[8:12], cnpj[12:])
+
     assert contrato_serializer.data is not None
     assert contrato_serializer.data['termo_contrato']
     assert contrato_serializer.data['criado_em']
@@ -48,7 +52,7 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['nucleo_responsavel']
     assert contrato_serializer.data['edital']
     assert contrato_serializer.data['empresa_contratada'] == {'nome': empresa.nome, 'uuid': str(empresa.uuid),
-                                                              'id': empresa.id, 'cnpj': empresa.cnpj,
+                                                              'id': empresa.id, 'cnpj': cnpj_empresa,
                                                               'situacao': empresa.SITUACAO_CHOICES[0][1],
                                                               'tipo_servico': empresa.TIPO_SERVICO_CHOICES[0][1]}
     assert contrato_serializer.data['gestor'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
