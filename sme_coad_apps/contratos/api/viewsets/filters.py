@@ -108,3 +108,30 @@ class AtaFilter(filters.FilterSet):
         field_name='data_encerramento',
         lookup_expr='lte',
     )
+
+
+class EmpresaFilter(filters.FilterSet):
+    uuid = filters.CharFilter(
+        field_name='uuid',
+        lookup_expr='exact',
+    )
+    nome = filters.CharFilter(
+        field_name='nome',
+        lookup_expr='icontains',
+    )
+    cnpj_empresa = filters.CharFilter(
+        field_name='cnpj',
+        lookup_expr='exact',
+    )
+    tipo_servico = filters.CharFilter(
+        field_name='tipo_servico',
+        lookup_expr='exact',
+    )
+    tipo_fornecedor = filters.CharFilter(
+        field_name='tipo_fornecedor',
+        lookup_expr='exact',
+    )
+    status = filters.CharFilter(
+        field_name='situacao',
+        lookup_expr='exact',
+    )
