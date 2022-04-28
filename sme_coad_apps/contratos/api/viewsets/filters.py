@@ -131,7 +131,7 @@ class EmpresaFilter(filters.FilterSet):
         field_name='tipo_fornecedor',
         lookup_expr='exact',
     )
-    status = filters.CharFilter(
+    situacao = filters.CharFilter(
         field_name='situacao',
         lookup_expr='exact',
     )
