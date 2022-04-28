@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Ata, Edital, TipoServico
+from sme_coad_apps.contratos.models import Ata, Edital, Empresa, TipoServico
 from sme_coad_apps.users.models import User
 
 
@@ -87,4 +87,23 @@ def ata():
                       data_encerramento=datetime.date(2023, 1, 15),
                       edital=mommy.make(Edital),
                       unidade_vigencia=Ata.UNIDADE_VIGENCIA_DIAS
+                      )
+
+
+@pytest.fixture
+def empresa():
+    return mommy.make(Empresa,
+                      nome='EmpresaTeste',
+                      cnpj='21256564000160',
+                      razao_social='Empresa Teste LTDA',
+                      tipo_servico=Empresa.FORNECEDOR,
+                      tipo_fornecedor=Empresa.CONVENCIONAL,
+                      situacao=Empresa.SITUACAO_ATIVA,
+                      cep='04284000',
+                      endereco='Rua América',
+                      bairro='Vila Moinho',
+                      cidade='São Paulo',
+                      estado='São Paulo',
+                      numero='100',
+                      complemento=''
                       )

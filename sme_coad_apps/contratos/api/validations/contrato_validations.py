@@ -3,7 +3,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
-from sme_coad_apps.contratos.models import Ata
+from sme_coad_apps.contratos.models import Ata, Empresa
 
 
 def gestor_e_suplente_devem_ser_diferentes(gestor, suplente):
@@ -21,3 +21,9 @@ def data_encerramento(unidade_vigencia, vigencia, data_assinatura, data_encerram
 
     if data_encerramento_payload != data_calculada:
         raise serializers.ValidationError({'detail': 'Data de encerramento não está correta'})
+
+
+def tipo_fornecimento(tipo_servico):
+    if tipo_servico == Empresa.ARMAZEM_DISTRIBUIDOR:
+        raise serializers.ValidationError({'detail': f'Não é possivel informar Tipo de fornecedor caso o tipo de '
+                                                     f'serviço seja {Empresa.ARMAZEM_DISTRIBUIDOR}.'})
