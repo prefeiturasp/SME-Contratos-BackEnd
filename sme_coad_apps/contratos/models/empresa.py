@@ -33,7 +33,7 @@ class Empresa(ModeloBase, TemNome):
 
     TIPO_FORNECEDOR_CHOICES = (
         (AGRICULTURA_FAMILIAR, 'Agricultura familiar'),
-        (CONVENCIONAL, 'CONVENCIONAL'),
+        (CONVENCIONAL, 'Convencional'),
     )
 
     historico = AuditlogHistoryField()
