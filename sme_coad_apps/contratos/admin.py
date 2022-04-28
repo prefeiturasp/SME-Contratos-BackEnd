@@ -20,7 +20,9 @@ from .models import (
     Obrigacao,
     ObrigacaoContratual,
     ParametroNotificacoesVigencia,
-    TipoServico
+    Produto,
+    TipoServico,
+    UnidadeDeMedida
 )
 
 
@@ -259,3 +261,18 @@ class GrupoObrigacaoAdmin(admin.ModelAdmin):
 class AtaAdmin(admin.ModelAdmin):
     list_display = ('numero', 'status', 'empresa', 'data_assinatura', 'data_encerramento')
     search_fields = ('numero',)
+
+
+@admin.register(UnidadeDeMedida)
+class UnidadeDeMedidaAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'criado_em')
+    ordering = ('nome',)
+    search_fields = ('nome',)
+
+
+@admin.register(Produto)
+class ProdutoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'situacao', 'categoria', 'grupo_alimentar', 'unidade_medida', 'criado_em')
+    list_filter = ('situacao', 'categoria', 'grupo_alimentar', 'unidade_medida', 'durabilidade', 'armazenabilidade')
+    ordering = ('nome',)
+    search_fields = ('nome',)

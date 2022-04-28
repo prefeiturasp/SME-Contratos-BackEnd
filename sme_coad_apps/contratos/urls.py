@@ -14,6 +14,7 @@ from .api.viewsets.notificacao_vigencia_contrato_viewsets import (
     MinhasNotificacoesVigenciaViewSet
 )
 from .api.viewsets.obricacao_contratual_viewset import ObrigacaoContratualViewSet
+from .api.viewsets.produto_viewset import ProdutoViewSet, UnidadeDeMedidaViewSet
 from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
 
 router = routers.DefaultRouter()
@@ -32,6 +33,8 @@ router.register('minhas-notificacoes-vigencia-contratos', MinhasNotificacoesVige
                 basename='minhas-notificacoes-vigencia-contratos')
 router.register('obrigacoes-contratuais', ObrigacaoContratualViewSet)
 router.register('dotacoes-orcamentarias', DotacaoValorViewSet)
+router.register('unidades-de-medida', UnidadeDeMedidaViewSet)
+router.register('produtos', ProdutoViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
