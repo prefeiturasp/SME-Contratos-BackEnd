@@ -3,10 +3,12 @@ from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoReadOnlyViewSet, ComHistoricoViewSet
 from ...models import Produto, UnidadeDeMedida
-from ..serializers.produto_serializer import (ProdutoCreateSerializer,
-                                              ProdutoLookUpSerializer,
-                                              ProdutoSerializer,
-                                              UnidadeDeMedidaSerializer)
+from ..serializers.produto_serializer import (
+    ProdutoCreateSerializer,
+    ProdutoLookUpSerializer,
+    ProdutoSerializer,
+    UnidadeDeMedidaSerializer
+)
 from ..utils.pagination import ProdutoPagination
 
 
