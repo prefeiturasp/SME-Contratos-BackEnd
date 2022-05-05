@@ -81,3 +81,14 @@ class ProdutoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         exclude = ('id',)
+
+
+class ProdutoLookUpSerializer(serializers.ModelSerializer):
+    categoria = serializers.CharField(source='get_categoria_display')
+    grupo_alimentar = serializers.CharField(source='get_grupo_alimentar_display')
+    durabilidade = serializers.CharField(source='get_durabilidade_display')
+    armazenabilidade = serializers.CharField(source='get_armazenabilidade_display')
+
+    class Meta:
+        model = Produto
+        fields = ('id', 'uuid', 'nome', 'categoria', 'durabilidade', 'grupo_alimentar', 'armazenabilidade')
