@@ -135,3 +135,34 @@ class EmpresaFilter(filters.FilterSet):
         field_name='situacao',
         lookup_expr='exact',
     )
+
+
+class ProdutoFilter(filters.FilterSet):
+    uuid = filters.CharFilter(
+        field_name='uuid',
+        lookup_expr='exact',
+    )
+    nome = filters.CharFilter(
+        field_name='nome',
+        lookup_expr='icontains',
+    )
+    situacao = filters.CharFilter(
+        field_name='situacao',
+        lookup_expr='exact',
+    )
+    categoria = filters.CharFilter(
+        field_name='categoria',
+        lookup_expr='exact',
+    )
+    grupo_alimentar = filters.CharFilter(
+        field_name='grupo_alimentar',
+        lookup_expr='exact',
+    )
+    durabilidade = filters.CharFilter(
+        field_name='durabilidade',
+        lookup_expr='exact',
+    )
+    armazenabilidade = filters.CharFilter(
+        field_name='armazenabilidade',
+        lookup_expr='exact',
+    )
