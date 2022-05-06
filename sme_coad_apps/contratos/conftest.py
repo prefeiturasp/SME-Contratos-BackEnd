@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Ata, Edital, Empresa, TipoServico
+from sme_coad_apps.contratos.models import Ata, Edital, Empresa, Produto, TipoServico, UnidadeDeMedida
 from sme_coad_apps.users.models import User
 
 
@@ -106,4 +106,17 @@ def empresa():
                       estado='São Paulo',
                       numero='100',
                       complemento=''
+                      )
+
+
+@pytest.fixture
+def produto():
+    return mommy.make(Produto,
+                      unidade_medida=mommy.make(UnidadeDeMedida),
+                      nome='Produto Teste',
+                      categoria=Produto.CATEGORIA_ALIMENTO,
+                      situacao=Produto.SITUACAO_ATIVO,
+                      grupo_alimentar=Produto.GRUPO_ALIMENTAR_SECOS,
+                      durabilidade=Produto.DURABILIDADE_NAO_PERECIVEL,
+                      armazenabilidade=Produto.ARMAZENABILIDADE_ARMAZENAVEL
                       )
