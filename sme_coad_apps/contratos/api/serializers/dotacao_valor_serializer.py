@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from ...models import Contrato, DotacaoValor
+from ...models.dotacao_valor import DotacaoOrcamentaria
 
 
 class DotacaoValorSerializer(serializers.ModelSerializer):
@@ -31,4 +32,33 @@ class DotacaoValorCreatorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DotacaoValor
+        fields = '__all__'
+
+
+class DotacaoOrcamentariaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DotacaoOrcamentaria
+        fields = ('orgao', 'unidade', 'funcao', 'subfuncao', 'programa', 'projeto_atividade', 'conta_despesa', 'fonte')
+
+
+class DotacaoOrcamentariaLookUpSerializer(serializers.ModelSerializer):
+    numero_dotacao = serializers.ReadOnlyField()
+
+    class Meta:
+        model = DotacaoOrcamentaria
+        fields = ('uuid', 'numero_dotacao')
+
+
+class DotacaoOrcamentariaCreatorSerializer(serializers.ModelSerializer):
+    orgao = serializers.CharField(required=True)
+    unidade = serializers.CharField(required=True)
+    funcao = serializers.CharField(required=True)
+    subfuncao = serializers.CharField(required=True)
+    programa = serializers.CharField(required=True)
+    projeto_atividade = serializers.CharField(required=True)
+    conta_despesa = serializers.CharField(required=True)
+    fonte = serializers.CharField(required=True)
+
+    class Meta:
+        model = DotacaoOrcamentaria
         fields = '__all__'

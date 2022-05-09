@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria
 
 from .forms import TipoServicoForm
 from .models import (
@@ -220,6 +221,12 @@ class LoteAdmin(admin.ModelAdmin):
 class DotacaoValorAdmin(admin.ModelAdmin):
     list_display = ['contrato', 'dotacao_orcamentaria', 'valor', ]
     ordering = ('contrato',)
+
+
+@admin.register(DotacaoOrcamentaria)
+class DotacaoOrcamentariaAdmin(admin.ModelAdmin):
+    list_display = ['numero_dotacao']
+    ordering = ('orgao',)
 
 
 class GrupoObrigacoesInline(admin.StackedInline):
