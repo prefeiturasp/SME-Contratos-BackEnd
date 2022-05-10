@@ -36,9 +36,12 @@ class DotacaoValorCreatorSerializer(serializers.ModelSerializer):
 
 
 class DotacaoOrcamentariaSerializer(serializers.ModelSerializer):
+    numero_dotacao = serializers.ReadOnlyField()
+
     class Meta:
         model = DotacaoOrcamentaria
-        fields = ('orgao', 'unidade', 'funcao', 'subfuncao', 'programa', 'projeto_atividade', 'conta_despesa', 'fonte')
+        fields = ('uuid', 'orgao', 'unidade', 'funcao', 'subfuncao',
+                  'programa', 'projeto_atividade', 'conta_despesa', 'fonte', 'numero_dotacao')
 
 
 class DotacaoOrcamentariaLookUpSerializer(serializers.ModelSerializer):

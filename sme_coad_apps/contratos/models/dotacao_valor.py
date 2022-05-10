@@ -32,8 +32,8 @@ class DotacaoOrcamentaria(ModeloBase):
 
     @property
     def numero_dotacao(self):
-        return f"""{self.orgao}.{self.unidade}.{self.funcao}.{self.subfuncao}.
-                   {self.programa}.{self.projeto_atividade}.{self.conta_despesa}.{self.fonte}"""
+        return (f'{self.orgao}.{self.unidade}.{self.funcao}.{self.subfuncao}.'
+                f'{self.programa}.{self.projeto_atividade}.{self.conta_despesa}.{self.fonte}')
 
     def __str__(self):
         return self.numero_dotacao
