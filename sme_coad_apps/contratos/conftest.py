@@ -120,3 +120,17 @@ def produto():
                       durabilidade=Produto.DURABILIDADE_NAO_PERECIVEL,
                       armazenabilidade=Produto.ARMAZENABILIDADE_ARMAZENAVEL
                       )
+
+
+@pytest.fixture
+def dotacao_orcamentaria():
+    return mommy.make('DotacaoOrcamentaria',
+                      orgao='99',
+                      unidade='88',
+                      funcao='77',
+                      subfuncao='666',
+                      programa='5555',
+                      projeto_atividade='4.444',
+                      conta_despesa='33333333',
+                      fonte='22'
+                      )

@@ -16,8 +16,32 @@ class DotacaoValor(ModeloBase):
         return f'{self.contrato.termo_contrato} - {self.dotacao_orcamentaria} - R${self.valor}'
 
     class Meta:
+        verbose_name = 'Dotação Orçamentária (Valor)'
+        verbose_name_plural = 'Dotações Orçamentárias (Valor)'
+
+
+class DotacaoOrcamentaria(ModeloBase):
+    orgao = models.CharField('Órgão', max_length=2)
+    unidade = models.CharField('Unidade', max_length=2)
+    funcao = models.CharField('Função', max_length=2)
+    subfuncao = models.CharField('Subfunção', max_length=3)
+    programa = models.CharField('Programa', max_length=4)
+    projeto_atividade = models.CharField('Projeto/Atividade', max_length=5)
+    conta_despesa = models.CharField('Conta Despesa', max_length=8)
+    fonte = models.CharField('Fonte', max_length=2)
+
+    @property
+    def numero_dotacao(self):
+        return (f'{self.orgao}.{self.unidade}.{self.funcao}.{self.subfuncao}.'
+                f'{self.programa}.{self.projeto_atividade}.{self.conta_despesa}.{self.fonte}')
+
+    def __str__(self):
+        return self.numero_dotacao
+
+    class Meta:
         verbose_name = 'Dotação Orçamentária'
         verbose_name_plural = 'Dotações Orçamentárias'
 
 
 auditlog.register(DotacaoValor)
+auditlog.register(DotacaoOrcamentaria)
