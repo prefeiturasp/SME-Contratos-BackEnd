@@ -47,10 +47,18 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['estado_contrato']
     assert contrato_serializer.data['nucleo_responsavel']
     assert contrato_serializer.data['edital']
-    assert contrato_serializer.data['empresa_contratada'] == {'nome': empresa.nome, 'uuid': str(empresa.uuid),
-                                                              'id': empresa.id, 'cnpj': '55.803.656/0001-34',
-                                                              'situacao': empresa.SITUACAO_CHOICES[0][1],
-                                                              'tipo_servico': empresa.TIPO_SERVICO_CHOICES[0][1]}
+    contrato_empresa_contratada = dict(contrato_serializer.data['empresa_contratada'])
+    contrato_empresa_contratada.pop('alterado_em')
+    contrato_empresa_contratada.pop('criado_em')
+    resultado_esperado = {'contatos': [], 'cnpj': '55.803.656/0001-34',
+                          'tipo_servico': {'id': 'ARMAZEM/DISTRIBUIDOR', 'nome': 'Armazém/Distribuidor'},
+                          'tipo_fornecedor': {'id': '', 'nome': ''},
+                          'situacao': {'id': 'ATIVA', 'nome': 'Ativa'},
+                          'nome': empresa.nome,
+                          'uuid': str(empresa.uuid), 'razao_social': '',
+                          'cep': '', 'endereco': '', 'bairro': '', 'cidade': '', 'estado': '',
+                          'numero': '', 'complemento': ''}
+    assert contrato_empresa_contratada == resultado_esperado
     assert contrato_serializer.data['gestor'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
                                                   'id': fake_user.id, 'username': fake_user.username,
                                                   'email': fake_user.email}

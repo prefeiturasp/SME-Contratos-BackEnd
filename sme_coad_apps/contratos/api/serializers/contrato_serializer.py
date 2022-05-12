@@ -8,7 +8,7 @@ from ....core.models import Nucleo, Unidade
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
-from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer
+from ...api.serializers.empresa_serializer import EmpresaSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer
 from ...models import Contrato, DotacaoValor, Empresa, FiscalLote, Lote
 from ...models.edital import Edital
@@ -67,7 +67,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     CONT = 0
     data_encerramento = serializers.SerializerMethodField('get_data_encerramento')
     tipo_servico = TipoServicoLookupSerializer()
-    empresa_contratada = EmpresaLookUpSerializer()
+    empresa_contratada = EmpresaSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
     gestor = UsuarioLookUpSerializer()
     coordenador = serializers.SlugRelatedField(
