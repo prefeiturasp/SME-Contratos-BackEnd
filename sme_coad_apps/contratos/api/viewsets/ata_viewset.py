@@ -27,6 +27,6 @@ class AtaViewSet(ComHistoricoViewSet):
         else:
             return AtaCreateSerializer
 
-    @action(detail=False, methods=['delete'])
+    @action(detail=False, methods=['delete'], url_path='lookup-por-edital')
     def lookup_por_edital(self, request, uuid):
         return Response(AtaLookUpSerializer(self.queryset.order_by('-criado_em').filter(edital=uuid), many=True).data)
