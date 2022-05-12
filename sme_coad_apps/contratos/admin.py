@@ -117,12 +117,11 @@ class ContratoAdmin(admin.ModelAdmin):
         'data_inicio',
         'data_fim',
         'dias_para_vencer',
-        'estado_contrato',
         'situacao'
     )
     ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
-    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
+    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao')
     inlines = [ContratoUnidadeInLine, LotesInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
     fieldsets = (
