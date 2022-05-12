@@ -1,5 +1,7 @@
 from django_filters import rest_framework as filters
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...api.serializers.ata_serializer import AtaCreateSerializer, AtaLookUpSerializer, AtaSerializer
@@ -24,3 +26,7 @@ class AtaViewSet(ComHistoricoViewSet):
             return AtaLookUpSerializer
         else:
             return AtaCreateSerializer
+
+    @action(detail=False, methods=['delete'])
+    def lookup_por_edital(self, request, uuid):
+        return Response(AtaLookUpSerializer(self.queryset.order_by('-criado_em').filter(edital=uuid), many=True).data)
