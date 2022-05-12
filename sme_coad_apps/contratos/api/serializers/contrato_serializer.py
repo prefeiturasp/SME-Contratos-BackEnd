@@ -10,10 +10,11 @@ from ....users.models import User
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer
-from ...models import Contrato, DotacaoValor, Empresa, FiscalLote, Lote
+from ...models import Ata, Contrato, DotacaoValor, Empresa, FiscalLote, Lote
 from ...models.edital import Edital
 from ...models.tipo_servico import TipoServico
 from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
+from .ata_serializer import AtaLookUpSerializer
 from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
 
 user_model = get_user_model()
@@ -77,6 +78,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     )
     suplente = UsuarioLookUpSerializer()
     edital = EditalSimplesSerializer()
+    Ata = AtaLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
@@ -154,6 +156,13 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         allow_null=True,
         allow_empty=True,
         queryset=Edital.objects.all()
+    )
+    ata = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        allow_null=True,
+        allow_empty=True,
+        queryset=Ata.objects.all()
     )
     unidades_selecionadas = serializers.ListField(required=False)
     lotes = LoteSerializer(many=True, required=False)
