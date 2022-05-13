@@ -78,7 +78,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     )
     suplente = UsuarioLookUpSerializer()
     edital = EditalSimplesSerializer()
-    Ata = AtaLookUpSerializer()
+    ata = AtaLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
     row_index = serializers.SerializerMethodField('get_row_index')
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
