@@ -15,9 +15,8 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def contrato(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
-                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
-                      suplente=suplente, estado_contrato=Contrato.ESTADO_EMERGENCIAL,
-                      termo_contrato='999/99',
+                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
+                      suplente=suplente, termo_contrato='999/99',
                       )
 
 

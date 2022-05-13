@@ -23,9 +23,8 @@ def test_contrato_serializer(fake_user):
         suplente=fake_user,
         tipo_servico=tipo_servico,
         empresa_contratada=empresa,
-        vigencia_em_dias=100,
+        vigencia=100,
         processo='12233',
-        estado_contrato='Vigente',
         nucleo_responsavel=mommy.make(Nucleo),
         edital=mommy.make(Edital),
         modelo_ateste=modelo_ateste
@@ -41,10 +40,9 @@ def test_contrato_serializer(fake_user):
     assert contrato_serializer.data['processo']
     assert contrato_serializer.data['data_assinatura']
     assert contrato_serializer.data['data_ordem_inicio']
-    assert contrato_serializer.data['vigencia_em_dias'] is not None
+    assert contrato_serializer.data['vigencia'] is not None
     assert contrato_serializer.data['situacao']
     assert contrato_serializer.data['observacoes'] is not None
-    assert contrato_serializer.data['estado_contrato']
     assert contrato_serializer.data['nucleo_responsavel']
     assert contrato_serializer.data['edital']
     contrato_empresa_contratada = dict(contrato_serializer.data['empresa_contratada'])
