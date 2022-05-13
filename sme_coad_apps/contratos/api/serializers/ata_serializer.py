@@ -4,11 +4,11 @@ from ...models import Edital, Empresa
 from ...models.ata import Ata
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
-from .empresa_serializer import EmpresaLookUpSerializer
+from .empresa_serializer import EmpresaSerializer
 
 
 class AtaSerializer(serializers.ModelSerializer):
-    empresa = EmpresaLookUpSerializer()
+    empresa = EmpresaSerializer()
     edital = EditalSimplesSerializer()
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
