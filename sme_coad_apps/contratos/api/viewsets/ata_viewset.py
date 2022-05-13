@@ -27,6 +27,7 @@ class AtaViewSet(ComHistoricoViewSet):
         else:
             return AtaCreateSerializer
 
-    @action(detail=False, methods=['get'], url_path='atas-por-edital')
-    def atas_por_edital(self, request, uuid):
-        return Response(AtaLookUpSerializer(self.queryset.order_by('-criado_em').filter(edital=uuid), many=True).data)
+    @action(detail=False, methods=['get'], url_path='atas-por-edital/(?P<edital>[^/.]+)')
+    def atas_por_edital(self, request, edital):
+        return Response(
+            AtaLookUpSerializer(self.queryset.filter(edital__uuid=edital).order_by('-criado_em'), many=True).data)
