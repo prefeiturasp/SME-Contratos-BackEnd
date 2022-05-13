@@ -21,14 +21,15 @@ def test_instance_model(dotacao_orcamentaria):
 
 
 def test_srt_model(dotacao_orcamentaria):
-    assert dotacao_orcamentaria.__str__() == f"""{dotacao_orcamentaria.orgao}.
-                                                 {dotacao_orcamentaria.unidade}.
-                                                 {dotacao_orcamentaria.funcao}.
-                                                 {dotacao_orcamentaria.subfuncao}.
-                                                 {dotacao_orcamentaria.programa}.
-                                                 {dotacao_orcamentaria.projeto_atividade}.
-                                                 {dotacao_orcamentaria.conta_despesa}.
-                                                 {dotacao_orcamentaria.fonte}"""
+    esperado = f"""{dotacao_orcamentaria.orgao}.
+                     {dotacao_orcamentaria.unidade}.
+                     {dotacao_orcamentaria.funcao}.
+                     {dotacao_orcamentaria.subfuncao}.
+                     {dotacao_orcamentaria.programa}.
+                     {dotacao_orcamentaria.projeto_atividade}.
+                     {dotacao_orcamentaria.conta_despesa}.
+                     {dotacao_orcamentaria.fonte}"""
+    assert dotacao_orcamentaria.__str__() == esperado.replace('\n', '').replace(' ', '')
 
 
 def test_admin():
