@@ -1,15 +1,14 @@
+# flake8: noqa
 import datetime
 
 from django.db import models
 from notifications.models import Notification
-from notifications.signals import notify
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 
 from ...core.models_abstracts import ModeloBase
 from ...users.models import User
 from .contrato import Contrato
-from .parametro_notificacoes import ParametroNotificacoesVigencia
 
 
 class NotificacaoVigenciaContrato(ModeloBase):
@@ -36,51 +35,53 @@ class NotificacaoVigenciaContrato(ModeloBase):
 
     @classmethod
     def gera_notificacoes(cls):
-        for estado in Contrato.ESTADOS:
+        pass
+        # for estado in Contrato.ESTADOS:
+        #
+        #     if not ParametroNotificacoesVigencia.estado_notificavel(estado):
+        #         continue
+        #
+        #     data_limite = ParametroNotificacoesVigencia.data_limite_do_estado(estado)
+        #
+        #     contratos = Contrato.contratos_no_estado(estado, vencendo_ate=data_limite)
+        #
+        #     for contrato in contratos:
+        #         if not contrato.gestor:
+        #             continue
+        #
+        #         frequencia_de_notificacao = ParametroNotificacoesVigencia.frequencia_repeticao(
+        #             estado, dias_pra_vencer=contrato.dias_para_o_encerramento
+        #         )
+        #
+        #         ultima_notificacao = NotificacaoVigenciaContrato.ultima_notificacao_para_o_gestor_do_contrato(
+        #         contrato)
+        #
+        #         if not ultima_notificacao or ultima_notificacao.idade >= frequencia_de_notificacao:
+        #
+        #             if contrato.dias_para_o_encerramento > 0:
+        #                 texto_notificacao = f'está à {contrato.dias_para_o_encerramento} dias de seu encerramento'
+        #             elif contrato.dias_para_o_encerramento < 0:
+        #                 texto_notificacao = f'encerrou-se à {abs(contrato.dias_para_o_encerramento)} dias'
+        #             else:
+        #                 texto_notificacao = 'encerrou-se'
+        #
+        #             notificacao = NotificacaoVigenciaContrato.objects.create(
+        #                 contrato=contrato,
+        #                 notificado=contrato.gestor,
+        #             )
+        #
+        #             notify.send(
+        #                 notificacao,
+        #                 verb='alerta_vigencia_contrato',
+        #                 recipient=notificacao.notificado,
+        #                 description=f'Atenção! O contrato {contrato.termo_contrato} {texto_notificacao}.',
+        #                 target=contrato,
+        #             )
+        #
+        #             if ultima_notificacao:
+        #                 ultima_notificacao.delete()
 
-            if not ParametroNotificacoesVigencia.estado_notificavel(estado):
-                continue
-
-            data_limite = ParametroNotificacoesVigencia.data_limite_do_estado(estado)
-
-            contratos = Contrato.contratos_no_estado(estado, vencendo_ate=data_limite)
-
-            for contrato in contratos:
-                if not contrato.gestor:
-                    continue
-
-                frequencia_de_notificacao = ParametroNotificacoesVigencia.frequencia_repeticao(
-                    estado, dias_pra_vencer=contrato.dias_para_o_encerramento
-                )
-
-                ultima_notificacao = NotificacaoVigenciaContrato.ultima_notificacao_para_o_gestor_do_contrato(contrato)
-
-                if not ultima_notificacao or ultima_notificacao.idade >= frequencia_de_notificacao:
-
-                    if contrato.dias_para_o_encerramento > 0:
-                        texto_notificacao = f'está à {contrato.dias_para_o_encerramento} dias de seu encerramento'
-                    elif contrato.dias_para_o_encerramento < 0:
-                        texto_notificacao = f'encerrou-se à {abs(contrato.dias_para_o_encerramento)} dias'
-                    else:
-                        texto_notificacao = 'encerrou-se'
-
-                    notificacao = NotificacaoVigenciaContrato.objects.create(
-                        contrato=contrato,
-                        notificado=contrato.gestor,
-                    )
-
-                    notify.send(
-                        notificacao,
-                        verb='alerta_vigencia_contrato',
-                        recipient=notificacao.notificado,
-                        description=f'Atenção! O contrato {contrato.termo_contrato} {texto_notificacao}.',
-                        target=contrato,
-                    )
-
-                    if ultima_notificacao:
-                        ultima_notificacao.delete()
-
-        cls.enviar_emails_notificacao()
+        # cls.enviar_emails_notificacao()
 
     @classmethod
     def get_notificacoes_do_usuario(cls, usuario):

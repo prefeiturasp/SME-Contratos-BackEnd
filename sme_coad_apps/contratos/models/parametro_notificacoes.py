@@ -5,20 +5,18 @@ from auditlog.registry import auditlog
 from django.db import models
 
 from ...core.models_abstracts import ModeloBase
-from .contrato import Contrato
 
 
 class ParametroNotificacoesVigencia(ModeloBase):
     historico = AuditlogHistoryField()
 
-    estado_contrato = models.CharField('Para contratos com estado', max_length=30, choices=Contrato.ESTADO_CHOICES,
-                                       blank=True, default='')
+    estado_contrato = models.CharField('Para contratos com estado', max_length=30, blank=True, default='')
     vencendo_em = models.PositiveSmallIntegerField('Vencendo a partir de (dias)', default=0, blank=True, null=True)
     repetir_notificacao_a_cada = models.PositiveSmallIntegerField('Repetir notificação a cada (dias)', default=0,
                                                                   blank=True, null=True)
 
     def __str__(self):
-        contratos_no_estado = f'Contratos {Contrato.ESTADO_NOMES[self.estado_contrato]}'
+        contratos_no_estado = f'Contratos {self.estado_contrato}'
         notificar_a_partir_de = f'notificar a partir de {self.vencendo_em} dias'
         repetir_a_cada = f'repetindo a cada {self.repetir_notificacao_a_cada} dias'
         return f'{contratos_no_estado} {notificar_a_partir_de} {repetir_a_cada}.'

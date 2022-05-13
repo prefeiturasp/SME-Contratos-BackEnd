@@ -7,7 +7,7 @@ from auditlog.registry import auditlog
 from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.db.models import Q
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from notifications.models import Notification
 from notifications.signals import notify
@@ -20,6 +20,7 @@ from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
+from .ata import Ata
 from .edital import Edital
 from .empresa import Empresa
 from .tipo_servico import TipoServico
@@ -35,33 +36,6 @@ class SafiToken(viewsets.ViewSet):
 
 class Contrato(ModeloBase):
     historico = AuditlogHistoryField()
-
-    # Estado do Contrato
-    ESTADO_VIGENTE = 'VIGENTE'
-    ESTADO_EXCEPCIONAL = 'EXCEPCIONAL'
-    ESTADO_EMERGENCIAL = 'EMERGENCIAL'
-    ESTADO_SUSPENSO_INTERROMPIDO = 'SUSPENSO_INTERROMPIDO'
-
-    ESTADO_NOMES = {
-        ESTADO_VIGENTE: 'Vigente',
-        ESTADO_EXCEPCIONAL: 'Excepcional',
-        ESTADO_EMERGENCIAL: 'Emergencial',
-        ESTADO_SUSPENSO_INTERROMPIDO: 'Suspenso / Interrompido',
-    }
-
-    ESTADO_CHOICES = (
-        (ESTADO_VIGENTE, ESTADO_NOMES[ESTADO_VIGENTE]),
-        (ESTADO_EXCEPCIONAL, ESTADO_NOMES[ESTADO_EXCEPCIONAL]),
-        (ESTADO_EMERGENCIAL, ESTADO_NOMES[ESTADO_EMERGENCIAL]),
-        (ESTADO_SUSPENSO_INTERROMPIDO, ESTADO_NOMES[ESTADO_SUSPENSO_INTERROMPIDO]),
-    )
-
-    ESTADOS = (
-        ESTADO_VIGENTE,
-        ESTADO_EXCEPCIONAL,
-        ESTADO_EMERGENCIAL,
-        ESTADO_SUSPENSO_INTERROMPIDO,
-    )
 
     # Situações do Contrato Choice
     SITUACAO_ATIVO = 'ATIVO'
@@ -112,6 +86,8 @@ class Contrato(ModeloBase):
     processo = models.CharField(max_length=50, blank=True, default='')
     edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contartos_do_edital',
                                blank=True, null=True)
+    ata = models.ForeignKey(Ata, on_delete=models.PROTECT, related_name='contartos_da_ata',
+                            blank=True, null=True)
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
@@ -125,8 +101,7 @@ class Contrato(ModeloBase):
                                                default=REFERENCIA_DATA_ORDEM_INICIO)
     unidade_vigencia = models.CharField(max_length=10, choices=UNIDADE_VIGENCIA_CHOICES,
                                         default=UNIDADE_VIGENCIA_DIAS)
-    # TODO Renomear esse campo para apenas vigencia uma vez que agora pode ser em dias ou meses
-    vigencia_em_dias = models.PositiveSmallIntegerField('vigência', default=0, blank=True, null=True)
+    vigencia = models.PositiveSmallIntegerField('vigência', default=0, blank=True, null=True)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
     gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
                                null=True)
@@ -136,7 +111,6 @@ class Contrato(ModeloBase):
     modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
                                       blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
-    estado_contrato = models.CharField('estado', max_length=30, choices=ESTADO_CHOICES, blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
@@ -157,11 +131,6 @@ class Contrato(ModeloBase):
             return 0
 
     @property
-    def estado(self):
-        # Futuramente o estado será calculado. No momento ele é um campo digitado.
-        return self.estado_contrato
-
-    @property
     def total_mensal(self):
         total = 0
         for unidade in self.unidades.all():
@@ -176,17 +145,6 @@ class Contrato(ModeloBase):
         return self.termo_contrato
 
     @classmethod
-    def estados_to_json(cls):
-        result = []
-        for estado in cls.ESTADO_CHOICES:
-            choice = {
-                'id': estado[0],
-                'nome': estado[1]
-            }
-            result.append(choice)
-        return result
-
-    @classmethod
     def situacoes_to_json(cls):
         result = []
         for situacao in cls.SITUACAO_CHOICES:
@@ -196,15 +154,6 @@ class Contrato(ModeloBase):
             }
             result.append(choice)
         return result
-
-    @classmethod
-    def contratos_no_estado(cls, estado, vencendo_ate=None):
-        result_query = cls.objects.filter(estado_contrato=estado)
-
-        if vencendo_ate:
-            result_query = result_query.filter(data_encerramento__lte=vencendo_ate)
-
-        return result_query.all()
 
     @classmethod
     def notifica_atribuicao(cls, notificado, papel, contrato):
@@ -275,13 +224,12 @@ def contrato_pre_save(instance, *_args, **_kwargs):
     else:
         data_inicio = instance.data_ordem_inicio
 
-    # TODO Renomear o campo vigencia_em_dias para apenas vigencia uma vez que agora pode ser em dias ou meses
-    if data_inicio and instance.vigencia_em_dias:
+    if data_inicio and instance.vigencia:
         if instance.unidade_vigencia == Contrato.UNIDADE_VIGENCIA_MESES:
-            instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia_em_dias) - relativedelta(
+            instance.data_encerramento = data_inicio + relativedelta(months=+instance.vigencia) - relativedelta(
                 days=+1)
         else:
-            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia_em_dias)
+            instance.data_encerramento = data_inicio + relativedelta(days=+instance.vigencia)
 
     instance.tem_ue = instance.unidades.filter(unidade__equipamento='UE').exists()
     instance.tem_ua = instance.unidades.filter(unidade__equipamento='UA').exists()
@@ -290,12 +238,6 @@ def contrato_pre_save(instance, *_args, **_kwargs):
         instance.data_assinatura += relativedelta(days=+1)
     if instance.data_encerramento and instance.data_ordem_inicio:
         instance.data_ordem_inicio += relativedelta(days=+1)
-
-
-@receiver(post_save, sender=Contrato)
-def contrato_post_save(instance, **kwargs):
-    if instance.gestor:
-        instance.notificar_gestor_e_suplente()
 
 
 class DocumentoFiscal(ModeloBase):

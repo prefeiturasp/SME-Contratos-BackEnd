@@ -45,10 +45,6 @@ class ContratoViewSet(ComHistoricoViewSet):
             return ContratoCreateSerializer
 
     @action(detail=False)
-    def estados(self, _):
-        return Response(Contrato.estados_to_json())
-
-    @action(detail=False)
     def situacoes(self, _):
         return Response(Contrato.situacoes_to_json())
 
