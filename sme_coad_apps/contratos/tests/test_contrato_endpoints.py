@@ -20,9 +20,9 @@ def test_url_authorized(authencticated_client):
 
 def test_atualizacao_contrato(authencticated_client, contrato):
     data = {'termo_contrato': '129/14', 'tipo_servico': '7baa3356-599f-4627-9fed-832ee888de14',
-            'processo': '6016.2017/0000791-6', 'estado_contrato': 'VIGENTE', 'situacao': 'ATIVO',
+            'processo': '6016.2017/0000791-6', 'situacao': 'ATIVO',
             'data_encerramento': '2019-12-12', 'data_assinatura': '2020-05-18', 'data_ordem_inicio': '2014-12-13',
-            'vigencia_em_dias': 1825,
+            'vigencia': 1825,
             'dotacao_orcamentaria': ['2100 39', '16.24 2100 39'],
             'observacoes': '', 'objeto': '<p>dsadsad</p>',
             'numero_edital': '123123123',
@@ -132,13 +132,6 @@ def test_atualizacao_contrato(authencticated_client, contrato):
     assert response.status_code == status.HTTP_200_OK
     response_json = response.json()
     assert len(response_json.get('lotes')) == 3
-
-
-def test_url_estados(authencticated_client):
-    response = authencticated_client.get('/contratos/estados/')
-    assert response.status_code == status.HTTP_200_OK
-    json_data = json.loads(response.content)
-    assert json_data == Contrato.estados_to_json()
 
 
 def test_url_situacoes(authencticated_client):

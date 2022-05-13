@@ -27,10 +27,10 @@ def suplente():
 @pytest.fixture
 def contrato_emergencial(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
-                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia_em_dias=100, gestor=gestor,
+                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
                       suplente=suplente, observacoes='teste', tipo_servico=mommy.make(TipoServico),
                       nucleo_responsavel=mommy.make(Nucleo), edital=mommy.make(Edital),
-                      empresa_contratada=mommy.make(Empresa), estado_contrato=Contrato.ESTADO_EMERGENCIAL,
+                      empresa_contratada=mommy.make(Empresa),
                       modelo_ateste=mommy.make(ModeloAteste)
                       )
 
@@ -86,12 +86,11 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
     assert isinstance(contrato_emergencial.data_ordem_inicio, datetime.date)
     assert isinstance(contrato_emergencial.referencia_encerramento, str)
-    assert isinstance(contrato_emergencial.vigencia_em_dias, int)
+    assert isinstance(contrato_emergencial.vigencia, int)
     assert isinstance(contrato_emergencial.situacao, str)
     assert isinstance(contrato_emergencial.gestor, User)
     assert isinstance(contrato_emergencial.suplente, User)
     assert isinstance(contrato_emergencial.observacoes, str)
-    assert isinstance(contrato_emergencial.estado_contrato, str)
     assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
     assert isinstance(contrato_emergencial.valor_total, float)
     assert contrato_emergencial.historico
@@ -118,21 +117,14 @@ def test_situcoes():
     assert Contrato.SITUACAO_RASCUNHO
 
 
-def test_estado():
-    assert Contrato.ESTADO_EMERGENCIAL
-    assert Contrato.ESTADO_EXCEPCIONAL
-    assert Contrato.ESTADO_SUSPENSO_INTERROMPIDO
-    assert Contrato.ESTADO_VIGENTE
-
-
 def test_field_data_encerramento():
-    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia_em_dias=30)
+    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia=30)
     assert model.data_encerramento == datetime.date(2018, 12, 31)
 
 
 @freeze_time('2018-12-15')
 def test_property_dias_para_o_encerramento():
-    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia_em_dias=30)
+    model = mommy.make('Contrato', data_ordem_inicio=datetime.date(2018, 12, 1), vigencia=30)
     assert model.dias_para_o_encerramento == 16
 
 
@@ -173,37 +165,11 @@ def test_admin():
         'data_inicio',
         'data_fim',
         'dias_para_vencer',
-        'estado_contrato',
         'situacao'
     )
     assert model_admin.ordering == ('termo_contrato',)
     assert model_admin.search_fields == ('processo', 'termo_contrato')
-    assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao', 'estado_contrato')
-
-
-def test_contratos_no_estado():
-    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, _quantity=3)
-    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_VIGENTE, _quantity=2)
-    assert Contrato.contratos_no_estado(Contrato.ESTADO_EXCEPCIONAL).count() == 3
-
-
-def test_contratos_no_estado_vencendo_ate():
-    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, data_encerramento='2020-01-01', _quantity=3)
-    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_EXCEPCIONAL, data_encerramento='2021-01-01', _quantity=2)
-    mommy.make(Contrato, estado_contrato=Contrato.ESTADO_VIGENTE, data_encerramento='2020-01-01', _quantity=2)
-
-    assert Contrato.contratos_no_estado(Contrato.ESTADO_EXCEPCIONAL, vencendo_ate='2020-02-01').count() == 3
-
-
-def test_notifica_atribuicao(contrato_emergencial):
-    notificacoes_gestor = contrato_emergencial.gestor.notifications.unread().filter(
-        verb='tc_atribuido_gestor', actor_object_id=contrato_emergencial.id)
-
-    notificacoes_suplente = contrato_emergencial.suplente.notifications.unread().filter(
-        verb='tc_atribuido_suplente', actor_object_id=contrato_emergencial.id)
-
-    assert notificacoes_gestor.exists()
-    assert notificacoes_suplente.exists()
+    assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao')
 
 
 def test_dres_do_contrato(contrato_unidade_xpto123_123456, contrato_unidade_xpto123_654321):
