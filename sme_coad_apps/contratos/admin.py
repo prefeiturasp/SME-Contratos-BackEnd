@@ -130,6 +130,7 @@ class ContratoAdmin(admin.ModelAdmin):
                 'termo_contrato',
                 'processo',
                 'edital',
+                'ata',
                 'tipo_servico',
                 'nucleo_responsavel',
                 'objeto',
