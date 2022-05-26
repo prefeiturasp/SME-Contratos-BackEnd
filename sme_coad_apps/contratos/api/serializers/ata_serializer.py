@@ -1,9 +1,8 @@
-import json
-
 from rest_framework import serializers
 
 from ...models import Edital, Empresa
 from ...models.ata import Ata
+from ..utils.historico_utils import serializa_historico
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
@@ -83,33 +82,7 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
 
     def get_historico(self, obj):
 
-        historico = []
-        for reg in obj.historico.all():
-            registro = {}
-
-            mudancas = json.loads(reg.changes)
-            changes = []
-            for key in mudancas.keys():
-                newChange = {}
-                newChange['field'] = key
-                newChange['from'] = mudancas[key][0]
-                newChange['to'] = mudancas[key][1]
-                changes.append(newChange)
-
-            registro['changes'] = changes
-            registro['user'] = {
-                'email': reg.actor.email,
-                'uuid': str(reg.actor.uuid)
-            } if reg.actor else None
-            registro['created_at'] = reg.timestamp.strftime('%m/%d/%Y %H:%M:%S')
-            if reg.action == 0:
-                registro['action'] = 'CREATE'
-            elif reg.action == 1:
-                registro['action'] = 'UPDATE'
-
-            historico.append(registro)
-
-        return historico
+        return serializa_historico(obj.historico)
 
     class Meta:
         model = Ata
