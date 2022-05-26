@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from ...models import Edital, Empresa
@@ -68,6 +70,7 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     objeto = serializers.SerializerMethodField()
     data_encerramento = serializers.SerializerMethodField()
     status = serializers.CharField(source='get_status_display')
+    historico = serializers.SerializerMethodField()
 
     def get_nome_empresa(self, obj):
         return obj.empresa.nome if obj.empresa else None
@@ -78,6 +81,36 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     def get_data_encerramento(self, obj):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
 
+    def get_historico(self, obj):
+
+        historico = []
+        for reg in obj.historico.all():
+            registro = {}
+
+            mudancas = json.loads(reg.changes)
+            changes = []
+            for key in mudancas.keys():
+                newChange = {}
+                newChange['field'] = key
+                newChange['from'] = mudancas[key][0]
+                newChange['to'] = mudancas[key][1]
+                changes.append(newChange)
+
+            registro['changes'] = changes
+            registro['user'] = {
+                'email': reg.actor.email,
+                'uuid': str(reg.actor.uuid)
+            } if reg.actor else None
+            registro['created_at'] = reg.timestamp.strftime('%m/%d/%Y %H:%M:%S')
+            if reg.action == 0:
+                registro['action'] = 'CREATE'
+            elif reg.action == 1:
+                registro['action'] = 'UPDATE'
+
+            historico.append(registro)
+
+        return historico
+
     class Meta:
         model = Ata
-        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto')
+        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto', 'historico')
