@@ -1,5 +1,6 @@
 from auditlog.models import AuditlogHistoryField
 from auditlog.registry import auditlog
+from django.contrib.postgres import fields
 from django.db import models
 
 from ...core.models_abstracts import ModeloBase
@@ -33,7 +34,7 @@ class Edital(ModeloBase):
         (TIPO_INEXIGIBILIDADE_LICITACAO, TIPO_NOMES[TIPO_INEXIGIBILIDADE_LICITACAO]),
     )
 
-    historico = AuditlogHistoryField()
+    history = AuditlogHistoryField()
     numero = models.CharField('Número do Edital', max_length=50, unique=True)
     processo = models.CharField(max_length=19, default='')
     tipo_contratacao = models.CharField(max_length=25, choices=TIPO_CONTRATACAO_CHOICES, default=TIPO_LICITACAO)
@@ -43,6 +44,7 @@ class Edital(ModeloBase):
     objeto = models.ForeignKey(TipoServico, related_name='objetos', verbose_name='Categoria de objeto',
                                on_delete=models.PROTECT, blank=True, null=True)
     descricao_objeto = models.TextField(blank=True, default='')
+    historico = fields.JSONField(blank=True, null=True)
 
     def __str__(self):
         return self.numero
