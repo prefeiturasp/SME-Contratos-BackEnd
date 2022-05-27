@@ -84,9 +84,9 @@ class Contrato(ModeloBase):
 
     termo_contrato = models.CharField('TC No.', max_length=20, unique=True)
     processo = models.CharField(max_length=50, blank=True, default='')
-    edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contartos_do_edital',
+    edital = models.ForeignKey(Edital, on_delete=models.PROTECT, related_name='contratos_do_edital',
                                blank=True, null=True)
-    ata = models.ForeignKey(Ata, on_delete=models.PROTECT, related_name='contartos_da_ata',
+    ata = models.ForeignKey(Ata, on_delete=models.PROTECT, related_name='contratos_da_ata',
                             blank=True, null=True)
     tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
                                      verbose_name='tipo de serviço', blank=True, null=True)
