@@ -85,4 +85,4 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ata
-        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto', 'historico')
+        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto')
