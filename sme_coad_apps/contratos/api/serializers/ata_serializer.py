@@ -14,6 +14,7 @@ class AtaSerializer(serializers.ModelSerializer):
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
+    historico = serializers.SerializerMethodField()
 
     def get_data_assinatura(self, obj):
         return obj.data_assinatura.strftime('%d/%m/%Y') if obj.data_assinatura else None
@@ -26,6 +27,9 @@ class AtaSerializer(serializers.ModelSerializer):
             'id': obj.status,
             'nome': obj.get_status_display()
         }
+
+    def get_historico(self, obj):
+        return serializa_historico(obj.historico)
 
     class Meta:
         model = Ata
@@ -69,7 +73,6 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     objeto = serializers.SerializerMethodField()
     data_encerramento = serializers.SerializerMethodField()
     status = serializers.CharField(source='get_status_display')
-    historico = serializers.SerializerMethodField()
 
     def get_nome_empresa(self, obj):
         return obj.empresa.nome if obj.empresa else None
@@ -79,10 +82,6 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
-
-    def get_historico(self, obj):
-
-        return serializa_historico(obj.historico)
 
     class Meta:
         model = Ata

@@ -22,6 +22,7 @@ def test_ata_serializer(ata):
     assert serializer.data['data_assinatura']
     assert serializer.data['data_encerramento']
     assert serializer.data['edital']
+    assert serializer.data['historico']
 
 def test_ata_lookup_serializer(ata):
     serializer = AtaLookUpSerializer(ata)
@@ -32,7 +33,6 @@ def test_ata_lookup_serializer(ata):
     assert serializer.data['nome_empresa']
     assert serializer.data['status']
     assert serializer.data['data_encerramento']
-    assert serializer.data['historico']
 
 @pytest.fixture
 def payload_ata():
