@@ -5,13 +5,13 @@ from faker import Faker
 from model_mommy import mommy
 from rest_framework import status
 
-from ..api.serializers.ata_serializer import AtaSerializer
+from ..api.serializers.ata_serializer import AtaLookUpSerializer, AtaSerializer
 from ..models import Ata, Edital
 
 pytestmark = pytest.mark.django_db
 
 
-def test_edital_serializer(ata):
+def test_ata_serializer(ata):
     serializer = AtaSerializer(ata)
 
     assert serializer.data is not None
@@ -22,7 +22,17 @@ def test_edital_serializer(ata):
     assert serializer.data['data_assinatura']
     assert serializer.data['data_encerramento']
     assert serializer.data['edital']
+    assert serializer.data['historico']
 
+def test_ata_lookup_serializer(ata):
+    serializer = AtaLookUpSerializer(ata)
+
+    assert serializer.data is not None
+    assert serializer.data['numero'] == ata.numero
+    assert serializer.data['uuid']
+    assert serializer.data['nome_empresa']
+    assert serializer.data['status']
+    assert serializer.data['data_encerramento']
 
 @pytest.fixture
 def payload_ata():
@@ -57,20 +67,7 @@ def test_get_ata_filters(authencticated_client, test_ata_serializer_create):
     url = rota.replace('\n', '')
     response = authencticated_client.get(url, content_type='application/json')
     resposta = json.loads(response.content)
-    data = result['data_encerramento'].split('-')
-    esperado = {
-        'count': 1,
-        'next': None,
-        'previous': None,
-        'results': [
-            {
-                'uuid': f"{result['uuid']}",
-                'numero': f"{result['numero']}",
-                'nome_empresa': None,
-                'status': 'Ativa',
-                'data_encerramento': f'{data[2]}/{data[1]}/{data[0]}',
-                'objeto': None
-            }
-        ]
-    }
-    assert resposta == esperado
+
+    assert resposta
+    assert resposta['count'] == 1
+    assert resposta['results']
