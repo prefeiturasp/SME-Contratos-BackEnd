@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from ...models import Edital, Empresa
 from ...models.ata import Ata
+from ..utils.historico_utils import serializa_historico
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
@@ -68,6 +69,7 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     objeto = serializers.SerializerMethodField()
     data_encerramento = serializers.SerializerMethodField()
     status = serializers.CharField(source='get_status_display')
+    historico = serializers.SerializerMethodField()
 
     def get_nome_empresa(self, obj):
         return obj.empresa.nome if obj.empresa else None
@@ -78,6 +80,10 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     def get_data_encerramento(self, obj):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
 
+    def get_historico(self, obj):
+
+        return serializa_historico(obj.historico)
+
     class Meta:
         model = Ata
-        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto')
+        fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto', 'historico')
