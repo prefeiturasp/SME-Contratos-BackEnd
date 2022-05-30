@@ -10,12 +10,12 @@ from ....users.models import User
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
 from ...api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer
-from ...models import Ata, Contrato, DotacaoValor, Empresa, FiscalLote, Lote
+from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
 from ...models.edital import Edital
 from ...models.tipo_servico import TipoServico
 from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from .ata_serializer import AtaLookUpSerializer
-from .dotacao_valor_serializer import DotacaoValorLookUpSerializer
+from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
 
 user_model = get_user_model()
 
@@ -84,7 +84,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     dias_para_o_encerramento = serializers.SerializerMethodField('get_dias_para_o_encerramento')
     dres = serializers.SerializerMethodField('get_dres')
     lotes = LoteSerializer(many=True)
-    dotacoes_orcamentarias = DotacaoValorLookUpSerializer(many=True, source='dotacoes')
+    dotacoes = DotacaoValorSerializer(many=True)
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -166,28 +166,34 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     )
     unidades_selecionadas = serializers.ListField(required=False)
     lotes = LoteSerializer(many=True, required=False)
-    dotacoes = DotacaoValorLookUpSerializer(many=True, required=False)
-    dotacoes_orcamentarias = serializers.ListField(required=False)
+    dotacoes = DotacaoValorCreatorSerializer(many=True, required=False)
     dias_para_o_encerramento = serializers.CharField(required=False)
 
     def validate(self, attrs):
         gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
         return attrs
 
-    def update(self, instance, validated_data):
-        unidades_selecionadas = validated_data.pop('unidades_selecionadas', [])
-        dotacoes = validated_data.pop('dotacoes_orcamentarias', [])
-        instance.lotes.all().delete()
-        instance.dotacoes.all().delete()
-        update_instance_from_dict(instance, validated_data, save=True)
+    def create(self, validated_data):
+        dotacoes = validated_data.pop('dotacoes', [])
+        contrato = Contrato.objects.create(**validated_data)
 
         for dotacao in dotacoes:
-            dotacao_valor = DotacaoValor(
-                contrato=instance,
-                dotacao_orcamentaria=dotacao.get('dotacao_orcamentaria', ''),
-                valor=dotacao.get('valor', '')
-            )
-            dotacao_valor.save()
+            dotacao['contrato'] = contrato
+            DotacaoValorCreatorSerializer().create(dotacao)
+
+        return contrato
+
+    def update(self, instance, validated_data):
+        unidades_selecionadas = validated_data.pop('unidades_selecionadas', [])
+        dotacoes = validated_data.pop('dotacoes', [])
+        instance.lotes.all().delete()
+        instance.dotacoes.all().delete()
+
+        for dotacao in dotacoes:
+            dotacao['contrato'] = instance
+            DotacaoValorCreatorSerializer().create(dotacao)
+
+        update_instance_from_dict(instance, validated_data, save=True)
 
         for unidade_selecionada in unidades_selecionadas:
             lote = unidade_selecionada.get('lote')
