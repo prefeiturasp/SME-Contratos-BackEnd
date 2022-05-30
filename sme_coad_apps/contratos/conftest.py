@@ -79,13 +79,14 @@ def edital(gestor, suplente):
 
 
 @pytest.fixture
-def ata():
+def ata(empresa):
     return mommy.make(Ata, numero='0123456/2022',
                       vigencia=15,
                       status=Ata.ATIVA,
                       data_assinatura=datetime.date(2023, 1, 1),
                       data_encerramento=datetime.date(2023, 1, 15),
                       edital=mommy.make(Edital),
+                      empresa=empresa,
                       unidade_vigencia=Ata.UNIDADE_VIGENCIA_DIAS
                       )
 

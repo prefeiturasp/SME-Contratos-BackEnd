@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from ...models import Edital, Empresa
 from ...models.ata import Ata
+from ..utils.historico_utils import serializa_historico
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
@@ -13,6 +14,7 @@ class AtaSerializer(serializers.ModelSerializer):
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
+    historico = serializers.SerializerMethodField()
 
     def get_data_assinatura(self, obj):
         return obj.data_assinatura.strftime('%d/%m/%Y') if obj.data_assinatura else None
@@ -25,6 +27,9 @@ class AtaSerializer(serializers.ModelSerializer):
             'id': obj.status,
             'nome': obj.get_status_display()
         }
+
+    def get_historico(self, obj):
+        return serializa_historico(obj.historico)
 
     class Meta:
         model = Ata
