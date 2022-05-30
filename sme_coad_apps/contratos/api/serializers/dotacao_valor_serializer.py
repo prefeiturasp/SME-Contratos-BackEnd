@@ -65,7 +65,7 @@ class DotacaoValorCreatorSerializer(serializers.ModelSerializer):
     empenhos = EmpenhoLookUpSerializer(many=True, required=False)
 
     def create(self, validated_data):
-        empenhos = validated_data.pop('empenhos')
+        empenhos = validated_data.pop('empenhos', [])
         dotacao_valor = DotacaoValor.objects.create(**validated_data)
         for empenho in empenhos:
             empenho['dotacao_valor'] = dotacao_valor
