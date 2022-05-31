@@ -6,11 +6,13 @@ from ..utils.historico_utils import serializa_historico
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
+from .produto_ata_serializer import ProdutoAtaSerializer, ProdutoAtaSerializerCreate
 
 
 class AtaSerializer(serializers.ModelSerializer):
     empresa = EmpresaSerializer()
     edital = EditalSimplesSerializer()
+    produtos = serializers.SerializerMethodField()
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -30,6 +32,10 @@ class AtaSerializer(serializers.ModelSerializer):
 
     def get_historico(self, obj):
         return serializa_historico(obj.historico)
+
+    def get_produtos(self, obj):
+        produto = obj.produtos.all().order_by('id')
+        return ProdutoAtaSerializer(produto, many=True).data
 
     class Meta:
         model = Ata
@@ -57,11 +63,22 @@ class AtaCreateSerializer(serializers.ModelSerializer):
     vigencia = serializers.IntegerField(required=True)
     data_assinatura = serializers.CharField(required=True)
     data_encerramento = serializers.CharField(required=True)
+    produtos = ProdutoAtaSerializerCreate(many=True, required=False)
 
     def validate(self, attrs):
         data_encerramento(attrs.get('unidade_vigencia'), attrs.get('vigencia'),
                           attrs.get('data_assinatura'), attrs.get('data_encerramento'))
         return attrs
+
+    def create(self, validated_data):
+        produtos = validated_data.pop('produtos', [])
+        ata = Ata.objects.create(**validated_data)
+
+        for produto in produtos:
+            produto['ata'] = ata
+            ProdutoAtaSerializerCreate().create(produto)
+
+        return ata
 
     class Meta:
         model = Ata
