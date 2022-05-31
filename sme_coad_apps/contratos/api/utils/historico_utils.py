@@ -20,7 +20,7 @@ def serializa_historico(log_entry):
             'email': reg.actor.email,
             'uuid': str(reg.actor.uuid)
         } if reg.actor else None
-        data = reg.timestamp.strftime('%d-%m-%Y %H:%M:%S')
+        data = reg.timestamp.strftime('%Y-%m-%d %H:%M:%S')
         if reg.action == 0:
             registro['created_at'] = data
             registro['action'] = 'CREATE'

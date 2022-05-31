@@ -1,6 +1,8 @@
 from django_filters import rest_framework as filters
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from sme_coad_apps.contratos.api.utils.pagination import DotacaoOrcamentariaPagination
 
@@ -8,6 +10,7 @@ from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...models.dotacao_valor import DotacaoOrcamentaria, DotacaoValor
 from ..serializers.dotacao_valor_serializer import (
     DotacaoOrcamentariaCreatorSerializer,
+    DotacaoOrcamentariaLookUpSerializer,
     DotacaoOrcamentariaSerializer,
     DotacaoValorCreatorSerializer,
     DotacaoValorSerializer
@@ -44,3 +47,7 @@ class DotacaoOrcamentariaViewSet(ComHistoricoViewSet):
             return DotacaoOrcamentariaSerializer
         else:
             return DotacaoOrcamentariaCreatorSerializer
+
+    @action(detail=False)
+    def lookup(self, request):
+        return Response(DotacaoOrcamentariaLookUpSerializer(self.queryset.order_by('-id'), many=True).data)
