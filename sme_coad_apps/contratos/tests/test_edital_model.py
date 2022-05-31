@@ -20,7 +20,7 @@ def test_instance_model(edital):
     assert isinstance(edital.data_homologacao, datetime.date)
     assert isinstance(edital.objeto, TipoServico)
     assert isinstance(edital.descricao_objeto, str)
-    assert edital.historico
+    assert edital.history
 
 
 def test_status():
