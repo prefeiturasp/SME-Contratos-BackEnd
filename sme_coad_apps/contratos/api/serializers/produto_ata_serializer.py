@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
+from ...api.serializers.produto_serializer import ProdutoSimplesSerializer
 from ...models.ata import Ata, ProdutosAta
 from ...models.produto import Produto
-from ...api.serializers.produto_serializer import ProdutoSimplesSerializer
 
 
 class ProdutoAtaSerializer(serializers.ModelSerializer):
@@ -25,7 +25,8 @@ class ProdutoAtaSerializerCreate(serializers.ModelSerializer):
         required=False,
         queryset=Ata.objects.all()
     )
+    uuid = serializers.UUIDField(required=False)
 
     class Meta:
         model = ProdutosAta
-        exclude = ('id',)
+        fields = ('id', 'uuid', 'produto', 'quantidade_total', 'valor_unitario', 'valor_total', 'ata', 'anexo')

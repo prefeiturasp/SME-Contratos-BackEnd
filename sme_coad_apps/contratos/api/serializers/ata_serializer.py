@@ -12,7 +12,7 @@ from .produto_ata_serializer import ProdutoAtaSerializer, ProdutoAtaSerializerCr
 class AtaSerializer(serializers.ModelSerializer):
     empresa = EmpresaSerializer()
     edital = EditalSimplesSerializer()
-    produtos = serializers.SerializerMethodField()
+    produtos = ProdutoAtaSerializer(many=True)
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -32,10 +32,6 @@ class AtaSerializer(serializers.ModelSerializer):
 
     def get_historico(self, obj):
         return serializa_historico(obj.historico)
-
-    def get_produtos(self, obj):
-        produto = obj.produtos.all().order_by('id')
-        return ProdutoAtaSerializer(produto, many=True).data
 
     class Meta:
         model = Ata
@@ -79,6 +75,22 @@ class AtaCreateSerializer(serializers.ModelSerializer):
             ProdutoAtaSerializerCreate().create(produto)
 
         return ata
+
+    def update(self, instance, validated_data):
+        produtos = validated_data.pop('produtos', [])
+        lista_produtos_existentes = list(instance.produtos.all().values_list('uuid', flat=True))
+
+        for produto in produtos:
+            prod = produto.get('uuid', None)
+            if prod in lista_produtos_existentes:
+                lista_produtos_existentes.remove(prod)
+            else:
+                produto['ata'] = instance
+                ProdutoAtaSerializerCreate().create(produto)
+
+        # Apaga os produtos que não vinheram do payload
+        instance.produtos.filter(uuid__in=lista_produtos_existentes).delete()
+        return instance
 
     class Meta:
         model = Ata

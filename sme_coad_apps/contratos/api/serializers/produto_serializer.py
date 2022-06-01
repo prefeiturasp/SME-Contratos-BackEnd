@@ -108,4 +108,4 @@ class ProdutoSimplesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Produto
-        fields = ('id', 'uuid', 'nome', 'unidade_medida')
+        fields = ('uuid', 'nome', 'unidade_medida')
