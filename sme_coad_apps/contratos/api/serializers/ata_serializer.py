@@ -3,6 +3,7 @@ from rest_framework import serializers
 from ...models import Edital, Empresa
 from ...models.ata import Ata
 from ..utils.historico_utils import serializa_historico
+from ..utils.utils import base64ToFile
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
@@ -68,11 +69,14 @@ class AtaCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         produtos = validated_data.pop('produtos', [])
-        ata = Ata.objects.create(**validated_data)
 
+        ata = Ata.objects.create(**validated_data)
         for produto in produtos:
+            anexo = produto.pop('anexo', '')
+            file = base64ToFile(anexo)
             produto['ata'] = ata
-            ProdutoAtaSerializerCreate().create(produto)
+            produto_ata = ProdutoAtaSerializerCreate().create(produto)
+            produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
 
         return ata
 
@@ -81,12 +85,15 @@ class AtaCreateSerializer(serializers.ModelSerializer):
         lista_produtos_existentes = list(instance.produtos.all().values_list('uuid', flat=True))
 
         for produto in produtos:
+            anexo = produto.pop('anexo', '')
+            file = base64ToFile(anexo)
             prod = produto.get('uuid', None)
             if prod in lista_produtos_existentes:
                 lista_produtos_existentes.remove(prod)
             else:
                 produto['ata'] = instance
-                ProdutoAtaSerializerCreate().create(produto)
+                produto_ata = ProdutoAtaSerializerCreate().create(produto)
+                produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
 
         # Apaga os produtos que não vinheram do payload
         instance.produtos.filter(uuid__in=lista_produtos_existentes).delete()

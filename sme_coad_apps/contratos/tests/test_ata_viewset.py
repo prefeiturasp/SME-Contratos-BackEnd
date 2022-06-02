@@ -6,7 +6,7 @@ from model_mommy import mommy
 from rest_framework import status
 
 from ..api.serializers.ata_serializer import AtaLookUpSerializer, AtaSerializer
-from ..models import Ata, Edital
+from ..models import Ata, Edital, Produto
 
 pytestmark = pytest.mark.django_db
 
@@ -24,6 +24,7 @@ def test_ata_serializer(ata):
     assert serializer.data['edital']
     assert serializer.data['historico']
 
+
 def test_ata_lookup_serializer(ata):
     serializer = AtaLookUpSerializer(ata)
 
@@ -34,9 +35,11 @@ def test_ata_lookup_serializer(ata):
     assert serializer.data['status']
     assert serializer.data['data_encerramento']
 
+
 @pytest.fixture
 def payload_ata():
     edital = mommy.make(Edital, id=1, numero='1234/2022')
+    produto = mommy.make(Produto, id=1, nome='ARROZ')
     payload = {
         'numero': Faker().name(),
         'status': Ata.ATIVA,
@@ -45,6 +48,17 @@ def payload_ata():
         'data_assinatura': '2022-04-06',
         'data_encerramento': '2022-05-01',
         'edital': str(edital.uuid),
+        'produtos': [
+            {
+                'produto': str(produto.uuid),
+                'quantidade_total': '00.00',
+                'valor_unitario': '10.00',
+                'valor_total': '1000.00',
+                'anexo': 'data:text/txt;base64,W1tzb3VyY2VdXQp1cmwgPSAiaHR0cHM6Ly9weXBpLnB5dGhvbi5vcmcvc2ltcGxlIgp/'
+                         '2ZXJpZnlfc3NsID0gdHJ1ZQpuYW1lID0gInB5cGkiCgpbcGFja2FnZXNdCgpbZGV2LXBhY2thZ2VzXQoKW3JlcXV/'
+                         'pcmVzXQpweXRob25fdmVyc2lvbiA9ICIzLjYiCg=='
+            }
+        ]
     }
     return payload
 

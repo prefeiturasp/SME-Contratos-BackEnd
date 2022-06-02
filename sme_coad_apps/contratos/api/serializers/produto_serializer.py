@@ -17,13 +17,7 @@ class ProdutoSerializer(serializers.ModelSerializer):
     grupo_alimentar = serializers.SerializerMethodField()
     durabilidade = serializers.SerializerMethodField()
     armazenabilidade = serializers.SerializerMethodField()
-    unidade_medida = serializers.SerializerMethodField()
-
-    def get_unidade_medida(self, obj):
-        return {
-            'id': obj.unidade_medida,
-            'nome': obj.get_unidade_medida_display()
-        }
+    unidade_medida = UnidadeDeMedidaSerializer()
 
     def get_categoria(self, obj):
         return {

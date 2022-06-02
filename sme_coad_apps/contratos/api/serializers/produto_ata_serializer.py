@@ -1,12 +1,23 @@
+import environ
 from rest_framework import serializers
 
 from ...api.serializers.produto_serializer import ProdutoSimplesSerializer
 from ...models.ata import Ata, ProdutosAta
 from ...models.produto import Produto
 
+env = environ.Env()
+API_URL = f'{env("API_URL")}'
+
 
 class ProdutoAtaSerializer(serializers.ModelSerializer):
     produto = ProdutoSimplesSerializer(required=False)
+    anexo = serializers.SerializerMethodField('get_anexo')
+
+    def get_anexo(self, obj):
+        if bool(obj.anexo):
+            return '%s%s' % (API_URL, obj.anexo.url)
+        else:
+            return None
 
     class Meta:
         model = ProdutosAta
@@ -26,6 +37,7 @@ class ProdutoAtaSerializerCreate(serializers.ModelSerializer):
         queryset=Ata.objects.all()
     )
     uuid = serializers.UUIDField(required=False)
+    anexo = serializers.CharField()
 
     class Meta:
         model = ProdutosAta

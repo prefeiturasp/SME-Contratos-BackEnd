@@ -61,7 +61,7 @@ class ProdutosAta(ModeloBase):
     quantidade_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     valor_unitario = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    anexo = models.FileField(upload_to='uploads/', blank=True, null=True)
+    anexo = models.FileField(blank=True, default='', upload_to='uploads/')
 
     def __str__(self):
         return f'{self.produto.nome} - {self.ata.numero}'
