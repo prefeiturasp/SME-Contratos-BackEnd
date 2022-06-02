@@ -85,12 +85,12 @@ class AtaCreateSerializer(serializers.ModelSerializer):
         lista_produtos_existentes = list(instance.produtos.all().values_list('uuid', flat=True))
 
         for produto in produtos:
-            anexo = produto.pop('anexo', '')
-            file = base64ToFile(anexo)
             prod = produto.get('uuid', None)
             if prod in lista_produtos_existentes:
                 lista_produtos_existentes.remove(prod)
             else:
+                anexo = produto.pop('anexo', '')
+                file = base64ToFile(anexo)
                 produto['ata'] = instance
                 produto_ata = ProdutoAtaSerializerCreate().create(produto)
                 produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
