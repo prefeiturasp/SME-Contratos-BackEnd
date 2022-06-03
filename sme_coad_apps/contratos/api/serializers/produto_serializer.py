@@ -12,12 +12,12 @@ class UnidadeDeMedidaSerializer(serializers.ModelSerializer):
 
 
 class ProdutoSerializer(serializers.ModelSerializer):
-    unidade_medida = UnidadeDeMedidaSerializer()
     categoria = serializers.SerializerMethodField()
     situacao = serializers.SerializerMethodField()
     grupo_alimentar = serializers.SerializerMethodField()
     durabilidade = serializers.SerializerMethodField()
     armazenabilidade = serializers.SerializerMethodField()
+    unidade_medida = UnidadeDeMedidaSerializer()
 
     def get_categoria(self, obj):
         return {
@@ -92,3 +92,14 @@ class ProdutoLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Produto
         fields = ('id', 'uuid', 'nome', 'categoria', 'durabilidade', 'grupo_alimentar', 'armazenabilidade')
+
+
+class ProdutoSimplesSerializer(serializers.ModelSerializer):
+    unidade_medida = serializers.SerializerMethodField()
+
+    def get_unidade_medida(self, obj):
+        return obj.unidade_medida.nome if obj.unidade_medida else None
+
+    class Meta:
+        model = Produto
+        fields = ('uuid', 'nome', 'unidade_medida')
