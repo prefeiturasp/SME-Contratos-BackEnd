@@ -1,7 +1,12 @@
 import pytest
 from model_mommy import mommy
 
-from ..api.serializers.produto_serializer import ProdutoLookUpSerializer, ProdutoSerializer, UnidadeDeMedidaSerializer
+from ..api.serializers.produto_serializer import (
+    ProdutoLookUpSerializer,
+    ProdutoSerializer,
+    ProdutoSimplesSerializer,
+    UnidadeDeMedidaSerializer
+)
 from ..models.produto import Produto, UnidadeDeMedida
 
 pytestmark = pytest.mark.django_db
@@ -46,5 +51,17 @@ def test_produto_lookup_serializer(produto):
         'durabilidade',
         'grupo_alimentar',
         'armazenabilidade'
+    ]
+    assert produto_serializer.data['nome'] == 'PRODUTO TESTE'
+
+
+def test_produto_simples_serializer(produto):
+    produto_serializer = ProdutoSimplesSerializer(produto)
+
+    assert produto_serializer.data is not None
+    assert list(produto_serializer.data.keys()) == [
+        'uuid',
+        'nome',
+        'unidade_medida',
     ]
     assert produto_serializer.data['nome'] == 'PRODUTO TESTE'

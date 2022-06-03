@@ -4,7 +4,9 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
 class JWTAuthenticationMiddleware(object):
+
     def __init__(self, get_response):
+        """Json Web Token."""
         self.get_response = get_response
 
     def __call__(self, request):

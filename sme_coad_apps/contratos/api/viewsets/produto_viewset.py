@@ -8,6 +8,7 @@ from ..serializers.produto_serializer import (
     ProdutoCreateSerializer,
     ProdutoLookUpSerializer,
     ProdutoSerializer,
+    ProdutoSimplesSerializer,
     UnidadeDeMedidaSerializer
 )
 from ..utils.pagination import ProdutoPagination
@@ -39,3 +40,7 @@ class ProdutoViewSet(ComHistoricoViewSet):
             return ProdutoLookUpSerializer
         else:
             return ProdutoCreateSerializer
+
+    @action(detail=False)
+    def simples(self, request):
+        return Response(ProdutoSimplesSerializer(self.queryset.order_by('-id'), many=True).data)
