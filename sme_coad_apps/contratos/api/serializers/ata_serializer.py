@@ -3,14 +3,17 @@ from rest_framework import serializers
 from ...models import Edital, Empresa
 from ...models.ata import Ata
 from ..utils.historico_utils import serializa_historico
+from ..utils.utils import base64ToFile
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
+from .produto_ata_serializer import ProdutoAtaSerializer, ProdutoAtaSerializerCreate
 
 
 class AtaSerializer(serializers.ModelSerializer):
     empresa = EmpresaSerializer()
     edital = EditalSimplesSerializer()
+    produtos = ProdutoAtaSerializer(many=True)
     data_encerramento = serializers.SerializerMethodField()
     data_assinatura = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
@@ -57,11 +60,44 @@ class AtaCreateSerializer(serializers.ModelSerializer):
     vigencia = serializers.IntegerField(required=True)
     data_assinatura = serializers.CharField(required=True)
     data_encerramento = serializers.CharField(required=True)
+    produtos = ProdutoAtaSerializerCreate(many=True, required=False)
 
     def validate(self, attrs):
         data_encerramento(attrs.get('unidade_vigencia'), attrs.get('vigencia'),
                           attrs.get('data_assinatura'), attrs.get('data_encerramento'))
         return attrs
+
+    def create(self, validated_data):
+        produtos = validated_data.pop('produtos', [])
+
+        ata = Ata.objects.create(**validated_data)
+        for produto in produtos:
+            anexo = produto.pop('anexo', '')
+            file = base64ToFile(anexo)
+            produto['ata'] = ata
+            produto_ata = ProdutoAtaSerializerCreate().create(produto)
+            produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
+
+        return ata
+
+    def update(self, instance, validated_data):
+        produtos = validated_data.pop('produtos', [])
+        lista_produtos_existentes = list(instance.produtos.all().values_list('uuid', flat=True))
+
+        for produto in produtos:
+            prod = produto.get('uuid', None)
+            if prod in lista_produtos_existentes:
+                lista_produtos_existentes.remove(prod)
+            else:
+                anexo = produto.pop('anexo', '')
+                file = base64ToFile(anexo)
+                produto['ata'] = instance
+                produto_ata = ProdutoAtaSerializerCreate().create(produto)
+                produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
+
+        # Apaga os produtos que não vinheram do payload
+        instance.produtos.filter(uuid__in=lista_produtos_existentes).delete()
+        return instance
 
     class Meta:
         model = Ata

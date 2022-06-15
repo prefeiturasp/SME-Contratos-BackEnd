@@ -29,6 +29,11 @@ def test_url_authorized_produtos(authencticated_client):
     assert response.status_code == status.HTTP_200_OK
 
 
+def test_url_authorized_produtos_simples(authencticated_client):
+    response = authencticated_client.get('/produtos/simples/')
+    assert response.status_code == status.HTTP_200_OK
+
+
 def test_post_produto(authencticated_client):
     unidade_medida = mommy.make(UnidadeDeMedida, id=1, nome='ARROZ')
     payload = {

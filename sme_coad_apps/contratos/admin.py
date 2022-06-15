@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
+from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Empenho
 
@@ -291,3 +292,9 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_filter = ('situacao', 'categoria', 'grupo_alimentar', 'unidade_medida', 'durabilidade', 'armazenabilidade')
     ordering = ('nome',)
     search_fields = ('nome',)
+
+
+@admin.register(ProdutosAta)
+class ProdutosAtaAdmin(admin.ModelAdmin):
+    list_display = ('ata', 'produto', 'quantidade_total', 'valor_unitario', 'valor_total')
+    search_fields = ('ata',)
