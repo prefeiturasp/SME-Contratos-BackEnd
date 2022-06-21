@@ -54,7 +54,7 @@ class Ata(ModeloBase):
 
 
 class ProdutosAta(ModeloBase):
-    historico = AuditlogHistoryField()
+    historico = AuditlogHistoryField(delete_related=False)
 
     ata = models.ForeignKey(Ata, on_delete=models.CASCADE, related_name='produtos')
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='produtos_ata')
