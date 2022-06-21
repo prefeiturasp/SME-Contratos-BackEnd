@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
+from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ...models import Edital, Empresa
 from ...models.ata import Ata
-from ..utils.historico_utils import serializa_historico
+from ..utils.historico_utils import serializa_historico_objetos
 from ..utils.utils import base64ToFile
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
@@ -32,7 +33,7 @@ class AtaSerializer(serializers.ModelSerializer):
         }
 
     def get_historico(self, obj):
-        return serializa_historico(obj.historico)
+        return serializa_historico_objetos(obj.historico, obj.numero)
 
     class Meta:
         model = Ata
@@ -95,8 +96,10 @@ class AtaCreateSerializer(serializers.ModelSerializer):
                 produto_ata = ProdutoAtaSerializerCreate().create(produto)
                 produto_ata.anexo.save('anexo.' + file['ext'], file['data'])
 
-        # Apaga os produtos que não vinheram do payload
+        # Apaga os produtos que não vieram do payload
         instance.produtos.filter(uuid__in=lista_produtos_existentes).delete()
+        update_instance_from_dict(instance, validated_data)
+        instance.save()
         return instance
 
     class Meta:
