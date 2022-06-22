@@ -94,7 +94,6 @@ def ata(empresa):
 @pytest.fixture
 def empresa():
     return mommy.make(Empresa,
-                      nome='EmpresaTeste',
                       cnpj='21256564000160',
                       razao_social='Empresa Teste LTDA',
                       tipo_servico=Empresa.FORNECEDOR,
