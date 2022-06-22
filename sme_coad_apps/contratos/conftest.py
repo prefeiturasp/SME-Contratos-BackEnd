@@ -5,6 +5,7 @@ from faker import Faker
 from model_mommy import mommy
 
 from sme_coad_apps.contratos.models import Ata, Edital, Empresa, Produto, TipoServico, UnidadeDeMedida
+from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.users.models import User
 
 
@@ -88,6 +89,16 @@ def ata(empresa):
                       edital=mommy.make(Edital),
                       empresa=empresa,
                       unidade_vigencia=Ata.UNIDADE_VIGENCIA_DIAS
+                      )
+
+
+@pytest.fixture
+def produtos_ata(ata):
+    return mommy.make(ProdutosAta, ata=ata,
+                      produto=mommy.make(Produto),
+                      quantidade_total=10.0,
+                      valor_unitario=10.0,
+                      valor_total=100.0,
                       )
 
 
