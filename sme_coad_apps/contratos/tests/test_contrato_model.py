@@ -5,7 +5,6 @@ from django.contrib import admin
 from freezegun import freeze_time
 from model_mommy import mommy
 
-from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
 from ..admin import ContratoAdmin
@@ -30,8 +29,7 @@ def contrato_emergencial(gestor, suplente):
                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
                       suplente=suplente, observacoes='teste', tipo_servico=mommy.make(TipoServico),
                       nucleo_responsavel=mommy.make(Nucleo), edital=mommy.make(Edital),
-                      empresa_contratada=mommy.make(Empresa),
-                      modelo_ateste=mommy.make(ModeloAteste)
+                      empresa_contratada=mommy.make(Empresa)
                       )
 
 
@@ -94,7 +92,6 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
     assert isinstance(contrato_emergencial.valor_total, float)
     assert contrato_emergencial.historico
-    assert isinstance(contrato_emergencial.modelo_ateste, ModeloAteste)
     assert contrato_emergencial.dres == ''
 
 
