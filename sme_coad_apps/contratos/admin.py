@@ -136,7 +136,6 @@ class ContratoAdmin(admin.ModelAdmin):
                 'nucleo_responsavel',
                 'objeto',
                 'empresa_contratada',
-                'modelo_ateste',
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia', 'unidade_vigencia'),
                 'referencia_encerramento',
                 'observacoes',

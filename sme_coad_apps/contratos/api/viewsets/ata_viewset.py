@@ -12,7 +12,7 @@ from .filters import AtaFilter
 
 class AtaViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
-    queryset = Ata.objects.all()
+    queryset = Ata.objects.all().order_by('-id')
     serializer_class = AtaSerializer
     pagination_class = AtaPagination
     permission_classes = [IsAuthenticated]

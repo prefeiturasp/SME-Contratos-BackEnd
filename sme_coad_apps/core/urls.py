@@ -1,7 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from sme_coad_apps.atestes.urls import router as atestes_router
 from sme_coad_apps.contratos.urls import router as contratos_router
 from sme_coad_apps.users.urls import router as usuarios_router
 
@@ -23,7 +22,6 @@ router.register('safi-token', SafiToken, basename='Version')
 
 router.registry.extend(contratos_router.registry)
 router.registry.extend(usuarios_router.registry)
-router.registry.extend(atestes_router.registry)
 
 urlpatterns = [
     path('', include(router.urls))

@@ -16,7 +16,6 @@ from rest_framework.response import Response
 
 from sme_coad_apps.core.helpers.enviar_email import enviar_email_html
 
-from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo, Unidade
 from ...core.models_abstracts import ModeloBase, TemNome
 from ...users.models import User
@@ -108,8 +107,6 @@ class Contrato(ModeloBase):
     suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente',
                                  blank=True,
                                  null=True)
-    modelo_ateste = models.ForeignKey(ModeloAteste, on_delete=models.PROTECT, related_name='modelo_ateste',
-                                      blank=True, null=True)
     observacoes = models.TextField(blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)

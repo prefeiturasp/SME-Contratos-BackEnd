@@ -3,7 +3,6 @@ import datetime
 import pytest
 from model_mommy import mommy
 
-from ...atestes.models import ModeloAteste
 from ...core.models import Nucleo
 from ..api.serializers.contrato_serializer import ContratoLookUpSerializer, ContratoSerializer
 from ..models.contrato import Contrato, Edital, Empresa, TipoServico
@@ -14,7 +13,6 @@ pytestmark = pytest.mark.django_db
 def test_contrato_serializer(fake_user):
     tipo_servico = mommy.make(TipoServico, id=1, nome='teste')
     empresa = mommy.make(Empresa, id=1, cnpj='55803656000134', nome='teste')
-    modelo_ateste = mommy.make(ModeloAteste)
     contrato = mommy.make(
         Contrato,
         data_assinatura=datetime.date(2019, 10, 1),
@@ -26,8 +24,7 @@ def test_contrato_serializer(fake_user):
         vigencia=100,
         processo='12233',
         nucleo_responsavel=mommy.make(Nucleo),
-        edital=mommy.make(Edital),
-        modelo_ateste=modelo_ateste
+        edital=mommy.make(Edital)
     )
 
     contrato_serializer = ContratoSerializer(contrato)
@@ -68,7 +65,6 @@ def test_contrato_serializer(fake_user):
                                                         'id': tipo_servico.id}
     assert contrato_serializer.data['total_mensal'] is not None
     assert contrato_serializer.data['row_index'] is not None
-    assert contrato_serializer.data['modelo_ateste'] is not None
     assert contrato_serializer.data['dres'] is not None
 
 
