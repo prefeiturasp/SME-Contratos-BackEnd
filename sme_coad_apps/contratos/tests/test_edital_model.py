@@ -5,7 +5,7 @@ from django.contrib import admin
 from model_mommy import mommy
 
 from ..admin import EditalAdmin
-from ..models import Edital, TipoServico
+from ..models import Edital, Objeto
 
 pytestmark = pytest.mark.django_db
 
@@ -18,7 +18,7 @@ def test_instance_model(edital):
     assert isinstance(edital.subtipo, str)
     assert isinstance(edital.status, str)
     assert isinstance(edital.data_homologacao, datetime.date)
-    assert isinstance(edital.objeto, TipoServico)
+    assert isinstance(edital.objeto, Objeto)
     assert isinstance(edital.descricao_objeto, str)
     assert edital.history
 

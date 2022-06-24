@@ -13,15 +13,15 @@ from .api.viewsets.notificacao_vigencia_contrato_viewsets import (
     GeraNotificacoesVigenciaContratosViewSet,
     MinhasNotificacoesVigenciaViewSet
 )
+from .api.viewsets.objeto_viewsets import ObjetoViewSet
 from .api.viewsets.obricacao_contratual_viewset import ObrigacaoContratualViewSet
 from .api.viewsets.produto_viewset import ProdutoViewSet, UnidadeDeMedidaViewSet
-from .api.viewsets.tipo_servico_viewsets import TipoServicoViewSet
 
 router = routers.DefaultRouter()
 
 router.register('atas', AtaViewSet)
 router.register('colunas-contrato', ColunasContratoViewSet)
-router.register('tipos-servico', TipoServicoViewSet)
+router.register('objetos', ObjetoViewSet)
 router.register('empresas', EmpresaViewSet)
 router.register('editais', EditalViewSet)
 router.register('contratos', ContratoViewSet)

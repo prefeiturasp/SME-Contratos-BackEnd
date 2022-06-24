@@ -5,13 +5,13 @@ from model_mommy import mommy
 
 from ...core.models import Nucleo
 from ..api.serializers.contrato_serializer import ContratoLookUpSerializer, ContratoSerializer
-from ..models.contrato import Contrato, Edital, Empresa, TipoServico
+from ..models.contrato import Contrato, Edital, Empresa, Objeto
 
 pytestmark = pytest.mark.django_db
 
 
 def test_contrato_serializer(fake_user):
-    tipo_servico = mommy.make(TipoServico, id=1, nome='teste')
+    objeto = mommy.make(Objeto, id=1, nome='teste')
     empresa = mommy.make(Empresa, id=1, cnpj='55803656000134', nome='teste')
     contrato = mommy.make(
         Contrato,
@@ -19,7 +19,7 @@ def test_contrato_serializer(fake_user):
         data_ordem_inicio=datetime.date(2019, 10, 1),
         gestor=fake_user,
         suplente=fake_user,
-        tipo_servico=tipo_servico,
+        objeto=objeto,
         empresa_contratada=empresa,
         vigencia=100,
         processo='12233',
@@ -28,6 +28,7 @@ def test_contrato_serializer(fake_user):
     )
 
     contrato_serializer = ContratoSerializer(contrato)
+    print(contrato_serializer.data, "CONTRATO SERIALIZAER")
 
     assert contrato_serializer.data is not None
     assert contrato_serializer.data['termo_contrato']
@@ -61,8 +62,7 @@ def test_contrato_serializer(fake_user):
                                                     'id': fake_user.id, 'username': fake_user.username,
                                                     'email': fake_user.email}
     assert contrato_serializer.data['data_encerramento'] is not None
-    assert contrato_serializer.data['tipo_servico'] == {'nome': tipo_servico.nome, 'uuid': str(tipo_servico.uuid),
-                                                        'id': tipo_servico.id}
+    assert contrato_serializer.data['objeto'] == {'nome': objeto.nome, 'uuid': str(objeto.uuid), 'id': objeto.id}
     assert contrato_serializer.data['total_mensal'] is not None
     assert contrato_serializer.data['row_index'] is not None
     assert contrato_serializer.data['dres'] is not None

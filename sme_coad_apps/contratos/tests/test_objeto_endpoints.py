@@ -5,23 +5,23 @@ pytestmark = pytest.mark.django_db
 
 
 def test_url_unauthorized(client):
-    response = client.get('/tipos-servico/')
+    response = client.get('/objetos/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_url_authorized(authencticated_client):
-    response = authencticated_client.get('/tipos-servico/')
+    response = authencticated_client.get('/objetos/')
     assert response.status_code == status.HTTP_200_OK
 
 
 def test_url_lookup(authencticated_client):
-    response = authencticated_client.get('/tipos-servico/lookup/')
+    response = authencticated_client.get('/objetos/lookup/')
     assert response.status_code == status.HTTP_200_OK
 
 
 def test_url_created(authencticated_client):
     data = {'nome': 'TestApi'}
-    response = authencticated_client.post('/tipos-servico/', data, format='json')
+    response = authencticated_client.post('/objetos/', data, format='json')
     response_json = response.json()
     assert response.status_code == status.HTTP_201_CREATED
     assert response_json.get('nome') == 'TESTAPI'

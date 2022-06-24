@@ -5,7 +5,7 @@ from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Empenho
 
-from .forms import TipoServicoForm
+from .forms import ObjetosForm
 from .models import (
     Ata,
     ColunasContrato,
@@ -19,18 +19,18 @@ from .models import (
     GrupoObrigacao,
     Lote,
     NotificacaoVigenciaContrato,
+    Objeto,
     Obrigacao,
     ObrigacaoContratual,
     ParametroNotificacoesVigencia,
     Produto,
-    TipoServico,
     UnidadeDeMedida
 )
 
 
-@admin.register(TipoServico)
-class TipoServicoAdmin(admin.ModelAdmin):
-    form = TipoServicoForm
+@admin.register(Objeto)
+class ObjetoAdmin(admin.ModelAdmin):
+    form = ObjetosForm
 
     list_display = ('nome',)
     ordering = ('nome',)
@@ -112,7 +112,7 @@ class ContratoAdmin(admin.ModelAdmin):
 
     list_display = (
         'termo_contrato',
-        'tipo_servico',
+        'objeto',
         'empresa_contratada',
         'dres',
         'data_inicio',
@@ -122,7 +122,7 @@ class ContratoAdmin(admin.ModelAdmin):
     )
     ordering = ('termo_contrato',)
     search_fields = ('processo', 'termo_contrato')
-    list_filter = ('tipo_servico', 'empresa_contratada', 'situacao')
+    list_filter = ('objeto', 'empresa_contratada', 'situacao')
     inlines = [ContratoUnidadeInLine, LotesInLine]
     readonly_fields = ('tem_ceu', 'tem_ua', 'tem_ue')
     fieldsets = (
@@ -132,9 +132,9 @@ class ContratoAdmin(admin.ModelAdmin):
                 'processo',
                 'edital',
                 'ata',
-                'tipo_servico',
-                'nucleo_responsavel',
                 'objeto',
+                'nucleo_responsavel',
+                'descricao_objeto',
                 'empresa_contratada',
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia', 'unidade_vigencia'),
                 'referencia_encerramento',
@@ -150,7 +150,7 @@ class ContratoAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'tipo_servico')
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'objeto')
 
     actions = ['atualiza_tipo_equipamento', 'encerra_contratos_vencidos']
 

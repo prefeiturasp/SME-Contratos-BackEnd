@@ -4,7 +4,7 @@ from django.contrib.postgres import fields
 from django.db import models
 
 from ...core.models_abstracts import ModeloBase
-from ..models.tipo_servico import TipoServico
+from ..models.objeto import Objeto
 
 
 class Edital(ModeloBase):
@@ -41,7 +41,7 @@ class Edital(ModeloBase):
     subtipo = models.TextField(blank=True, default='')
     status = models.CharField(choices=STATUS_CHOICES, max_length=10, default=ATIVO)
     data_homologacao = models.DateField('Data de homologação', blank=True, null=True)
-    objeto = models.ForeignKey(TipoServico, related_name='objetos', verbose_name='Categoria de objeto',
+    objeto = models.ForeignKey(Objeto, related_name='objetos', verbose_name='Categoria de objeto',
                                on_delete=models.PROTECT, blank=True, null=True)
     descricao_objeto = models.TextField(blank=True, default='')
     historico = fields.JSONField(blank=True, null=True)
