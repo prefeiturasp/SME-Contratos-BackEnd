@@ -19,12 +19,12 @@ def test_url_authorized(authencticated_client):
 
 
 def test_atualizacao_contrato(authencticated_client, contrato):
-    data = {'termo_contrato': '129/14', 'tipo_servico': '7baa3356-599f-4627-9fed-832ee888de14',
+    data = {'termo_contrato': '129/14', 'objeto': '7baa3356-599f-4627-9fed-832ee888de14',
             'processo': '6016.2017/0000791-6', 'situacao': 'ATIVO',
             'data_encerramento': '2019-12-12', 'data_assinatura': '2020-05-18', 'data_ordem_inicio': '2014-12-13',
             'vigencia': 1825,
             'dotacao_orcamentaria': ['2100 39', '16.24 2100 39'],
-            'observacoes': '', 'objeto': '<p>dsadsad</p>',
+            'observacoes': '', 'descricao_objeto': '<p>dsadsad</p>',
             'numero_edital': '123123123',
             'unidades_selecionadas': [{'unidade': {'cd_equipamento': '108101',
                                                    'nm_exibicao_equipamento': 'ASSISTENCIA ADMINISTRATIVA-CE BT',

@@ -5,7 +5,7 @@ from django.db import models
 from ...core.models_abstracts import ModeloBase
 
 
-class TipoServico(ModeloBase):
+class Objeto(ModeloBase):
     historico = AuditlogHistoryField()
 
     nome = models.CharField('Nome', max_length=160, unique=True)
@@ -14,8 +14,8 @@ class TipoServico(ModeloBase):
         return self.nome
 
     class Meta:
-        verbose_name = 'Tipo de Serviço'
-        verbose_name_plural = 'Tipos de Serviço'
+        verbose_name = 'Objeto'
+        verbose_name_plural = 'Objetos'
 
 
-auditlog.register(TipoServico)
+auditlog.register(Objeto)
