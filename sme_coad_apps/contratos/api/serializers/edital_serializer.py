@@ -2,17 +2,17 @@ from rest_framework import serializers
 
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ...api.utils.edital_utils import log_create, salvar_itens_de_grupo
-from ...models import TipoServico
+from ...models import Objeto
 from ...models.edital import Edital
 from ..utils.edital_utils import log_update
 from .grupo_obrigacao_serializer import GrupoObrigacaoSerializer
+from .objeto_serializer import ObjetoLookupSerializer
 from .obrigacao_serializer import ObrigacaoSerializer
-from .tipo_servico_serializer import TipoServicoLookupSerializer
 
 
 class EditalSerializer(serializers.ModelSerializer):
     grupos_de_obrigacao = serializers.SerializerMethodField()
-    objeto = TipoServicoLookupSerializer()
+    objeto = ObjetoLookupSerializer()
     tipo_contratacao = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     historico = serializers.SerializerMethodField()
@@ -61,7 +61,7 @@ class EditalLookUpSerializer(serializers.ModelSerializer):
 
 
 class EditalSimplesSerializer(serializers.ModelSerializer):
-    objeto = TipoServicoLookupSerializer()
+    objeto = ObjetoLookupSerializer()
 
     class Meta:
         model = Edital
@@ -76,7 +76,7 @@ class EditalSerializerCreate(serializers.ModelSerializer):
         required=False,
         allow_null=True,
         allow_empty=True,
-        queryset=TipoServico.objects.all()
+        queryset=Objeto.objects.all()
     )
 
     def create(self, validated_data):

@@ -8,7 +8,7 @@ from model_mommy import mommy
 from ...core.models import Nucleo, Unidade
 from ...users.models import User
 from ..admin import ContratoAdmin
-from ..models import Contrato, ContratoUnidade, Edital, Empresa, TipoServico
+from ..models import Contrato, ContratoUnidade, Edital, Empresa, Objeto
 
 pytestmark = pytest.mark.django_db
 
@@ -27,7 +27,7 @@ def suplente():
 def contrato_emergencial(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
                       data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
-                      suplente=suplente, observacoes='teste', tipo_servico=mommy.make(TipoServico),
+                      suplente=suplente, observacoes='teste', objeto=mommy.make(Objeto),
                       nucleo_responsavel=mommy.make(Nucleo), edital=mommy.make(Edital),
                       empresa_contratada=mommy.make(Empresa)
                       )
@@ -76,10 +76,10 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.termo_contrato, str)
     assert isinstance(contrato_emergencial, Contrato)
     assert isinstance(contrato_emergencial.processo, str)
-    assert isinstance(contrato_emergencial.tipo_servico, TipoServico)
+    assert isinstance(contrato_emergencial.objeto, Objeto)
     assert isinstance(contrato_emergencial.nucleo_responsavel, Nucleo)
     assert isinstance(contrato_emergencial.edital, Edital)
-    assert isinstance(contrato_emergencial.objeto, str)
+    assert isinstance(contrato_emergencial.descricao_objeto, str)
     assert isinstance(contrato_emergencial.empresa_contratada, Empresa)
     assert isinstance(contrato_emergencial.data_assinatura, datetime.date)
     assert isinstance(contrato_emergencial.data_ordem_inicio, datetime.date)
@@ -96,8 +96,8 @@ def test_instance_model(contrato_emergencial):
 
 
 def test_srt_model():
-    tipo_servico = mommy.make(TipoServico, nome='teste')
-    model = mommy.make('Contrato', termo_contrato='XPTO123', tipo_servico=tipo_servico,
+    objeto = mommy.make(Objeto, nome='teste')
+    model = mommy.make('Contrato', termo_contrato='XPTO123', objeto=objeto,
                        situacao=Contrato.SITUACAO_ATIVO)
     assert model.__str__() == 'XPTO123'
 
@@ -156,7 +156,7 @@ def test_admin():
     assert admin.site._registry[Contrato]
     assert model_admin.list_display == (
         'termo_contrato',
-        'tipo_servico',
+        'objeto',
         'empresa_contratada',
         'dres',
         'data_inicio',
@@ -166,7 +166,7 @@ def test_admin():
     )
     assert model_admin.ordering == ('termo_contrato',)
     assert model_admin.search_fields == ('processo', 'termo_contrato')
-    assert model_admin.list_filter == ('tipo_servico', 'empresa_contratada', 'situacao')
+    assert model_admin.list_filter == ('objeto', 'empresa_contratada', 'situacao')
 
 
 def test_dres_do_contrato(contrato_unidade_xpto123_123456, contrato_unidade_xpto123_654321):

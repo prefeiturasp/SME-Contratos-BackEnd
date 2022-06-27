@@ -5,8 +5,8 @@ from .dotacao_valor import DotacaoValor
 from .edital import Edital
 from .empresa import Empresa
 from .notificacao_vigencia_contrato import NotificacaoVigenciaContrato
+from .objeto import Objeto
 from .obrigacao import GrupoObrigacao, Obrigacao
 from .obrigacao_contratual import ObrigacaoContratual
 from .parametro_notificacoes import ParametroNotificacoesVigencia
 from .produto import Produto, UnidadeDeMedida
-from .tipo_servico import TipoServico

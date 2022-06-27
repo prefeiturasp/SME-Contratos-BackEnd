@@ -27,7 +27,7 @@ class ContratoFilter(filters.FilterSet):
         lookup_expr='exact',
     )
     objeto = filters.CharFilter(
-        field_name='tipo_servico__id',
+        field_name='objeto__id',
         lookup_expr='exact',
     )
     data_inicial = filters.DateFilter(

@@ -9,10 +9,10 @@ from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
-from ...api.serializers.tipo_servico_serializer import TipoServicoLookupSerializer
+from ...api.serializers.objeto_serializer import ObjetoLookupSerializer
 from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
 from ...models.edital import Edital
-from ...models.tipo_servico import TipoServico
+from ...models.objeto import Objeto
 from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from .ata_serializer import AtaLookUpSerializer
 from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
@@ -67,7 +67,7 @@ class LoteSerializer(serializers.ModelSerializer):
 class ContratoSerializer(serializers.ModelSerializer):
     CONT = 0
     data_encerramento = serializers.SerializerMethodField('get_data_encerramento')
-    tipo_servico = TipoServicoLookupSerializer()
+    objeto = ObjetoLookupSerializer()
     empresa_contratada = EmpresaSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
     gestor = UsuarioLookUpSerializer()
@@ -108,12 +108,12 @@ class ContratoSerializer(serializers.ModelSerializer):
 
 
 class ContratoCreateSerializer(serializers.ModelSerializer):
-    tipo_servico = serializers.SlugRelatedField(
+    objeto = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
         allow_null=True,
         allow_empty=True,
-        queryset=TipoServico.objects.all()
+        queryset=Objeto.objects.all()
     )
     nucleo_responsavel = serializers.SlugRelatedField(
         slug_field='uuid',
@@ -258,7 +258,7 @@ class ContratoSimplesSerializer(serializers.ModelSerializer):
         return obj.data_encerramento.strftime('%d/%m/%Y') if obj.data_encerramento else None
 
     def get_objeto(self, obj):
-        return obj.tipo_servico.nome if obj.tipo_servico else None
+        return obj.objeto.nome if obj.objeto else None
 
     class Meta:
         model = Contrato

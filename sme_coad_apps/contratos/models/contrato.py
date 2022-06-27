@@ -22,7 +22,7 @@ from ...users.models import User
 from .ata import Ata
 from .edital import Edital
 from .empresa import Empresa
-from .tipo_servico import TipoServico
+from .objeto import Objeto
 
 env = environ.Env()
 
@@ -87,11 +87,11 @@ class Contrato(ModeloBase):
                                blank=True, null=True)
     ata = models.ForeignKey(Ata, on_delete=models.PROTECT, related_name='contratos_da_ata',
                             blank=True, null=True)
-    tipo_servico = models.ForeignKey(TipoServico, on_delete=models.PROTECT, related_name='contratos_do_tipo',
-                                     verbose_name='tipo de serviço', blank=True, null=True)
+    objeto = models.ForeignKey(Objeto, on_delete=models.PROTECT, related_name='contratos_do_tipo',
+                               verbose_name='objeto', blank=True, null=True)
     nucleo_responsavel = models.ForeignKey(Nucleo, on_delete=models.PROTECT, related_name='contratos_do_nucleo',
                                            verbose_name='núcleo responsável', blank=True, null=True)
-    objeto = models.TextField(blank=True, default='')
+    descricao_objeto = models.TextField(blank=True, default='')
     empresa_contratada = models.ForeignKey(Empresa, on_delete=models.PROTECT, related_name='contratos_da_empresa',
                                            blank=True, null=True)
     data_assinatura = models.DateField('data da assinatura', blank=True, null=True)

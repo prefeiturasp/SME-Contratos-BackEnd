@@ -6,7 +6,7 @@ from model_mommy import mommy
 from rest_framework import status
 
 from ..api.serializers.edital_serializer import EditalSerializer
-from ..models import Edital, TipoServico
+from ..models import Edital, Objeto
 
 pytestmark = pytest.mark.django_db
 
@@ -22,7 +22,7 @@ def test_edital_serializer():
 
 @pytest.fixture
 def payload_edital():
-    tipo_servico = mommy.make(TipoServico, id=1, nome='teste')
+    objeto = mommy.make(Objeto, id=1, nome='teste')
     payload = {
         'numero': Faker().name(),
         'processo': Faker().name(),
@@ -30,7 +30,7 @@ def payload_edital():
         'subtipo': Faker().text(),
         'status': Edital.ATIVO,
         'data_homologacao': Faker().date(),
-        'objeto': str(tipo_servico.uuid),
+        'objeto': str(objeto.uuid),
         'descricao_objeto': Faker().text(),
         'grupos_de_obrigacao': [
             {'nome': Faker().name(),
