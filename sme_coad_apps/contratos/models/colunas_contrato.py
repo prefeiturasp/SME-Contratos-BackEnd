@@ -18,8 +18,8 @@ class ColunasContrato(ModeloBase):
             'header': 'Processo'
         },
         {
-            'field': 'tipo_servico.nome',
-            'header': 'Tipo de Serviço'
+            'field': 'objeto.nome',
+            'header': 'Obejto'
         },
         {
             'field': 'empresa_contratada.nome',

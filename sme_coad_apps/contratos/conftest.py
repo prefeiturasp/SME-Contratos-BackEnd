@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Ata, Edital, Empresa, Produto, TipoServico, UnidadeDeMedida
+from sme_coad_apps.contratos.models import Ata, Edital, Empresa, Objeto, Produto, UnidadeDeMedida
 from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.users.models import User
 
@@ -24,8 +24,8 @@ def contrato():
                nome='Calvin Feitosa')
     mommy.make('Unidade',
                codigo_eol='108101')
-    mommy.make('TipoServico',
-               nome='Teste tipo servico',
+    mommy.make('objeto',
+               nome='Teste objeto',
                uuid='7baa3356-599f-4627-9fed-832ee888de14')
     return mommy.make('Contrato',
                       uuid='d0260b07-4ed3-4741-8844-c5c3a9279f55')
@@ -74,7 +74,7 @@ def colunas_contrato(fake_user):
 def edital(gestor, suplente):
     return mommy.make(Edital, numero='0123456', processo='6543210', status=Edital.ATIVO,
                       tipo_contratacao=Edital.TIPO_LICITACAO, subtipo='esse é um subtipo',
-                      data_homologacao=datetime.date(2023, 1, 1), objeto=mommy.make(TipoServico),
+                      data_homologacao=datetime.date(2023, 1, 1), objeto=mommy.make(Objeto),
                       descricao_objeto='essa é uma descrição do objeto'
                       )
 
