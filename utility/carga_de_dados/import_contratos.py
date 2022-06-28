@@ -4,7 +4,7 @@ from auditlog.registry import auditlog
 from brazilnum.cnpj import clean_id
 from django.db.models import F
 
-from sme_coad_apps.contratos.models import Empresa, TipoServico, Contrato, ContratoUnidade, FiscaisUnidade
+from sme_coad_apps.contratos.models import Empresa, Objeto, Contrato, ContratoUnidade, FiscaisUnidade
 from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
 from sme_coad_apps.core.models import Divisao, Nucleo, Unidade, Coad
 from utility.carga_de_dados.import_dres import importa_dres
@@ -154,13 +154,13 @@ def importa_empresa(empresa_data: dict):
         return empresa.first()
 
 
-def importa_tipo_servico(tipo_servico_data: dict):
-    tipo_servico = TipoServico.objects.filter(nome=tipo_servico_data['nome'])
-    if not tipo_servico.exists():
-        print(f"Criado tipo de serviço {tipo_servico_data['nome']}")
-        return TipoServico.objects.create(**tipo_servico_data)
+def importa_objeto(objeto_data: dict):
+    objeto = Objeto.objects.filter(nome=objeto_data['nome'])
+    if not objeto.exists():
+        print(f"Criado tipo de serviço {objeto_data['nome']}")
+        return Objeto.objects.create(**objeto_data)
     else:
-        return tipo_servico.first()
+        return objeto.first()
 
 
 def importa_unidade(unidade_data: dict):
@@ -250,12 +250,13 @@ def importa_contratos():
         empresa_contratada = importa_empresa(empresa_data)
 
         servico = de_para_servicos(row["OBJETO"])
-        tipo_servico = importa_tipo_servico({'nome': servico})
+        objeto = importa_objeto({'nome': servico})
 
         equipamento = de_para_equipamento(row['EQP'])
 
         delta = row['TERMINO'] - row['INICIO']
-        vigencia_em_dias = delta.days
+        vigencia = delta.days
+        unidade_vigencia = Contrato.UNIDADE_VIGENCIA_DIAS
 
         unidade_data = {
             'codigo_eol': eol_unidade,
@@ -268,13 +269,13 @@ def importa_contratos():
         contrato_data = {
             'termo_contrato': tc,
             'processo': row['PROCESSO'],
-            'tipo_servico': tipo_servico,
+            'objeto': objeto,
             'nucleo_responsavel': nucleos[equipamento],
             'empresa_contratada': empresa_contratada,
             'data_ordem_inicio': row['INICIO'],
-            'vigencia_em_dias': vigencia_em_dias,
+            'unidade_vigencia': unidade_vigencia,
+            'vigencia': vigencia,
             'situacao': Contrato.SITUACAO_ATIVO,
-            'estado_contrato': de_para_estado(row['SITUACAO'], ),
             'data_encerramento': row['TERMINO']
         }
 
