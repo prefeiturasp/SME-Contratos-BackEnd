@@ -108,8 +108,6 @@ class Contrato(ModeloBase):
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
     valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    # coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
-    #                                 null=True)
 
     @property
     def dias_para_o_encerramento(self):
