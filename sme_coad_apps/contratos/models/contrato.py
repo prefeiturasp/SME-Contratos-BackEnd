@@ -102,19 +102,12 @@ class Contrato(ModeloBase):
                                         default=UNIDADE_VIGENCIA_DIAS)
     vigencia = models.PositiveSmallIntegerField('vigência', default=0, blank=True, null=True)
     situacao = models.CharField(max_length=15, choices=SITUACAO_CHOICES, default=SITUACAO_RASCUNHO)
-    gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
-                               null=True)
-    suplente = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos_suplente',
-                                 blank=True,
-                                 null=True)
     observacoes = models.TextField(blank=True, default='')
     data_encerramento = models.DateField(blank=True, null=True)
     tem_ue = models.BooleanField(default=False)
     tem_ua = models.BooleanField(default=False)
     tem_ceu = models.BooleanField(default=False)
     valor_total = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    coordenador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_coordenador', blank=True,
-                                    null=True)
 
     @property
     def dias_para_o_encerramento(self):
@@ -358,7 +351,23 @@ class FiscaisUnidade(ModeloBase):
         verbose_name_plural = 'Fiscais das Unidades de Contratos'
 
 
+class GestorContrato(ModeloBase):
+    historico = AuditlogHistoryField()
+
+    gestor = models.ForeignKey(User, on_delete=models.PROTECT, related_name='contratos_geridos', blank=True,
+                               null=True)
+    contrato = models.ForeignKey(Contrato, on_delete=models.PROTECT, related_name='gestores')
+
+    def __str__(self):
+        return f'{self.contrato.termo_contrato} - {self.gestor.nome}'
+
+    class Meta:
+        verbose_name = 'Gestor de Contrato'
+        verbose_name_plural = 'Gestores de Contrato'
+
+
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
 auditlog.register(DocumentoFiscal)
 auditlog.register(FiscaisUnidade)
+auditlog.register(GestorContrato)

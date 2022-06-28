@@ -15,8 +15,7 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def contrato(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
-                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
-                      suplente=suplente, termo_contrato='999/99',
+                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, termo_contrato='999/99',
                       )
 
 
@@ -65,30 +64,6 @@ def test_admin():
     assert model_admin.list_display == ('criado_em', 'termo_contrato', 'notificado')
     assert model_admin.ordering == ('criado_em', 'contrato', 'notificado')
     assert model_admin.list_filter == ('notificado',)
-
-
-@freeze_time('2019-02-01')
-def test_ultima_notificacao_do_gestor_do_contrato(contrato, notificacao_vigencia_contrato):
-    mommy.make(NotificacaoVigenciaContrato, contrato=contrato, notificado=contrato.gestor)
-    mommy.make(NotificacaoVigenciaContrato, contrato=contrato, notificado=contrato.suplente)
-
-    ultima_notificacao_gestor = NotificacaoVigenciaContrato.ultima_notificacao_para_o_gestor_do_contrato(contrato)
-
-    assert ultima_notificacao_gestor.contrato == contrato
-    assert ultima_notificacao_gestor.notificado == contrato.gestor
-    assert ultima_notificacao_gestor.criado_em.date() == datetime.date(2019, 2, 1)
-
-
-@freeze_time('2019-02-01')
-def test_ultima_notificacao_do_suplente_do_contrato(contrato, notificacao_vigencia_contrato):
-    mommy.make(NotificacaoVigenciaContrato, contrato=contrato, notificado=contrato.gestor)
-    mommy.make(NotificacaoVigenciaContrato, contrato=contrato, notificado=contrato.suplente)
-
-    ultima_notificacao_suplente = NotificacaoVigenciaContrato.ultima_notificacao_para_o_suplente_do_contrato(contrato)
-
-    assert ultima_notificacao_suplente.contrato == contrato
-    assert ultima_notificacao_suplente.notificado == contrato.suplente
-    assert ultima_notificacao_suplente.criado_em.date() == datetime.date(2019, 2, 1)
 
 
 @freeze_time('2019-01-10')

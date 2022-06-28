@@ -22,9 +22,14 @@ PERECIVEL = Produto.DURABILIDADE_PERECIVEL
 NAO_PERECIVEL = Produto.DURABILIDADE_NAO_PERECIVEL
 
 
-def gestor_e_suplente_devem_ser_diferentes(gestor, suplente):
-    if gestor and gestor == suplente:
-        raise serializers.ValidationError({'detail': 'Gestor e Suplente devem ser diferentes'})
+def nao_pode_repetir_o_gestor(gestores):
+    lista_gestores = []
+    if gestores:
+        for gestor in gestores:
+            for _key, value in gestor.items():
+                lista_gestores.append(value)
+        if len(lista_gestores) != len(set(lista_gestores)):
+            raise serializers.ValidationError({'detail': 'Não é permitido duplicidade de gestor no contrato'})
 
 
 def data_encerramento(unidade_vigencia, vigencia, data_assinatura, data_encerramento):

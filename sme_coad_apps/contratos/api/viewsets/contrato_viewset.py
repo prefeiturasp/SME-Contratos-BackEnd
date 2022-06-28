@@ -23,8 +23,6 @@ class ContratoViewSet(ComHistoricoViewSet):
     contratos_queryset = Contrato.objects.select_related(
         'empresa_contratada').select_related(
         'nucleo_responsavel').select_related(
-        'gestor').select_related(
-        'suplente').select_related(
         'objeto').select_related(
         'edital').all()
 
