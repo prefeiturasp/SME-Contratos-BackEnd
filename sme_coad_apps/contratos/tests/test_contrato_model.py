@@ -26,8 +26,8 @@ def suplente():
 @pytest.fixture
 def contrato_emergencial(gestor, suplente):
     return mommy.make('Contrato', data_assinatura=datetime.date(2019, 1, 1),
-                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100, gestor=gestor,
-                      suplente=suplente, observacoes='teste', objeto=mommy.make(Objeto),
+                      data_ordem_inicio=datetime.date(2019, 1, 1), vigencia=100,
+                      observacoes='teste', objeto=mommy.make(Objeto),
                       nucleo_responsavel=mommy.make(Nucleo), edital=mommy.make(Edital),
                       empresa_contratada=mommy.make(Empresa)
                       )
@@ -86,8 +86,6 @@ def test_instance_model(contrato_emergencial):
     assert isinstance(contrato_emergencial.referencia_encerramento, str)
     assert isinstance(contrato_emergencial.vigencia, int)
     assert isinstance(contrato_emergencial.situacao, str)
-    assert isinstance(contrato_emergencial.gestor, User)
-    assert isinstance(contrato_emergencial.suplente, User)
     assert isinstance(contrato_emergencial.observacoes, str)
     assert isinstance(contrato_emergencial.data_encerramento, datetime.date)
     assert isinstance(contrato_emergencial.valor_total, float)

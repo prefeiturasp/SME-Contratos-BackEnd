@@ -17,8 +17,6 @@ def test_contrato_serializer(fake_user):
         Contrato,
         data_assinatura=datetime.date(2019, 10, 1),
         data_ordem_inicio=datetime.date(2019, 10, 1),
-        gestor=fake_user,
-        suplente=fake_user,
         objeto=objeto,
         empresa_contratada=empresa,
         vigencia=100,
@@ -54,12 +52,6 @@ def test_contrato_serializer(fake_user):
                           'cep': '', 'endereco': '', 'bairro': '', 'cidade': '', 'estado': '',
                           'numero': '', 'complemento': ''}
     assert contrato_empresa_contratada == resultado_esperado
-    assert contrato_serializer.data['gestor'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
-                                                  'id': fake_user.id, 'username': fake_user.username,
-                                                  'email': fake_user.email}
-    assert contrato_serializer.data['suplente'] == {'nome': fake_user.nome, 'uuid': str(fake_user.uuid),
-                                                    'id': fake_user.id, 'username': fake_user.username,
-                                                    'email': fake_user.email}
     assert contrato_serializer.data['data_encerramento'] is not None
     assert contrato_serializer.data['objeto'] == {'nome': objeto.nome, 'uuid': str(objeto.uuid), 'id': objeto.id}
     assert contrato_serializer.data['total_mensal'] is not None
@@ -72,8 +64,6 @@ def test_contrato_lookup_serializer(fake_user):
         Contrato,
         termo_contrato='00/00',
         criado_em=datetime.date(2019, 10, 1),
-        gestor=fake_user,
-        suplente=fake_user
     )
 
     contrato_serializer = ContratoLookUpSerializer(contrato)
@@ -81,5 +71,3 @@ def test_contrato_lookup_serializer(fake_user):
     assert contrato_serializer.data is not None
     assert contrato_serializer.data['termo_contrato'] == '00/00'
     assert contrato_serializer.data['uuid']
-    assert contrato_serializer.data['gestor']
-    assert contrato_serializer.data['suplente']

@@ -14,6 +14,7 @@ from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
 from ...models.contrato import GestorContrato
 from ...models.edital import Edital
 from ...models.objeto import Objeto
+from ..validations.contrato_validations import nao_pode_repetir_o_gestor
 from .ata_serializer import AtaLookUpSerializer
 from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
 
@@ -167,6 +168,10 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     dotacoes = DotacaoValorCreatorSerializer(many=True, required=False)
     dias_para_o_encerramento = serializers.CharField(required=False)
     gestores = GestorContratoCreatorSerializer(many=True, required=False)
+
+    def validate(self, attrs):
+        nao_pode_repetir_o_gestor(attrs.get('gestores'))
+        return attrs
 
     def create(self, validated_data):
         dotacoes = validated_data.pop('dotacoes', [])
