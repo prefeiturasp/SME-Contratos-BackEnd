@@ -11,13 +11,39 @@ from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
 from ...api.serializers.objeto_serializer import ObjetoLookupSerializer
 from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
+from ...models.contrato import GestorContrato
 from ...models.edital import Edital
 from ...models.objeto import Objeto
-from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
+from ..validations.contrato_validations import nao_pode_repetir_o_gestor
 from .ata_serializer import AtaLookUpSerializer
 from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
 
 user_model = get_user_model()
+
+
+class GestorContratoSerializer(serializers.ModelSerializer):
+    gestor = UsuarioLookUpSerializer(required=False)
+
+    class Meta:
+        model = GestorContrato
+        fields = ('uuid', 'gestor')
+
+
+class GestorContratoCreatorSerializer(serializers.ModelSerializer):
+    contrato = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        queryset=Contrato.objects.all()
+    )
+    gestor = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=False,
+        queryset=User.objects.all()
+    )
+
+    class Meta:
+        model = GestorContrato
+        fields = ('uuid', 'gestor', 'contrato')
 
 
 class FiscalLoteSerializer(serializers.ModelSerializer):
@@ -70,13 +96,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     objeto = ObjetoLookupSerializer()
     empresa_contratada = EmpresaSerializer()
     nucleo_responsavel = NucleoLookUpSerializer()
-    gestor = UsuarioLookUpSerializer()
-    coordenador = serializers.SlugRelatedField(
-        slug_field='uuid',
-        required=False,
-        queryset=user_model.objects.all()
-    )
-    suplente = UsuarioLookUpSerializer()
+    gestores = GestorContratoSerializer(many=True)
     edital = EditalSimplesSerializer()
     ata = AtaLookUpSerializer()
     total_mensal = serializers.SerializerMethodField('get_total_mensal')
@@ -129,27 +149,6 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         allow_empty=True,
         queryset=Empresa.objects.all()
     )
-    coordenador = serializers.SlugRelatedField(
-        slug_field='uuid',
-        required=False,
-        allow_null=True,
-        allow_empty=True,
-        queryset=user_model.objects.all()
-    )
-    gestor = serializers.SlugRelatedField(
-        slug_field='uuid',
-        required=False,
-        allow_null=True,
-        allow_empty=True,
-        queryset=user_model.objects.all()
-    )
-    suplente = serializers.SlugRelatedField(
-        slug_field='uuid',
-        required=False,
-        allow_null=True,
-        allow_empty=True,
-        queryset=user_model.objects.all()
-    )
     edital = serializers.SlugRelatedField(
         slug_field='uuid',
         required=False,
@@ -168,24 +167,31 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     lotes = LoteSerializer(many=True, required=False)
     dotacoes = DotacaoValorCreatorSerializer(many=True, required=False)
     dias_para_o_encerramento = serializers.CharField(required=False)
+    gestores = GestorContratoCreatorSerializer(many=True, required=False)
 
     def validate(self, attrs):
-        gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
+        nao_pode_repetir_o_gestor(attrs.get('gestores'))
         return attrs
 
     def create(self, validated_data):
         dotacoes = validated_data.pop('dotacoes', [])
+        gestores = validated_data.pop('gestores', [])
         contrato = Contrato.objects.create(**validated_data)
 
         for dotacao in dotacoes:
             dotacao['contrato'] = contrato
             DotacaoValorCreatorSerializer().create(dotacao)
 
+        for gestor in gestores:
+            gestor['contrato'] = contrato
+            GestorContratoCreatorSerializer().create(gestor)
         return contrato
 
     def update(self, instance, validated_data):
         unidades_selecionadas = validated_data.pop('unidades_selecionadas', [])
         dotacoes = validated_data.pop('dotacoes', [])
+        gestores = validated_data.pop('gestores', [])
+        lista_gestores_existentes = list(instance.gestores.all().values_list('uuid', flat=True))
         instance.lotes.all().delete()
         instance.dotacoes.all().delete()
 
@@ -193,6 +199,15 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
             dotacao['contrato'] = instance
             DotacaoValorCreatorSerializer().create(dotacao)
 
+        for gestor in gestores:
+            manager = gestor.get('uuid', None)
+            if manager in lista_gestores_existentes:
+                lista_gestores_existentes.remove(manager)
+            else:
+                gestor['contrato'] = instance
+                GestorContratoCreatorSerializer().create(gestor)
+
+        instance.gestores.filter(uuid__in=lista_gestores_existentes).delete()
         update_instance_from_dict(instance, validated_data, save=True)
 
         for unidade_selecionada in unidades_selecionadas:
@@ -238,12 +253,11 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
 
 
 class ContratoLookUpSerializer(serializers.ModelSerializer):
-    gestor = UsuarioLookUpSerializer()
-    suplente = UsuarioLookUpSerializer()
+    gestores = GestorContratoSerializer(many=True)
 
     class Meta:
         model = Contrato
-        fields = ('uuid', 'termo_contrato', 'gestor', 'coordenador', 'suplente', 'alterado_em')
+        fields = ('uuid', 'termo_contrato', 'gestores', 'alterado_em')
 
 
 class ContratoSimplesSerializer(serializers.ModelSerializer):

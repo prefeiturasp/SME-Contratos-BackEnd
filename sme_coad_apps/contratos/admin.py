@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 from sme_coad_apps.contratos.models.ata import ProdutosAta
-from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from sme_coad_apps.contratos.models.contrato import DocumentoFiscal, GestorContrato
 from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Empenho
 
 from .forms import ObjetosForm
@@ -153,6 +153,14 @@ class ContratoAdmin(admin.ModelAdmin):
     list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'objeto')
 
     actions = ['atualiza_tipo_equipamento', 'encerra_contratos_vencidos']
+
+
+@admin.register(GestorContrato)
+class GestorContratoAdmin(admin.ModelAdmin):
+    list_display = ('contrato', 'gestor')
+    list_filter = ('contrato', 'gestor')
+    ordering = ('contrato',)
+    search_fields = ('contrato', 'gestor')
 
 
 @admin.register(ColunasContrato)
