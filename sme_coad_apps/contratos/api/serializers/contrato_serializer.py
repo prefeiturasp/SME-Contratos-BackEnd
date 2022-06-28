@@ -5,7 +5,7 @@ from ....core.api.serializers.nucleo_serializer import NucleoLookUpSerializer
 from ....core.api.serializers.unidade_serializer import UnidadeSerializer
 from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Nucleo, Unidade
-from ....users.api.serializers.usuario_serializer import UsuarioSimplesSerializer
+from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
@@ -14,7 +14,6 @@ from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
 from ...models.contrato import GestorContrato
 from ...models.edital import Edital
 from ...models.objeto import Objeto
-from ..validations.contrato_validations import gestor_e_suplente_devem_ser_diferentes
 from .ata_serializer import AtaLookUpSerializer
 from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
 
@@ -22,7 +21,7 @@ user_model = get_user_model()
 
 
 class GestorContratoSerializer(serializers.ModelSerializer):
-    gestor = UsuarioSimplesSerializer(required=False)
+    gestor = UsuarioLookUpSerializer(required=False)
 
     class Meta:
         model = GestorContrato
@@ -168,10 +167,6 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
     dotacoes = DotacaoValorCreatorSerializer(many=True, required=False)
     dias_para_o_encerramento = serializers.CharField(required=False)
     gestores = GestorContratoCreatorSerializer(many=True, required=False)
-
-    def validate(self, attrs):
-        gestor_e_suplente_devem_ser_diferentes(attrs.get('gestor'), attrs.get('suplente'))
-        return attrs
 
     def create(self, validated_data):
         dotacoes = validated_data.pop('dotacoes', [])
