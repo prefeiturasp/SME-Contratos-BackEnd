@@ -230,20 +230,18 @@ def contrato_pre_save(instance, *_args, **_kwargs):
         instance.data_ordem_inicio += relativedelta(days=+1)
 
 
-class DocumentoFiscal(ModeloBase):
+class AnexoContrato(ModeloBase):
     historico = AuditlogHistoryField()
 
-    CHOICES = (('FISCAL_DRE', 'DRE'), ('FISCAL_UNIDADE', 'UNIDADE'), ('FISCAL_OUTROS', 'OUTROS'))
-    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='documentos_fiscais')
+    contrato = models.ForeignKey(Contrato, on_delete=models.CASCADE, related_name='anexos_contrato')
     anexo = models.FileField(upload_to='uploads/')
-    tipo_unidade = models.CharField(max_length=20, choices=CHOICES)
 
     def __str__(self):
-        return f'{self.contrato.termo_contrato} - {self.tipo_unidade}'
+        return f'{self.contrato.termo_contrato}'
 
     class Meta:
-        verbose_name = 'Documento Fiscal'
-        verbose_name_plural = 'Documentos Fiscais'
+        verbose_name = 'Anexo de Contrato'
+        verbose_name_plural = 'Anexos de Contratos'
 
 
 class Lote(ModeloBase, TemNome):
@@ -368,6 +366,6 @@ class GestorContrato(ModeloBase):
 
 auditlog.register(Contrato)
 auditlog.register(ContratoUnidade)
-auditlog.register(DocumentoFiscal)
+auditlog.register(AnexoContrato)
 auditlog.register(FiscaisUnidade)
 auditlog.register(GestorContrato)

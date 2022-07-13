@@ -4,13 +4,13 @@ from rest_framework.filters import SearchFilter
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 
-from ...models.contrato import DocumentoFiscal
-from ..serializers.documento_fiscal_serializer import DocumentoFiscalSerializer
+from ...models.contrato import AnexoContrato
+from ..serializers.anexo_contrato_serializer import AnexoContratolSerializer
 
 
-class DocumentoFiscalViewSet(viewsets.ModelViewSet):
-    serializer_class = DocumentoFiscalSerializer
-    queryset = DocumentoFiscal.objects.all()
+class AnexoContratoViewSet(viewsets.ModelViewSet):
+    serializer_class = AnexoContratolSerializer
+    queryset = AnexoContrato.objects.all()
     lookup_field = 'uuid'
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ('contrato__uuid',)
