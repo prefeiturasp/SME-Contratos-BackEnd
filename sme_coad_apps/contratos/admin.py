@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 from sme_coad_apps.contratos.models.ata import ProdutosAta
-from sme_coad_apps.contratos.models.contrato import DocumentoFiscal, GestorContrato
+from sme_coad_apps.contratos.models.contrato import AnexoContrato, GestorContrato
 from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Empenho
 
 from .forms import ObjetosForm
@@ -170,11 +170,11 @@ class ColunasContratoAdmin(admin.ModelAdmin):
     search_fields = ('usuario',)
 
 
-@admin.register(DocumentoFiscal)
-class DocumentoFiscalAdmin(admin.ModelAdmin):
-    list_display = ['contrato', 'tipo_unidade', 'criado_em']
+@admin.register(AnexoContrato)
+class AnexoContratoAdmin(admin.ModelAdmin):
+    list_display = ['contrato', 'anexo', 'criado_em']
     ordering = ('contrato',)
-    search_field = ('contrato', 'tipo_unidade')
+    search_field = ('contrato')
 
 
 @admin.register(ParametroNotificacoesVigencia)
