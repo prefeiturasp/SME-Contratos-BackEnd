@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from sme_coad_apps.contratos.models import ContratoUnidade
-from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from sme_coad_apps.contratos.models.contrato import AnexoContrato
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...models import Contrato
@@ -55,6 +55,6 @@ class ContratoViewSet(ComHistoricoViewSet):
         contrato = self.get_object()
         if contrato.situacao == 'RASCUNHO':
             ContratoUnidade.objects.filter(contrato=contrato).delete()
-            DocumentoFiscal.objects.filter(contrato=contrato).delete()
+            AnexoContrato.objects.filter(contrato=contrato).delete()
             return Response(data={'detail': f'Contrato {contrato.termo_contrato} cancelado', 'status': 200})
         return Response(data=['Este contrato não pode ser cancelado'], status=status.HTTP_403_FORBIDDEN)

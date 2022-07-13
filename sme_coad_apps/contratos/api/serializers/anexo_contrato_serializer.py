@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from ...models.contrato import Contrato, DocumentoFiscal
+from ...models.contrato import Contrato, AnexoContrato
 
 
-class DocumentoFiscalSerializer(serializers.ModelSerializer):
+class AnexoContratolSerializer(serializers.ModelSerializer):
     contrato = serializers.SlugRelatedField(
         slug_field='uuid',
         required=True,
@@ -11,5 +11,5 @@ class DocumentoFiscalSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = DocumentoFiscal
+        model = AnexoContrato
         exclude = ('id',)
