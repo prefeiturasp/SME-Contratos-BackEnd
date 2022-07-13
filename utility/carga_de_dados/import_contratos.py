@@ -5,7 +5,7 @@ from brazilnum.cnpj import clean_id
 from django.db.models import F
 
 from sme_coad_apps.contratos.models import Empresa, Objeto, Contrato, ContratoUnidade, FiscaisUnidade
-from sme_coad_apps.contratos.models.contrato import DocumentoFiscal
+from sme_coad_apps.contratos.models.contrato import AnexoContrato
 from sme_coad_apps.core.models import Divisao, Nucleo, Unidade, Coad
 from utility.carga_de_dados.import_dres import importa_dres
 
@@ -221,7 +221,7 @@ def cria_coad():
 def importa_contratos():
     auditlog.unregister(Contrato)
     auditlog.unregister(ContratoUnidade)
-    auditlog.unregister(DocumentoFiscal)
+    auditlog.unregister(AnexoContrato)
     auditlog.unregister(FiscaisUnidade)
     auditlog.unregister(Divisao)
     auditlog.unregister(Nucleo)
