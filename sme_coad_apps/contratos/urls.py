@@ -1,11 +1,11 @@
 from django.urls import include, path
 from rest_framework import routers
 
+from .api.viewsets.anexo_contrato_viewset import AnexoContratoViewSet
 from .api.viewsets.ata_viewset import AtaViewSet
 from .api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
 from .api.viewsets.contrato_unidade_viewset import ContratoUnidadeViewSet
 from .api.viewsets.contrato_viewset import ContratoViewSet
-from .api.viewsets.anexo_contrato_viewset import AnexoContratoViewSet
 from .api.viewsets.dotacao_valor_viewset import DotacaoOrcamentariaViewSet, DotacaoValorViewSet
 from .api.viewsets.edital_viewset import EditalViewSet
 from .api.viewsets.empresa_viewsets import EmpresaViewSet
