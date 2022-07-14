@@ -16,6 +16,10 @@ class EquipamentosEOLViewSet(ViewSet):
         tipo_unidade = request.query_params.get('tipo_unidade', None)
         nome_unidade = request.query_params.get('nome_unidade', None)
         codigo_eol_unidade = request.query_params.get('codigo_eol_unidade', None)
+        if tipo_unidade:
+            tipo_unidade = tipo_unidade.split(',')
+        if tipo_escola:
+            tipo_escola = tipo_escola.split(',')
 
         try:
             response = EOLService.buscar_equipamentos(codigo_subprefeitura=codigo_subprefeitura, codigo_dre=codigo_dre,
