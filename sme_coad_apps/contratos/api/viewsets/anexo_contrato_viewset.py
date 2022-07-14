@@ -5,7 +5,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 
 from ...models.contrato import AnexoContrato
-from ..serializers.anexo_contrato_serializer import AnexoContratolSerializer, AnexoContratolSerializerCreate
+from ..serializers.anexo_contrato_serializer import AnexoContratoCreateSerializer, AnexoContratolSerializer
 
 
 class AnexoContratoViewSet(viewsets.ModelViewSet):
@@ -18,9 +18,7 @@ class AnexoContratoViewSet(viewsets.ModelViewSet):
     parser_classes = (MultiPartParser, FormParser,)
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return AnexoContratolSerializer
-        elif self.action == 'list':
+        if self.action in ['retrieve', 'list']:
             return AnexoContratolSerializer
         else:
-            return AnexoContratolSerializerCreate
+            return AnexoContratoCreateSerializer

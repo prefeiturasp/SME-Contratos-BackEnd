@@ -27,7 +27,7 @@ class AnexoContratolSerializer(serializers.ModelSerializer):
         exclude = ('id',)
 
 
-class AnexoContratolSerializerCreate(serializers.ModelSerializer):
+class AnexoContratoCreateSerializer(serializers.ModelSerializer):
 
     contrato = serializers.SlugRelatedField(
         slug_field='uuid',
