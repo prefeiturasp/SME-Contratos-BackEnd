@@ -15,6 +15,7 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify
 from sme_coad_apps.contratos.urls import urlpatterns as contrato_url
 from sme_coad_apps.core.urls import urlpatterns as core_urls
 from sme_coad_apps.users.urls import urlpatterns as usuario_url
+from sme_coad_apps.eol_servico.urls import urlpatterns as eol_servico_url
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -40,6 +41,7 @@ urlpatterns = [
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # ADDING URLS FROM APPS
+urlpatterns += eol_servico_url
 urlpatterns += core_urls
 urlpatterns += usuario_url
 urlpatterns += contrato_url
