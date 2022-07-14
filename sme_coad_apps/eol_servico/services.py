@@ -18,7 +18,8 @@ class EOLService:
     TIMEOUT = 20
 
     @classmethod
-    def buscar_equipamentos(cls, codigo_subprefeitura=None, codigo_dre=None, tipo_escola=None):
+    def buscar_equipamentos(cls, codigo_subprefeitura=None, codigo_dre=None, tipo_escola=None, tipo_unidade=None,
+                            nome_unidade=None, codigo_eol_unidade=None):
         """Retorna dados do equipamento.
 
         Exemplo de retorno:
@@ -50,7 +51,8 @@ class EOLService:
         response = requests.get(f'{DJANGO_EOL_API_URL}/escolas/equipamentos',
                                 headers=cls.HEADER, timeout=cls.TIMEOUT,
                                 params={'CodigosSubprefeitura': codigo_subprefeitura, 'CodigosDre': codigo_dre,
-                                        'TiposEscola': tipo_escola})
+                                        'TiposEscola': tipo_escola, 'TiposUnidade': tipo_unidade,
+                                        'NomeEscola': nome_unidade, 'CodigoEol': codigo_eol_unidade})
 
         if response.status_code == status.HTTP_200_OK:
             resultado = response.json()

@@ -13,10 +13,14 @@ class EquipamentosEOLViewSet(ViewSet):
         codigo_subprefeitura = request.query_params.get('codigo_subprefeitura', None)
         codigo_dre = request.query_params.get('codigo_dre', None)
         tipo_escola = request.query_params.get('tipo_escola', None)
+        tipo_unidade = request.query_params.get('tipo_unidade', None)
+        nome_unidade = request.query_params.get('nome_unidade', None)
+        codigo_eol_unidade = request.query_params.get('codigo_eol_unidade', None)
 
         try:
             response = EOLService.buscar_equipamentos(codigo_subprefeitura=codigo_subprefeitura, codigo_dre=codigo_dre,
-                                                      tipo_escola=tipo_escola)
+                                                      tipo_escola=tipo_escola, tipo_unidade=tipo_unidade,
+                                                      nome_unidade=nome_unidade, codigo_eol_unidade=codigo_eol_unidade)
             return Response(response)
         except EOLException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
