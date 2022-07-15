@@ -16,6 +16,7 @@ from ...models.edital import Edital
 from ...models.objeto import Objeto
 from ..validations.contrato_validations import nao_pode_repetir_o_gestor
 from .ata_serializer import AtaLookUpSerializer
+from .contrato_unidade_serializer import ContratoUnidadeSerializer
 from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
 
 user_model = get_user_model()
@@ -105,6 +106,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     dres = serializers.SerializerMethodField('get_dres')
     lotes = LoteSerializer(many=True)
     dotacoes = DotacaoValorSerializer(many=True)
+    unidades = ContratoUnidadeSerializer(many=True)
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
@@ -174,6 +176,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        unidades_selecionadas = validated_data.pop('unidades_selecionadas', [])
         dotacoes = validated_data.pop('dotacoes', [])
         gestores = validated_data.pop('gestores', [])
         contrato = Contrato.objects.create(**validated_data)
@@ -185,6 +188,33 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
         for gestor in gestores:
             gestor['contrato'] = contrato
             GestorContratoCreatorSerializer().create(gestor)
+
+        for unidade_selecionada in unidades_selecionadas:
+            lote = unidade_selecionada.get('lote')
+            lote = Lote(nome=lote, contrato=contrato)
+            lote.save()
+
+            unidade_json = unidade_selecionada.get('unidade')
+            if Unidade.objects.filter(codigo_eol=unidade_json.get('cd_equipamento')).exists():
+                unidade = Unidade.objects.get(codigo_eol=unidade_json.get('cd_equipamento'))
+                unidade.logradouro = unidade_json.get('logradouro', '')
+                unidade.bairro = unidade_json.get('bairro', '')
+                unidade.dre = unidade_json.get('nm_exibicao_diretoria_referencia', '')
+                unidade.tipo_unidade = unidade_json.get('sg_tp_escola', '') or ''
+                unidade.save()
+            else:
+                unidade = Unidade(
+                    equipamento=Unidade.get_equipamento_from_unidade(unidade_json),
+                    tipo_unidade=unidade_json.get('sg_tp_escola', '') or '',
+                    codigo_eol=unidade_json.get('cd_equipamento', ''),
+                    nome=unidade_json.get('nm_equipamento', ''),
+                    logradouro=unidade_json.get('logradouro', ''),
+                    bairro=unidade_json.get('bairro', ''),
+                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', '')
+                )
+                unidade.save()
+            lote.unidades.add(unidade)
+
         return contrato
 
     def update(self, instance, validated_data):
@@ -236,14 +266,6 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
                     dre=unidade_json.get('nm_exibicao_diretoria_referencia', '')
                 )
                 unidade.save()
-            if not FiscalLote.objects.filter(lote=lote).exists():
-                usuario = User.objects.get(username=unidade_selecionada.get('rf_fiscal'))
-                fiscal_lote = FiscalLote(lote=lote, fiscal=usuario, tipo_fiscal=FiscalLote.FISCAL_TITULAR)
-                fiscal_lote.save()
-                for suplente in unidade_selecionada.get('suplentes'):
-                    usuario = User.objects.get(username=suplente.get('rf'))
-                    suplente_lote = FiscalLote(lote=lote, fiscal=usuario)
-                    suplente_lote.save()
             lote.unidades.add(unidade)
         return instance
 
