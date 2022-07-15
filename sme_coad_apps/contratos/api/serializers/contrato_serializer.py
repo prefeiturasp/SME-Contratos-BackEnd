@@ -191,8 +191,11 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
 
         for unidade_selecionada in unidades_selecionadas:
             lote = unidade_selecionada.get('lote')
-            lote = Lote(nome=lote, contrato=contrato)
-            lote.save()
+            if contrato.lotes.filter(nome=lote, contrato=contrato).exists():
+                lote = contrato.lotes.get(nome=lote, contrato=contrato)
+            else:
+                lote = Lote(nome=lote, contrato=contrato)
+                lote.save()
 
             unidade_json = unidade_selecionada.get('unidade')
             if Unidade.objects.filter(codigo_eol=unidade_json.get('cd_equipamento')).exists():
