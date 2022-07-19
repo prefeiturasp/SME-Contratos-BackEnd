@@ -204,6 +204,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
                 unidade.bairro = unidade_json.get('bairro', '')
                 unidade.dre = unidade_json.get('nm_exibicao_diretoria_referencia', '')
                 unidade.tipo_unidade = unidade_json.get('sg_tp_escola', '') or ''
+                unidade.subprefeitura = unidade_json.get('nomeSubprefeitura', '')
                 unidade.save()
             else:
                 unidade = Unidade(
@@ -213,7 +214,8 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
                     nome=unidade_json.get('nm_equipamento', ''),
                     logradouro=unidade_json.get('logradouro', ''),
                     bairro=unidade_json.get('bairro', ''),
-                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', '')
+                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', ''),
+                    subprefeitura=unidade_json.get('nomeSubprefeitura', '')
                 )
                 unidade.save()
             lote.unidades.add(unidade)
@@ -257,6 +259,7 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
                 unidade.bairro = unidade_json.get('bairro', '')
                 unidade.dre = unidade_json.get('nm_exibicao_diretoria_referencia', '')
                 unidade.tipo_unidade = unidade_json.get('sg_tp_escola', '') or ''
+                unidade.subprefeitura = unidade_json.get('nomeSubprefeitura', '')
                 unidade.save()
             else:
                 unidade = Unidade(
@@ -266,7 +269,8 @@ class ContratoCreateSerializer(serializers.ModelSerializer):
                     nome=unidade_json.get('nm_equipamento', ''),
                     logradouro=unidade_json.get('logradouro', ''),
                     bairro=unidade_json.get('bairro', ''),
-                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', '')
+                    dre=unidade_json.get('nm_exibicao_diretoria_referencia', ''),
+                    subprefeitura=unidade_json.get('nomeSubprefeitura', '')
                 )
                 unidade.save()
             lote.unidades.add(unidade)

@@ -32,6 +32,7 @@ class Unidade(ModeloBase, TemNome):
     logradouro = models.CharField(max_length=100, blank=True, default='')
     bairro = models.CharField(max_length=50, blank=True, default='')
     dre = models.CharField(max_length=100, blank=True, default='')
+    subprefeitura = models.CharField(max_length=100, blank=True, default='')
 
     @classmethod
     def get_equipamento_from_unidade(self, unidade):
