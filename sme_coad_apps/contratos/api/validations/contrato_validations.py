@@ -68,3 +68,8 @@ def produto_validation(categoria, grupo_alimentar, durabilidade, armazenabilidad
         if grupo_alimentar == FLVO or grupo_alimentar == PAES_E_BOLO:
             if durabilidade != PERECIVEL or armazenabilidade != NAO_ARMAZENAVEL:
                 raise serializers.ValidationError({'detail': msg})
+
+
+def campo_nao_pode_ser_nulo(valor, mensagem='Não pode ser nulo'):
+    if not valor:
+        raise serializers.ValidationError(mensagem)

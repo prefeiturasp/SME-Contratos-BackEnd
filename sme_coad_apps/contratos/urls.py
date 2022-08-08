@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
+from .api.viewsets.aditamento_viewset import AditamentoViewSet
 from .api.viewsets.anexo_contrato_viewset import AnexoContratoViewSet
 from .api.viewsets.ata_viewset import AtaViewSet
 from .api.viewsets.colunas_contrato_viewset import ColunasContratoViewSet
@@ -19,6 +20,7 @@ from .api.viewsets.produto_viewset import ProdutoViewSet, UnidadeDeMedidaViewSet
 
 router = routers.DefaultRouter()
 
+router.register('aditamentos', AditamentoViewSet)
 router.register('atas', AtaViewSet)
 router.register('colunas-contrato', ColunasContratoViewSet)
 router.register('objetos', ObjetoViewSet)
