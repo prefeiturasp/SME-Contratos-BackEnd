@@ -10,7 +10,7 @@ from ..models import Aditamento, Contrato
 pytestmark = pytest.mark.django_db
 
 
-def test_ata_serializer(aditamento):
+def test_aditamento_serializer(aditamento):
     serializer = AditamentoSerializer(aditamento)
 
     assert serializer.data is not None
