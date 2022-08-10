@@ -7,6 +7,7 @@ from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Em
 
 from .forms import ObjetosForm
 from .models import (
+    Aditamento,
     Ata,
     ColunasContrato,
     Contrato,
@@ -284,6 +285,13 @@ class GrupoObrigacaoAdmin(admin.ModelAdmin):
 class AtaAdmin(admin.ModelAdmin):
     list_display = ('numero', 'status', 'empresa', 'data_assinatura', 'data_encerramento')
     search_fields = ('numero',)
+
+
+@admin.register(Aditamento)
+class AditamentoAdmin(admin.ModelAdmin):
+    list_display = ('termo_aditivo', 'contrato', 'objeto_aditamento', 'data_inicial',
+                    'data_final', 'valor_total_atualizado')
+    search_fields = ('termo_aditivo',)
 
 
 @admin.register(UnidadeDeMedida)

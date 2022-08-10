@@ -91,6 +91,7 @@ THIRD_PARTY_APPS = [
     "notifications",
     "django_prometheus",
     "drf_yasg",
+    "multiselectfield",
 ]
 
 LOCAL_APPS = [
