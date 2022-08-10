@@ -4,7 +4,7 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Ata, Edital, Empresa, Objeto, Produto, UnidadeDeMedida
+from sme_coad_apps.contratos.models import Aditamento, Ata, Edital, Empresa, Objeto, Produto, UnidadeDeMedida
 from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.users.models import User
 
@@ -144,4 +144,18 @@ def dotacao_orcamentaria():
                       projeto_atividade='4.444',
                       conta_despesa='33333333',
                       fonte='22'
+                      )
+
+
+@pytest.fixture
+def aditamento(contrato):
+    return mommy.make(Aditamento, termo_aditivo='12345/2022',
+                      objeto_aditamento=Aditamento.OBJETO_PRORROGACAO_VIGENCIA_CONTRATUAL,
+                      data_inicial=datetime.date(2023, 1, 1),
+                      data_final=datetime.date(2023, 1, 15),
+                      valor_mensal_atualizado=10000.0,
+                      valor_total_atualizado=200000.0,
+                      valor_aditamento=100000.0,
+                      contrato=contrato,
+                      razoes_aditamento='testando aditamento'
                       )

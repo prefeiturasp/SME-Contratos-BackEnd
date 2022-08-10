@@ -68,3 +68,25 @@ def produto_validation(categoria, grupo_alimentar, durabilidade, armazenabilidad
         if grupo_alimentar == FLVO or grupo_alimentar == PAES_E_BOLO:
             if durabilidade != PERECIVEL or armazenabilidade != NAO_ARMAZENAVEL:
                 raise serializers.ValidationError({'detail': msg})
+
+
+def campo_nao_pode_ser_nulo(valor, mensagem='Não pode ser nulo'):
+    if not valor:
+        raise serializers.ValidationError(mensagem)
+
+
+def validacao_objetos_aditamento(attrs):
+    objetos_aditamento = attrs['objeto_aditamento']
+    if ('PRORROGACAO_VIGENCIA_CONTRATUAL' or 'MODIFICACAO_PROJETO_ESPECIFICACOES' or
+            'MODIFICACAO_VALOR_CONTRATUAL') in objetos_aditamento:
+        campo_nao_pode_ser_nulo(attrs.get('valor_mensal_atualizado', None),
+                                mensagem='Valor mensal atualizado obrigatório.')
+        campo_nao_pode_ser_nulo(attrs.get('valor_total_atualizado', None),
+                                mensagem='Valor total atualizado obrigatório')
+        campo_nao_pode_ser_nulo(attrs.get('data_inicial', None),
+                                mensagem='Data inicial obrigatória')
+        campo_nao_pode_ser_nulo(attrs.get('data_final', None),
+                                mensagem='Data final obrigatória')
+        if 'MODIFICACAO_VALOR_CONTRATUAL' in objetos_aditamento:
+            campo_nao_pode_ser_nulo(attrs.get('valor_aditamento', None),
+                                    mensagem='Valor do aditamento obrigatório.')

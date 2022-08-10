@@ -27,6 +27,7 @@ prometheus-client==0.7.1  # https://github.com/korfuri/django-prometheus
 django-prometheus==1.0.15  # https://github.com/korfuri/django-prometheus
 django-cors-headers==3.1.0  # https://github.com/adamchainz/django-cors-headers
 django-des==2.4.1  # https://github.com/jamiecounsell/django-des
+django-multiselectfield==0.1.12 # https://github.com/goinnn/django-multiselectfield
 
 # Django REST Framework
 djangorestframework==3.10.3  # https://github.com/encode/django-rest-framework

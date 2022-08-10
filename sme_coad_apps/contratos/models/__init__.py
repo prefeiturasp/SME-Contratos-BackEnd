@@ -10,3 +10,4 @@ from .obrigacao import GrupoObrigacao, Obrigacao
 from .obrigacao_contratual import ObrigacaoContratual
 from .parametro_notificacoes import ParametroNotificacoesVigencia
 from .produto import Produto, UnidadeDeMedida
+from .aditamento import Aditamento
