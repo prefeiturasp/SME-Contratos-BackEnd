@@ -2,7 +2,7 @@ from rest_framework import fields, serializers
 
 from ...models.aditamento import Aditamento
 from ...models.contrato import Contrato
-from ..validations.contrato_validations import campo_nao_pode_ser_nulo
+from ..validations.contrato_validations import validacao_objetos_aditamento
 
 
 class AditamentoSerializer(serializers.ModelSerializer):
@@ -30,21 +30,7 @@ class AditamentoCreateSerializer(serializers.ModelSerializer):
     objeto_aditamento = fields.MultipleChoiceField(choices=Aditamento.OBJETO_CHOICES)
 
     def validate(self, attrs):
-        objetos_aditamento = attrs['objeto_aditamento']
-        if ('PRORROGACAO_VIGENCIA_CONTRATUAL' or 'MODIFICACAO_PROJETO_ESPECIFICACOES' or
-                'MODIFICACAO_VALOR_CONTRATUAL') in objetos_aditamento:
-            campo_nao_pode_ser_nulo(attrs.get('valor_mensal_atualizado', None),
-                                    mensagem='Valor mensal atualizado obrigatório.')
-            campo_nao_pode_ser_nulo(attrs.get('valor_total_atualizado', None),
-                                    mensagem='Valor total Atualizado obrigatório')
-            campo_nao_pode_ser_nulo(attrs.get('data_inicial', None),
-                                    mensagem='Data inicial obrigatório')
-            campo_nao_pode_ser_nulo(attrs.get('data_final', None),
-                                    mensagem='Data final obrigatório')
-            if 'MODIFICACAO_VALOR_CONTRATUAL' in objetos_aditamento:
-                campo_nao_pode_ser_nulo(attrs.get('valor_aditamento', None),
-                                        mensagem='Valor do aditamento obrigatório.')
-
+        validacao_objetos_aditamento(attrs)
         return attrs
 
     class Meta:
