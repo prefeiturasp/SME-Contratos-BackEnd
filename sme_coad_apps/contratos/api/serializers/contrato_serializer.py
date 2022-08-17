@@ -7,6 +7,7 @@ from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ....core.models import Nucleo, Unidade
 from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
+from ...api.serializers.aditamento_serializer import AditamentoLookUpSerializer
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
 from ...api.serializers.objeto_serializer import ObjetoLookupSerializer
@@ -106,6 +107,7 @@ class ContratoSerializer(serializers.ModelSerializer):
     dres = serializers.SerializerMethodField('get_dres')
     lotes = LoteSerializer(many=True)
     dotacoes = DotacaoValorSerializer(many=True)
+    aditamentos = AditamentoLookUpSerializer(many=True)
     unidades = ContratoUnidadeSerializer(many=True)
 
     def get_data_encerramento(self, obj):

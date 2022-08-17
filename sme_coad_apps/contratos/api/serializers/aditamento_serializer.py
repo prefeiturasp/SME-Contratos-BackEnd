@@ -19,6 +19,20 @@ class AditamentoSerializer(serializers.ModelSerializer):
         exclude = ('id',)
 
 
+class AditamentoLookUpSerializer(serializers.ModelSerializer):
+    contrato = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        allow_null=False,
+        allow_empty=False,
+        queryset=Contrato.objects.all()
+    )
+
+    class Meta:
+        model = Aditamento
+        exclude = ('id', 'criado_em', 'alterado_em')
+
+
 class AditamentoCreateSerializer(serializers.ModelSerializer):
     contrato = serializers.SlugRelatedField(
         slug_field='uuid',
