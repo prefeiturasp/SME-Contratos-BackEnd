@@ -13,6 +13,13 @@ class AditamentoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    objeto_aditamento = serializers.SerializerMethodField()
+
+    def get_objeto_aditamento(self, obj):
+        result = []
+        for objeto in obj.objeto_aditamento:
+            result.append(obj.OBJETOS_NOMES[objeto])
+        return result
 
     class Meta:
         model = Aditamento
@@ -27,6 +34,13 @@ class AditamentoLookUpSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    objeto_aditamento = serializers.SerializerMethodField()
+
+    def get_objeto_aditamento(self, obj):
+        result = []
+        for objeto in obj.objeto_aditamento:
+            result.append(obj.OBJETOS_NOMES[objeto])
+        return result
 
     class Meta:
         model = Aditamento
