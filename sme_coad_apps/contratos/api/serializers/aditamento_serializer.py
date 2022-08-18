@@ -13,6 +13,13 @@ class AditamentoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    objeto_aditamento = serializers.SerializerMethodField()
+
+    def get_objeto_aditamento(self, obj):
+        result = []
+        for objeto in obj.objeto_aditamento:
+            result.append(obj.OBJETOS_NOMES[objeto])
+        return result
 
     class Meta:
         model = Aditamento
@@ -27,6 +34,13 @@ class AditamentoLookUpSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    objeto_aditamento = serializers.SerializerMethodField()
+
+    def get_objeto_aditamento(self, obj):
+        result = []
+        for objeto in obj.objeto_aditamento:
+            result.append(obj.OBJETOS_NOMES[objeto])
+        return result
 
     class Meta:
         model = Aditamento
@@ -43,6 +57,15 @@ class AditamentoCreateSerializer(serializers.ModelSerializer):
     )
     objeto_aditamento = fields.MultipleChoiceField(choices=Aditamento.OBJETO_CHOICES)
 
+    @classmethod
+    def get_serializer(cls, model):
+        if model == Aditamento:
+            return AditamentoSerializer
+
+    def to_representation(self, instance):
+        serializer = self.get_serializer(instance.__class__)
+        return serializer(instance, context=self.context).data
+
     def validate(self, attrs):
         validacao_objetos_aditamento(attrs)
         return attrs
@@ -50,3 +73,8 @@ class AditamentoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aditamento
         exclude = ('id',)
+
+    def create(self, validated_data):
+        aditamento = Aditamento.objects.create(**validated_data)
+
+        return aditamento

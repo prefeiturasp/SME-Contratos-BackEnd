@@ -43,9 +43,9 @@ class Aditamento(ModeloBase):
     objeto_aditamento = MultiSelectField(choices=OBJETO_CHOICES)
     data_inicial = models.DateField('Data Inicial', null=True)
     data_final = models.DateField('Data Final', null=True)
-    valor_mensal_atualizado = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, null=True)
-    valor_total_atualizado = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, null=True)
-    valor_aditamento = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, null=True)
+    valor_mensal_atualizado = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    valor_total_atualizado = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    valor_aditamento = models.DecimalField(max_digits=15, decimal_places=2, null=True)
     razoes_aditamento = models.TextField('Razões do aditamento')
 
     def __str__(self):
