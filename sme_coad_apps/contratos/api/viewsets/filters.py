@@ -166,3 +166,14 @@ class ProdutoFilter(filters.FilterSet):
         field_name='armazenabilidade',
         lookup_expr='exact',
     )
+
+
+class AditamentoFilter(filters.FilterSet):
+    uuid = filters.CharFilter(
+        field_name='uuid',
+        lookup_expr='exact',
+    )
+    contrato = filters.CharFilter(
+        field_name='contrato__uuid',
+        lookup_expr='exact',
+    )

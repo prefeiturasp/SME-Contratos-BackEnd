@@ -140,9 +140,6 @@ class ContratoAdmin(admin.ModelAdmin):
                 ('data_assinatura', 'data_ordem_inicio', 'vigencia', 'unidade_vigencia'),
                 'referencia_encerramento',
                 'observacoes',
-                'coordenador',
-                'gestor',
-                'suplente',
                 'situacao',
                 'tem_ue',
                 'tem_ceu',
@@ -151,7 +148,7 @@ class ContratoAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'gestor', 'suplente', 'objeto')
+    list_select_related = ('nucleo_responsavel', 'empresa_contratada', 'objeto')
 
     actions = ['atualiza_tipo_equipamento', 'encerra_contratos_vencidos']
 
