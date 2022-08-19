@@ -73,8 +73,3 @@ class AditamentoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Aditamento
         exclude = ('id',)
-
-    def create(self, validated_data):
-        aditamento = Aditamento.objects.create(**validated_data)
-
-        return aditamento

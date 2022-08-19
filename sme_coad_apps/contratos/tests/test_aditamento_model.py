@@ -14,7 +14,7 @@ def test_instance_model(aditamento):
     assert isinstance(aditamento, Aditamento)
     assert isinstance(aditamento.termo_aditivo, str)
     assert isinstance(aditamento.contrato, Contrato)
-    assert isinstance(aditamento.objeto_aditamento, str)
+    assert isinstance(aditamento.objeto_aditamento, list)
     assert isinstance(aditamento.data_inicial, datetime.date)
     assert isinstance(aditamento.data_final, datetime.date)
     assert isinstance(aditamento.razoes_aditamento, str)
