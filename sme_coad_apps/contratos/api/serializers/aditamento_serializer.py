@@ -16,9 +16,13 @@ class AditamentoSerializer(serializers.ModelSerializer):
     objeto_aditamento = serializers.SerializerMethodField()
 
     def get_objeto_aditamento(self, obj):
-        result = []
+        result, dic = [], {}
         for objeto in obj.objeto_aditamento:
-            result.append(obj.OBJETOS_NOMES[objeto])
+            dic = {
+                'id': objeto,
+                'nome': obj.OBJETOS_NOMES[objeto]
+            }
+            result.append(dic)
         return result
 
     class Meta:
@@ -37,9 +41,13 @@ class AditamentoLookUpSerializer(serializers.ModelSerializer):
     objeto_aditamento = serializers.SerializerMethodField()
 
     def get_objeto_aditamento(self, obj):
-        result = []
+        result, dic = [], {}
         for objeto in obj.objeto_aditamento:
-            result.append(obj.OBJETOS_NOMES[objeto])
+            dic = {
+                'id': objeto,
+                'nome': obj.OBJETOS_NOMES[objeto]
+            }
+            result.append(dic)
         return result
 
     class Meta:
