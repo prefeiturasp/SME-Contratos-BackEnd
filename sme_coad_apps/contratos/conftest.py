@@ -150,7 +150,7 @@ def dotacao_orcamentaria():
 @pytest.fixture
 def aditamento(contrato):
     return mommy.make(Aditamento, termo_aditivo='12345/2022',
-                      objeto_aditamento=Aditamento.OBJETO_PRORROGACAO_VIGENCIA_CONTRATUAL,
+                      objeto_aditamento=[Aditamento.OBJETO_PRORROGACAO_VIGENCIA_CONTRATUAL],
                       data_inicial=datetime.date(2023, 1, 1),
                       data_final=datetime.date(2023, 1, 15),
                       valor_mensal_atualizado=10000.0,
