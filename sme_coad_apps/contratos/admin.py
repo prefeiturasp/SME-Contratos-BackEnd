@@ -18,6 +18,7 @@ from .models import (
     FiscaisUnidade,
     FiscalLote,
     GrupoObrigacao,
+    Intercorrencia,
     Lote,
     NotificacaoVigenciaContrato,
     Objeto,
@@ -310,3 +311,10 @@ class ProdutoAdmin(admin.ModelAdmin):
 class ProdutosAtaAdmin(admin.ModelAdmin):
     list_display = ('ata', 'produto', 'quantidade_total', 'valor_unitario', 'valor_total')
     search_fields = ('ata',)
+
+
+@admin.register(Intercorrencia)
+class IntercorrenciaAdmin(admin.ModelAdmin):
+    list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'motivo_suspensao',
+                    'opcao_suspensao', 'descricao_suspensao')
+    search_fields = ('tipo_intercorrencia', 'contrato')

@@ -10,6 +10,7 @@ from .api.viewsets.contrato_viewset import ContratoViewSet
 from .api.viewsets.dotacao_valor_viewset import DotacaoOrcamentariaViewSet, DotacaoValorViewSet
 from .api.viewsets.edital_viewset import EditalViewSet
 from .api.viewsets.empresa_viewsets import EmpresaViewSet
+from .api.viewsets.intercorrencia_viewset import IntercorrenciaViewSet
 from .api.viewsets.notificacao_vigencia_contrato_viewsets import (
     GeraNotificacoesVigenciaContratosViewSet,
     MinhasNotificacoesVigenciaViewSet
@@ -38,6 +39,7 @@ router.register('dotacoes-orcamentarias-valor', DotacaoValorViewSet)
 router.register('dotacoes-orcamentarias', DotacaoOrcamentariaViewSet)
 router.register('unidades-de-medida', UnidadeDeMedidaViewSet)
 router.register('produtos', ProdutoViewSet)
+router.register('intercorrencias', IntercorrenciaViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
