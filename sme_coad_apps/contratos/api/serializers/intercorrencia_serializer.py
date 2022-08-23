@@ -35,12 +35,10 @@ class IntercorrenciaCreateSerializer(serializers.ModelSerializer):
         data_inicial = validated_data.get('data_inicial', None)
         data_final = validated_data.get('data_final', None)
         data_encerramento_contrato = Contrato.objects.get(uuid=validated_data.get('contrato').uuid).data_encerramento
-        if acrescentar_dias:
-            dias = (data_final - data_inicial).days
-            validated_data['data_encerramento'] = data_encerramento_contrato + timedelta(dias)
-        else:
-            validated_data['data_encerramento'] = data_encerramento_contrato
-
+        dias = (data_final - data_inicial).days
+        if data_encerramento_contrato:
+            validated_data['data_encerramento'] = (data_encerramento_contrato + timedelta(dias) if acrescentar_dias
+                                                   else data_encerramento_contrato)
         intercorrencia = Intercorrencia.objects.create(**validated_data)
 
         return intercorrencia
