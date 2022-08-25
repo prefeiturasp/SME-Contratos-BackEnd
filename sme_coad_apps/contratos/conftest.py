@@ -4,7 +4,16 @@ import pytest
 from faker import Faker
 from model_mommy import mommy
 
-from sme_coad_apps.contratos.models import Aditamento, Ata, Edital, Empresa, Objeto, Produto, UnidadeDeMedida
+from sme_coad_apps.contratos.models import (
+    Aditamento,
+    Ata,
+    Edital,
+    Empresa,
+    Intercorrencia,
+    Objeto,
+    Produto,
+    UnidadeDeMedida
+)
 from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.users.models import User
 
@@ -158,4 +167,17 @@ def aditamento(contrato):
                       valor_aditamento=100000.0,
                       contrato=contrato,
                       razoes_aditamento='testando aditamento'
+                      )
+
+
+@pytest.fixture
+def intercorrencia(contrato):
+    return mommy.make(Intercorrencia, contrato=contrato,
+                      tipo_intercorrencia=Intercorrencia.TIPO_INTERCORRENCIA_SUSPENSAO,
+                      data_inicial=datetime.date(2022, 1, 1),
+                      data_final=datetime.date(2022, 1, 15),
+                      acrescentar_dias=True,
+                      motivo_suspensao=Intercorrencia.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA,
+                      opcao_suspensao='Conveniência da Administração Pública',
+                      descricao_suspensao='testando intercorrência'
                       )
