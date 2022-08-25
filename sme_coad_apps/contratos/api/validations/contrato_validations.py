@@ -91,3 +91,16 @@ def validacao_objetos_aditamento(attrs):
             if 'MODIFICACAO_VALOR_CONTRATUAL' in objetos_aditamento:
                 campo_nao_pode_ser_nulo(attrs.get('valor_aditamento', None),
                                         mensagem='Valor do aditamento obrigatório.')
+
+
+def validacao_data_rescisao(attrs):
+    contrato = attrs['contrato']
+    data_rescicao = attrs['data_rescisao']
+    data_inicio = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
+                   else contrato.data_ordem_inicio)
+    data_encerramento = contrato.data_encerramento
+
+    if data_rescicao < data_inicio:
+        raise serializers.ValidationError('Data de rescisão anteior a data de início do contrato')
+    elif data_rescicao > data_encerramento:
+        raise serializers.ValidationError('Data de rescisão superior a data de vencimento do contrato')
