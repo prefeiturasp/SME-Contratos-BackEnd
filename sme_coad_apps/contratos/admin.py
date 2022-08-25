@@ -18,7 +18,6 @@ from .models import (
     FiscaisUnidade,
     FiscalLote,
     GrupoObrigacao,
-    Intercorrencia,
     Lote,
     NotificacaoVigenciaContrato,
     Objeto,
@@ -26,6 +25,8 @@ from .models import (
     ObrigacaoContratual,
     ParametroNotificacoesVigencia,
     Produto,
+    Rescisao,
+    Suspensao,
     UnidadeDeMedida
 )
 
@@ -313,8 +314,15 @@ class ProdutosAtaAdmin(admin.ModelAdmin):
     search_fields = ('ata',)
 
 
-@admin.register(Intercorrencia)
-class IntercorrenciaAdmin(admin.ModelAdmin):
+@admin.register(Rescisao)
+class RescisaoAdmin(admin.ModelAdmin):
+    list_display = ('tipo_intercorrencia', 'contrato', 'data_rescisao', 'motivo_rescisao')
+    search_fields = ('tipo_intercorrencia', 'contrato')
+
+
+@admin.register(Suspensao)
+class SuspensaoAdmin(admin.ModelAdmin):
     list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'motivo_suspensao',
                     'opcao_suspensao', 'descricao_suspensao')
+
     search_fields = ('tipo_intercorrencia', 'contrato')

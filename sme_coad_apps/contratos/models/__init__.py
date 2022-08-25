@@ -5,7 +5,7 @@ from .contrato import Contrato, ContratoUnidade, FiscaisUnidade, FiscalLote, Lot
 from .dotacao_valor import DotacaoValor
 from .edital import Edital
 from .empresa import Empresa
-from .intercorrencia import Intercorrencia
+from .intercorrencia import Intercorrencia, Rescisao, Suspensao
 from .notificacao_vigencia_contrato import NotificacaoVigenciaContrato
 from .objeto import Objeto
 from .obrigacao import GrupoObrigacao, Obrigacao
