@@ -9,9 +9,10 @@ from sme_coad_apps.contratos.models import (
     Ata,
     Edital,
     Empresa,
-    Intercorrencia,
     Objeto,
     Produto,
+    Rescisao,
+    Suspensao,
     UnidadeDeMedida
 )
 from sme_coad_apps.contratos.models.ata import ProdutosAta
@@ -171,13 +172,23 @@ def aditamento(contrato):
 
 
 @pytest.fixture
-def intercorrencia(contrato):
-    return mommy.make(Intercorrencia, contrato=contrato,
-                      tipo_intercorrencia=Intercorrencia.TIPO_INTERCORRENCIA_SUSPENSAO,
+def rescisao(contrato):
+    return mommy.make(Rescisao, contrato=contrato,
+                      tipo_intercorrencia=Rescisao.TIPO_INTERCORRENCIA_RESCISAO,
+                      data_rescisao=datetime.date(2022, 8, 25),
+                      motivo_rescisao=[Rescisao.MOTIVO_RESCISAO_DESCUMPRIMENTO_CLAUSULAS,
+                                       Rescisao.MOTIVO_RESCISAO_LENTIDAO_NO_CUMPRIMENTO],
+                      )
+
+
+@pytest.fixture
+def suspensao(contrato):
+    return mommy.make(Suspensao, contrato=contrato,
+                      tipo_intercorrencia=Suspensao.TIPO_INTERCORRENCIA_SUSPENSAO,
                       data_inicial=datetime.date(2022, 1, 1),
                       data_final=datetime.date(2022, 1, 15),
                       acrescentar_dias=True,
-                      motivo_suspensao=Intercorrencia.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA,
+                      motivo_suspensao=Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA,
                       opcao_suspensao='Conveniência da Administração Pública',
                       descricao_suspensao='testando intercorrência'
                       )
