@@ -3,12 +3,26 @@ from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
 from ...api.serializers.intercorrencia_serializer import (
+    ImpedimentoCreateSerializer,
+    ImpedimentoSerializer,
     RescisaoCreateSerializer,
     RescisaoSerializer,
     SuspensaoCreateSerializer,
     SuspensaoSerializer
 )
-from ...models.intercorrencia import Rescisao, Suspensao
+from ...models.intercorrencia import Impedimento, Rescisao, Suspensao
+
+
+class ImpedimentoViewSet(ComHistoricoViewSet):
+    lookup_field = 'uuid'
+    queryset = Impedimento.objects.all()
+    serializer_class = ImpedimentoSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['retrieve', 'list']:
+            return ImpedimentoSerializer
+        else:
+            return ImpedimentoCreateSerializer
 
 
 class RescisaoViewSet(ComHistoricoViewSet):

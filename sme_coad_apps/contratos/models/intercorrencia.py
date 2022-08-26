@@ -33,8 +33,24 @@ class Intercorrencia(ModeloBase):
         abstract = True
 
 
-class Suspensao(Intercorrencia):
+class Impedimento(Intercorrencia):
 
+    historico = AuditlogHistoryField()
+    data_inicial = models.DateField('Data Inicial')
+    data_final = models.DateField('Data Final')
+    vigencia = models.PositiveSmallIntegerField('vigência', default=0)
+    descricao_impedimento = models.TextField('Descrição do Motivo')
+    anexo = models.FileField(upload_to='uploads/')
+
+    def __str__(self):
+        return self.tipo_intercorrencia
+
+    class Meta:
+        verbose_name = 'Impedimento'
+        verbose_name_plural = 'Impedimentos'
+
+
+class Suspensao(Intercorrencia):
     # Motivos de Suspensão
     MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA = 'UNILATERALMENTE_ADMINISTRACAO_PUBLICA'
     MOTIVO_SUSPENSAO_UNILATERALMENTE_CONTRATADO = 'UNILATERALMENTE_CONTRATADO'

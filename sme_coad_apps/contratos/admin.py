@@ -18,6 +18,7 @@ from .models import (
     FiscaisUnidade,
     FiscalLote,
     GrupoObrigacao,
+    Impedimento,
     Lote,
     NotificacaoVigenciaContrato,
     Objeto,
@@ -324,5 +325,13 @@ class RescisaoAdmin(admin.ModelAdmin):
 class SuspensaoAdmin(admin.ModelAdmin):
     list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'motivo_suspensao',
                     'opcao_suspensao', 'descricao_suspensao')
+
+    search_fields = ('tipo_intercorrencia', 'contrato')
+
+
+@admin.register(Impedimento)
+class ImpedimentoAdmin(admin.ModelAdmin):
+    list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'descricao_impedimento',
+                    'anexo')
 
     search_fields = ('tipo_intercorrencia', 'contrato')

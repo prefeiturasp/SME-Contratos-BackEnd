@@ -104,3 +104,19 @@ def validacao_data_rescisao(attrs):
         raise serializers.ValidationError('Data de rescisão anteior a data de início do contrato')
     elif data_rescicao > data_encerramento:
         raise serializers.ValidationError('Data de rescisão superior a data de vencimento do contrato')
+
+
+def validacao_data_inicial_final(attrs):
+    contrato = attrs['contrato']
+    data_inicio_impedimento = attrs['data_inicial']
+    data_final_impedimento = attrs['data_final']
+    data_inicio_contrato = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
+                            else contrato.data_ordem_inicio)
+    data_encerramento_contrato = contrato.data_encerramento
+
+    if data_inicio_impedimento < data_inicio_contrato or data_inicio_impedimento > data_encerramento_contrato:
+        raise serializers.ValidationError('Data de inicio do impedimento fora do intervalo permitido')
+    elif data_final_impedimento < data_inicio_contrato or data_final_impedimento > data_encerramento_contrato:
+        raise serializers.ValidationError('Data de fim do impedimento fora do intervalo permitido')
+    elif data_final_impedimento < data_inicio_impedimento:
+        raise serializers.ValidationError('Data de fim do impedimento anterior a data de inicio de impedimento')
