@@ -3,6 +3,8 @@ import uuid as uuid
 from django.db import models
 
 
+
+
 class Descritivel(models.Model):
     descricao = models.TextField('Descrição', blank=True, null=True)
 
@@ -67,3 +69,5 @@ class SingletonModel(models.Model):
     def get(cls):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
+
+
