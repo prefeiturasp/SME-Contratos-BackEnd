@@ -7,8 +7,10 @@ from model_mommy import mommy
 from sme_coad_apps.contratos.models import (
     Aditamento,
     Ata,
+    Contrato,
     Edital,
     Empresa,
+    Impedimento,
     Objeto,
     Produto,
     Rescisao,
@@ -172,6 +174,24 @@ def aditamento(contrato):
 
 
 @pytest.fixture
+def impedimento():
+    contrato = mommy.make(
+        Contrato,
+        termo_contrato='00/00',
+        data_assinatura=datetime.date(2019, 6, 1),
+        vigencia=180,
+        referencia_encerramento='DATA_ASSINATURA'
+    )
+    return mommy.make(Impedimento, contrato=contrato,
+                      tipo_intercorrencia=Impedimento.TIPO_INTERCORRENCIA_IMPEDIMENTO,
+                      data_inicial=datetime.date(2019, 8, 1),
+                      data_final=datetime.date(2019, 8, 10),
+                      data_encerramento=datetime.date(2019, 12, 1),
+                      descricao_impedimento='testando intercorrência de impedimento'
+                      )
+
+
+@pytest.fixture
 def rescisao(contrato):
     return mommy.make(Rescisao, contrato=contrato,
                       tipo_intercorrencia=Rescisao.TIPO_INTERCORRENCIA_RESCISAO,
@@ -190,5 +210,5 @@ def suspensao(contrato):
                       acrescentar_dias=True,
                       motivo_suspensao=Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA,
                       opcao_suspensao='Conveniência da Administração Pública',
-                      descricao_suspensao='testando intercorrência'
+                      descricao_suspensao='testando intercorrência de suspensão'
                       )

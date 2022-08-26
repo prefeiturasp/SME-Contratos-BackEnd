@@ -114,9 +114,9 @@ def validacao_data_inicial_final(attrs):
                             else contrato.data_ordem_inicio)
     data_encerramento_contrato = contrato.data_encerramento
 
-    if data_inicio_impedimento < data_inicio_contrato or data_inicio_impedimento > data_encerramento_contrato:
+    if data_final_impedimento < data_inicio_impedimento:
+        raise serializers.ValidationError('Data de fim do impedimento anterior a data de inicio de impedimento')
+    elif data_inicio_impedimento < data_inicio_contrato or data_inicio_impedimento > data_encerramento_contrato:
         raise serializers.ValidationError('Data de inicio do impedimento fora do intervalo permitido')
     elif data_final_impedimento < data_inicio_contrato or data_final_impedimento > data_encerramento_contrato:
         raise serializers.ValidationError('Data de fim do impedimento fora do intervalo permitido')
-    elif data_final_impedimento < data_inicio_impedimento:
-        raise serializers.ValidationError('Data de fim do impedimento anterior a data de inicio de impedimento')

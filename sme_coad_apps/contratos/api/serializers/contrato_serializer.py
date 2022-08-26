@@ -115,13 +115,13 @@ class ContratoSerializer(serializers.ModelSerializer):
     def get_intercorrencias(self, obj):
         impedimentos = obj.impedimento_set.all()
         impedimento_set = ImpedimentoSerializer(impedimentos, many=True)
-        objeto_impedimento = impedimento_set.data[:]
+        objeto_impedimento = impedimento_set.data
         rescisoes = obj.rescisao_set.all()
         rescisao_set = RescisaoSerializer(rescisoes, many=True)
-        objeto_rescisao = rescisao_set.data[:]
+        objeto_rescisao = rescisao_set.data
         suspensoes = obj.suspensao_set.all()
         suspensao_set = SuspensaoSerializer(suspensoes, many=True)
-        objeto_suspesao = suspensao_set.data[:]
+        objeto_suspesao = suspensao_set.data
         objetos = objeto_impedimento + objeto_rescisao + objeto_suspesao
         return objetos
 

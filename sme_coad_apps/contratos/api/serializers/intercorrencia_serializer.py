@@ -28,17 +28,17 @@ class ImpedimentoSerializer(serializers.ModelSerializer):
 
     def get_dias_vigencia(self, obj):
         hoje = date.today()
-        dias_impedimento = (obj.data_final - obj.data_inicial).days + 1
+        dias_impedimentos = (obj.data_final - obj.data_inicial).days + 1
         contrato = obj.contrato
         data_inicio_contrato = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
                                 else contrato.data_ordem_inicio)
         if data_inicio_contrato <= hoje <= obj.data_encerramento:
             if obj.data_inicial <= hoje <= obj.data_final:
-                vigencia = contrato.vigencia - (obj.data_inicial - data_inicio_contrato).days + 1
+                vigencia = contrato.vigencia - (obj.data_inicial - data_inicio_contrato).days
             elif hoje > obj.data_final:
-                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days + dias_impedimento
+                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days - 1 + dias_impedimentos
             else:
-                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days
+                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days - 1
         elif hoje < data_inicio_contrato:
             vigencia = obj.vigencia
         else:

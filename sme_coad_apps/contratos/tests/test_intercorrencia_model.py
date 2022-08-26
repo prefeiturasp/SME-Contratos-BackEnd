@@ -4,10 +4,44 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
-from ..admin import RescisaoAdmin, SuspensaoAdmin
-from ..models import Contrato, Intercorrencia, Rescisao, Suspensao
+from ..admin import ImpedimentoAdmin, RescisaoAdmin, SuspensaoAdmin
+from ..models import Contrato, Impedimento, Intercorrencia, Rescisao, Suspensao
 
 pytestmark = pytest.mark.django_db
+
+
+def test_tipos_intercorrencia():
+    assert Intercorrencia.TIPO_INTERCORRENCIA_SUSPENSAO
+    assert Intercorrencia.TIPO_INTERCORRENCIA_IMPEDIMENTO
+    assert Intercorrencia.TIPO_INTERCORRENCIA_RESCISAO
+
+
+def test_instance_model_impedimento(impedimento):
+    assert isinstance(impedimento, Impedimento)
+    assert isinstance(impedimento.contrato, Contrato)
+    assert isinstance(impedimento.tipo_intercorrencia, str)
+    assert isinstance(impedimento.data_inicial, datetime.date)
+    assert isinstance(impedimento.data_final, datetime.date)
+    assert isinstance(impedimento.descricao_impedimento, str)
+
+
+def test_srt_model_impedimento():
+    model = mommy.make('Impedimento', tipo_intercorrencia=Impedimento.TIPO_INTERCORRENCIA_IMPEDIMENTO)
+    assert model.__str__() == 'IMPEDIMENTO'
+
+
+def test_meta_modelo_impedimento():
+    model = mommy.make('Impedimento')
+    assert model._meta.verbose_name == 'Impedimento'
+    assert model._meta.verbose_name_plural == 'Impedimentos'
+
+
+def test_admin_impedimento():
+    model_admin = ImpedimentoAdmin(Impedimento, admin.site)
+    assert admin.site._registry[Impedimento]
+    assert model_admin.list_display == ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final',
+                                        'descricao_impedimento', 'anexo')
+    assert model_admin.search_fields == ('tipo_intercorrencia', 'contrato')
 
 
 def test_instance_model_rescisao(rescisao):
@@ -16,24 +50,6 @@ def test_instance_model_rescisao(rescisao):
     assert isinstance(rescisao.tipo_intercorrencia, str)
     assert isinstance(rescisao.data_rescisao, datetime.date)
     assert isinstance(rescisao.motivo_rescisao, list)
-
-
-def test_instance_model_suspensao(suspensao):
-    assert isinstance(suspensao, Suspensao)
-    assert isinstance(suspensao.contrato, Contrato)
-    assert isinstance(suspensao.tipo_intercorrencia, str)
-    assert isinstance(suspensao.data_inicial, datetime.date)
-    assert isinstance(suspensao.data_final, datetime.date)
-    assert isinstance(suspensao.acrescentar_dias, bool)
-    assert isinstance(suspensao.motivo_suspensao, str)
-    assert isinstance(suspensao.opcao_suspensao, str)
-    assert isinstance(suspensao.descricao_suspensao, str)
-
-
-def test_tipos_intercorrencia():
-    assert Intercorrencia.TIPO_INTERCORRENCIA_SUSPENSAO
-    assert Intercorrencia.TIPO_INTERCORRENCIA_IMPEDIMENTO
-    assert Intercorrencia.TIPO_INTERCORRENCIA_RESCISAO
 
 
 def test_motivos_rescisao_intercorrencia():
@@ -57,20 +73,9 @@ def test_motivos_rescisao_intercorrencia():
     assert Rescisao.MOTIVO_RESCISAO_DESCUPRIMENTO_DA_LEI
 
 
-def test_motivos_suspensao_intercorrencia():
-    assert Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA
-    assert Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_CONTRATADO
-    assert Suspensao.MOTIVO_SUSPENSAO_CONSENSUALMENTE
-
-
 def test_srt_model_rescisao():
     model = mommy.make('Rescisao', tipo_intercorrencia=Rescisao.TIPO_INTERCORRENCIA_RESCISAO)
     assert model.__str__() == 'RESCISAO'
-
-
-def test_srt_model_suspensao():
-    model = mommy.make('Suspensao', tipo_intercorrencia=Suspensao.TIPO_INTERCORRENCIA_SUSPENSAO)
-    assert model.__str__() == 'SUSPENSAO'
 
 
 def test_meta_modelo_rescisao():
@@ -79,17 +84,40 @@ def test_meta_modelo_rescisao():
     assert model._meta.verbose_name_plural == 'Rescisões'
 
 
-def test_meta_modelo_suspensao():
-    model = mommy.make('Suspensao')
-    assert model._meta.verbose_name == 'Suspensão'
-    assert model._meta.verbose_name_plural == 'Suspensões'
-
-
 def test_admin_rescisao():
     model_admin = RescisaoAdmin(Rescisao, admin.site)
     assert admin.site._registry[Rescisao]
     assert model_admin.list_display == ('tipo_intercorrencia', 'contrato', 'data_rescisao', 'motivo_rescisao')
     assert model_admin.search_fields == ('tipo_intercorrencia', 'contrato')
+
+
+def test_instance_model_suspensao(suspensao):
+    assert isinstance(suspensao, Suspensao)
+    assert isinstance(suspensao.contrato, Contrato)
+    assert isinstance(suspensao.tipo_intercorrencia, str)
+    assert isinstance(suspensao.data_inicial, datetime.date)
+    assert isinstance(suspensao.data_final, datetime.date)
+    assert isinstance(suspensao.acrescentar_dias, bool)
+    assert isinstance(suspensao.motivo_suspensao, str)
+    assert isinstance(suspensao.opcao_suspensao, str)
+    assert isinstance(suspensao.descricao_suspensao, str)
+
+
+def test_motivos_suspensao_intercorrencia():
+    assert Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA
+    assert Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_CONTRATADO
+    assert Suspensao.MOTIVO_SUSPENSAO_CONSENSUALMENTE
+
+
+def test_srt_model_suspensao():
+    model = mommy.make('Suspensao', tipo_intercorrencia=Suspensao.TIPO_INTERCORRENCIA_SUSPENSAO)
+    assert model.__str__() == 'SUSPENSAO'
+
+
+def test_meta_modelo_suspensao():
+    model = mommy.make('Suspensao')
+    assert model._meta.verbose_name == 'Suspensão'
+    assert model._meta.verbose_name_plural == 'Suspensões'
 
 
 def test_admin_suspensao():
