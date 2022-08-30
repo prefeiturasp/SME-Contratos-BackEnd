@@ -27,7 +27,7 @@ def test_instance_model_impedimento(impedimento):
 
 def test_srt_model_impedimento():
     model = mommy.make('Impedimento', tipo_intercorrencia=Impedimento.TIPO_INTERCORRENCIA_IMPEDIMENTO)
-    assert model.__str__() == 'IMPEDIMENTO'
+    assert model.__str__() == f'{model.tipo_intercorrencia}-{model.pk}'
 
 
 def test_meta_modelo_impedimento():
@@ -40,7 +40,7 @@ def test_admin_impedimento():
     model_admin = ImpedimentoAdmin(Impedimento, admin.site)
     assert admin.site._registry[Impedimento]
     assert model_admin.list_display == ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final',
-                                        'descricao_impedimento', 'anexo')
+                                        'descricao_impedimento')
     assert model_admin.search_fields == ('tipo_intercorrencia', 'contrato')
 
 
@@ -75,7 +75,7 @@ def test_motivos_rescisao_intercorrencia():
 
 def test_srt_model_rescisao():
     model = mommy.make('Rescisao', tipo_intercorrencia=Rescisao.TIPO_INTERCORRENCIA_RESCISAO)
-    assert model.__str__() == 'RESCISAO'
+    assert model.__str__() == f'{model.tipo_intercorrencia}-{model.pk}'
 
 
 def test_meta_modelo_rescisao():
@@ -111,7 +111,7 @@ def test_motivos_suspensao_intercorrencia():
 
 def test_srt_model_suspensao():
     model = mommy.make('Suspensao', tipo_intercorrencia=Suspensao.TIPO_INTERCORRENCIA_SUSPENSAO)
-    assert model.__str__() == 'SUSPENSAO'
+    assert model.__str__() == f'{model.tipo_intercorrencia}-{model.pk}'
 
 
 def test_meta_modelo_suspensao():

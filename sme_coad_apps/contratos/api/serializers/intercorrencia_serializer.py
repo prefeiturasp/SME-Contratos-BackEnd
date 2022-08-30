@@ -4,11 +4,44 @@ import environ
 from rest_framework import fields, serializers
 
 from ...models.contrato import Contrato
-from ...models.intercorrencia import Impedimento, Rescisao, Suspensao
+from ...models.intercorrencia import AnexoImpedimento, Impedimento, Rescisao, Suspensao
 from ..validations.contrato_validations import validacao_data_inicial_final, validacao_data_rescisao
 
 env = environ.Env()
 API_URL = f'{env("API_URL")}'
+
+
+class AnexoImpedimentoSerializer(serializers.ModelSerializer):
+
+    impedimento = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        queryset=Impedimento.objects.all()
+    )
+    anexo = serializers.SerializerMethodField('get_anexo')
+
+    def get_anexo(self, obj):
+        if bool(obj.anexo):
+            return '%s%s' % (API_URL, obj.anexo.url)
+        else:
+            return None
+
+    class Meta:
+        model = AnexoImpedimento
+        exclude = ('id',)
+
+
+class AnexoImpedimentoCreateSerializer(serializers.ModelSerializer):
+
+    impedimento = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        queryset=Impedimento.objects.all()
+    )
+
+    class Meta:
+        model = AnexoImpedimento
+        exclude = ('id',)
 
 
 class ImpedimentoSerializer(serializers.ModelSerializer):
@@ -59,13 +92,6 @@ class ImpedimentoCreateSerializer(serializers.ModelSerializer):
         queryset=Contrato.objects.all()
     )
     data_encerramento = serializers.DateField(required=False)
-    anexo = serializers.SerializerMethodField('get_anexo')
-
-    def get_anexo(self, obj):
-        if bool(obj.anexo):
-            return '%s%s' % (API_URL, obj.anexo.url)
-        else:
-            return None
 
     def validate(self, attrs):
         if attrs['tipo_intercorrencia'] == 'IMPEDIMENTO':
