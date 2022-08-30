@@ -131,8 +131,7 @@ class Rescisao(Intercorrencia):
                                                    'compras, acarretando modificação do valor inicial do contrato '
                                                    'além do limite  permitido no § 1º do art. 65 da Lei nº 8.666/93.',
         MOTIVO_RESCISAO_SUSPENSAO_DA_EXECUCAO: 'Suspensão da execução do contrato por prazo superior a 120 dias, ou '
-                                               'repetidas suspensões que totalizem o mesmo prazo." Houve alteração em '
-                                               'relação ao previsto no protótipo.',
+                                               'repetidas suspensões que totalizem o mesmo prazo.',
         MOTIVO_RESCISAO_ATRASO_DOS_PAGAMENTOS: 'Atraso superior a 90 dias dos pagamentos devidos pela Administração.',
         MOTIVO_RESCISAO_NAO_LIBERACAO_ADMINISTRACAO: 'Não liberação, por parte da Administração, de área, local ou'
                                                      ' objeto para execução de obra, serviço ou fornecimento, nos '
