@@ -198,6 +198,11 @@ class SuspensaoSerializer(serializers.ModelSerializer):
     )
     tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     motivo_suspensao = serializers.CharField(source='get_motivo_suspensao_display')
+    dias_suspensao = serializers.SerializerMethodField('get_dias_suspensao')
+
+    def get_dias_suspensao(self, obj):
+        dias_suspensao = (obj.data_final - obj.data_inicial).days + 1
+        return f'{dias_suspensao} dias'
 
     class Meta:
         model = Suspensao
