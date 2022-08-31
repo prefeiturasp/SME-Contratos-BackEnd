@@ -4,6 +4,7 @@ from django.utils import timezone
 from sme_coad_apps.contratos.models.ata import ProdutosAta
 from sme_coad_apps.contratos.models.contrato import AnexoContrato, GestorContrato
 from sme_coad_apps.contratos.models.dotacao_valor import DotacaoOrcamentaria, Empenho
+from sme_coad_apps.contratos.models.intercorrencia import AnexoImpedimento
 
 from .forms import ObjetosForm
 from .models import (
@@ -18,6 +19,7 @@ from .models import (
     FiscaisUnidade,
     FiscalLote,
     GrupoObrigacao,
+    Impedimento,
     Lote,
     NotificacaoVigenciaContrato,
     Objeto,
@@ -326,3 +328,17 @@ class SuspensaoAdmin(admin.ModelAdmin):
                     'opcao_suspensao', 'descricao_suspensao')
 
     search_fields = ('tipo_intercorrencia', 'contrato')
+
+
+@admin.register(Impedimento)
+class ImpedimentoAdmin(admin.ModelAdmin):
+    list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'descricao_impedimento')
+
+    search_fields = ('tipo_intercorrencia', 'contrato')
+
+
+@admin.register(AnexoImpedimento)
+class AnexoImpedimentoAdmin(admin.ModelAdmin):
+    list_display = ['impedimento', 'anexo', 'criado_em']
+    ordering = ('id',)
+    search_field = 'id'
