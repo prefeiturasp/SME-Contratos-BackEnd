@@ -10,7 +10,7 @@ from ....users.models import User
 from ...api.serializers.aditamento_serializer import AditamentoLookUpSerializer
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
 from ...api.serializers.empresa_serializer import EmpresaSerializer
-from ...api.serializers.intercorrencia_serializer import RescisaoSerializer, SuspensaoSerializer
+from ...api.serializers.intercorrencia_serializer import ImpedimentoSerializer, RescisaoSerializer, SuspensaoSerializer
 from ...api.serializers.objeto_serializer import ObjetoLookupSerializer
 from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
 from ...models.contrato import GestorContrato
@@ -113,14 +113,17 @@ class ContratoSerializer(serializers.ModelSerializer):
     intercorrencias = serializers.SerializerMethodField('get_intercorrencias')
 
     def get_intercorrencias(self, obj):
+        impedimentos = obj.impedimento_set.all()
+        impedimento_set = ImpedimentoSerializer(impedimentos, many=True)
+        objeto_impedimento = impedimento_set.data
         rescisoes = obj.rescisao_set.all()
         rescisao_set = RescisaoSerializer(rescisoes, many=True)
-        data_rescisao = rescisao_set.data[:]
+        objeto_rescisao = rescisao_set.data
         suspensoes = obj.suspensao_set.all()
         suspensao_set = SuspensaoSerializer(suspensoes, many=True)
-        data_suspesao = suspensao_set.data[:]
-        data = data_rescisao + data_suspesao
-        return data
+        objeto_suspensao = suspensao_set.data
+        objetos = objeto_impedimento + objeto_rescisao + objeto_suspensao
+        return objetos
 
     def get_data_encerramento(self, obj):
         return obj.data_encerramento
