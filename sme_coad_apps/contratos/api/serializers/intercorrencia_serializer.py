@@ -31,6 +31,20 @@ class AnexoImpedimentoSerializer(serializers.ModelSerializer):
         exclude = ('id',)
 
 
+class AnexoImpedimentoLookUpSerializer(serializers.ModelSerializer):
+    anexo = serializers.SerializerMethodField('get_anexo')
+
+    def get_anexo(self, obj):
+        if bool(obj.anexo):
+            return '%s%s' % (API_URL, obj.anexo.url)
+        else:
+            return None
+
+    class Meta:
+        model = AnexoImpedimento
+        fields = ('anexo',)
+
+
 class AnexoImpedimentoCreateSerializer(serializers.ModelSerializer):
 
     impedimento = serializers.SlugRelatedField(
@@ -52,8 +66,15 @@ class ImpedimentoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     dias_impedimento = serializers.SerializerMethodField('get_dias_impedimento')
     vigencia = serializers.SerializerMethodField('get_dias_vigencia')
+    anexos_impedimento = serializers.SerializerMethodField('get_anexos_impedimento')
+
+    def get_anexos_impedimento(self, obj):
+        anexos = obj.anexos_impedimento.all()
+        anexos_set = AnexoImpedimentoLookUpSerializer(anexos, many=True)
+        return anexos_set.data
 
     def get_dias_impedimento(self, obj):
         dias_impedimento = (obj.data_final - obj.data_inicial).days + 1
@@ -126,6 +147,14 @@ class RescisaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
+    motivo_rescisao = serializers.SerializerMethodField('get_motivo_rescisao')
+
+    def get_motivo_rescisao(self, obj):
+        lista = []
+        for i in obj.motivo_rescisao:
+            lista.append(obj.MOTIVO_RESCISAO_NOMES[i])
+        return lista
 
     class Meta:
         model = Rescisao
@@ -167,6 +196,8 @@ class SuspensaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
+    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
+    motivo_suspensao = serializers.CharField(source='get_motivo_suspensao_display')
 
     class Meta:
         model = Suspensao
