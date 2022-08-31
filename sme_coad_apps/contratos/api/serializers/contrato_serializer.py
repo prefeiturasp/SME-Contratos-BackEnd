@@ -121,8 +121,8 @@ class ContratoSerializer(serializers.ModelSerializer):
         objeto_rescisao = rescisao_set.data
         suspensoes = obj.suspensao_set.all()
         suspensao_set = SuspensaoSerializer(suspensoes, many=True)
-        objeto_suspesao = suspensao_set.data
-        objetos = objeto_impedimento + objeto_rescisao + objeto_suspesao
+        objeto_suspensao = suspensao_set.data
+        objetos = objeto_impedimento + objeto_rescisao + objeto_suspensao
         return objetos
 
     def get_data_encerramento(self, obj):
