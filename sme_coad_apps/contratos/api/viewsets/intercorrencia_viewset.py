@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from ....core.viewsets_abstracts import ComHistoricoViewSet
@@ -26,7 +25,6 @@ class AnexoImpedimentoViewSet(viewsets.ModelViewSet):
     lookup_field = 'uuid'
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     search_fields = ('impedimento__uuid',)
-    permission_classes = (AllowAny,)
     parser_classes = (MultiPartParser, FormParser,)
 
     def get_serializer_class(self):

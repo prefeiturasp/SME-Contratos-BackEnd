@@ -333,7 +333,6 @@ class SuspensaoAdmin(admin.ModelAdmin):
 @admin.register(Impedimento)
 class ImpedimentoAdmin(admin.ModelAdmin):
     list_display = ('tipo_intercorrencia', 'contrato', 'data_inicial', 'data_final', 'descricao_impedimento')
-
     search_fields = ('tipo_intercorrencia', 'contrato')
 
 
@@ -341,4 +340,4 @@ class ImpedimentoAdmin(admin.ModelAdmin):
 class AnexoImpedimentoAdmin(admin.ModelAdmin):
     list_display = ['impedimento', 'anexo', 'criado_em']
     ordering = ('id',)
-    search_field = 'id'
+    search_fields = ('id',)
