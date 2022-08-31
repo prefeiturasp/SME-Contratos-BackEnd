@@ -18,6 +18,7 @@ from sme_coad_apps.contratos.models import (
     UnidadeDeMedida
 )
 from sme_coad_apps.contratos.models.ata import ProdutosAta
+from sme_coad_apps.contratos.models.intercorrencia import AnexoImpedimento
 from sme_coad_apps.users.models import User
 
 
@@ -211,4 +212,11 @@ def suspensao(contrato):
                       motivo_suspensao=Suspensao.MOTIVO_SUSPENSAO_UNILATERALMENTE_ADMINISTRACAO_PUBLICA,
                       opcao_suspensao='Conveniência da Administração Pública',
                       descricao_suspensao='testando intercorrência de suspensão'
+                      )
+
+
+@pytest.fixture
+def anexo_impedimento(impedimento):
+    return mommy.make(AnexoImpedimento, impedimento=impedimento,
+                      anexo='http://localhost:8000/media/uploads/arroz_g9Dh1rb.png'
                       )

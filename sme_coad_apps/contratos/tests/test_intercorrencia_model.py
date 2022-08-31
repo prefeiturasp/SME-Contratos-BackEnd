@@ -4,8 +4,9 @@ import pytest
 from django.contrib import admin
 from model_mommy import mommy
 
-from ..admin import ImpedimentoAdmin, RescisaoAdmin, SuspensaoAdmin
+from ..admin import AnexoImpedimentoAdmin, ImpedimentoAdmin, RescisaoAdmin, SuspensaoAdmin
 from ..models import Contrato, Impedimento, Intercorrencia, Rescisao, Suspensao
+from ..models.intercorrencia import AnexoImpedimento
 
 pytestmark = pytest.mark.django_db
 
@@ -14,6 +15,30 @@ def test_tipos_intercorrencia():
     assert Intercorrencia.TIPO_INTERCORRENCIA_SUSPENSAO
     assert Intercorrencia.TIPO_INTERCORRENCIA_IMPEDIMENTO
     assert Intercorrencia.TIPO_INTERCORRENCIA_RESCISAO
+
+
+def test_instance_model_anexo_impedimento(anexo_impedimento):
+    assert isinstance(anexo_impedimento, AnexoImpedimento)
+    assert isinstance(anexo_impedimento.impedimento, Impedimento)
+    assert isinstance(anexo_impedimento.anexo, object)
+
+
+def test_srt_model_anexo_impedimento(impedimento):
+    model = mommy.make('AnexoImpedimento', impedimento=impedimento)
+    assert model.__str__() == model.impedimento.tipo_intercorrencia
+
+
+def test_meta_modelo_anexo_impedimento():
+    model = mommy.make('AnexoImpedimento')
+    assert model._meta.verbose_name == 'Anexo de Impedimento'
+    assert model._meta.verbose_name_plural == 'Anexos de Impedimentos'
+
+
+def test_admin_anexo_impedimento():
+    model_admin = AnexoImpedimentoAdmin(AnexoImpedimento, admin.site)
+    assert admin.site._registry[AnexoImpedimento]
+    assert model_admin.list_display == ['impedimento', 'anexo', 'criado_em']
+    assert model_admin.search_fields == ('id',)
 
 
 def test_instance_model_impedimento(impedimento):

@@ -12,6 +12,16 @@ from ..models.contrato import Contrato
 pytestmark = pytest.mark.django_db
 
 
+def test_url_anexos_impedimento_unauthorized(client):
+    response = client.get('/intercorrencias/anexos-impedimento/')
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_url_anexos_impedimento_authorized(authencticated_client):
+    response = authencticated_client.get('/intercorrencias/anexos-impedimento/')
+    assert response.status_code == status.HTTP_200_OK
+
+
 def test_url_impedimento_unauthorized(client):
     response = client.get('/intercorrencias/impedimento/')
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
