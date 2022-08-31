@@ -38,7 +38,7 @@ class AnexoImpedimentoViewSet(viewsets.ModelViewSet):
 
 class ImpedimentoViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
-    queryset = Impedimento.objects.all()
+    queryset = Impedimento.objects.all().order_by('-id')
     serializer_class = ImpedimentoSerializer
     parser_classes = (MultiPartParser, FormParser, JSONParser)
 
@@ -51,7 +51,7 @@ class ImpedimentoViewSet(ComHistoricoViewSet):
 
 class RescisaoViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
-    queryset = Rescisao.objects.all()
+    queryset = Rescisao.objects.all().order_by('-id')
     serializer_class = RescisaoSerializer
 
     def get_serializer_class(self):
@@ -67,7 +67,7 @@ class RescisaoViewSet(ComHistoricoViewSet):
 
 class SuspensaoViewSet(ComHistoricoViewSet):
     lookup_field = 'uuid'
-    queryset = Suspensao.objects.all()
+    queryset = Suspensao.objects.all().order_by('-id')
     serializer_class = SuspensaoSerializer
 
     def get_serializer_class(self):
