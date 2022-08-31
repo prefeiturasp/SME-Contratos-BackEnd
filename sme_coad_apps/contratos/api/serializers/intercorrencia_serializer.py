@@ -1,10 +1,121 @@
-from datetime import timedelta
+from datetime import date, timedelta
 
+import environ
 from rest_framework import fields, serializers
 
 from ...models.contrato import Contrato
-from ...models.intercorrencia import Rescisao, Suspensao
-from ..validations.contrato_validations import validacao_data_rescisao
+from ...models.intercorrencia import AnexoImpedimento, Impedimento, Rescisao, Suspensao
+from ..validations.contrato_validations import validacao_data_inicial_final, validacao_data_rescisao
+
+env = environ.Env()
+API_URL = f'{env("API_URL")}'
+
+
+class AnexoImpedimentoSerializer(serializers.ModelSerializer):
+
+    impedimento = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        queryset=Impedimento.objects.all()
+    )
+    anexo = serializers.SerializerMethodField('get_anexo')
+
+    def get_anexo(self, obj):
+        if bool(obj.anexo):
+            return '%s%s' % (API_URL, obj.anexo.url)
+        else:
+            return None
+
+    class Meta:
+        model = AnexoImpedimento
+        exclude = ('id',)
+
+
+class AnexoImpedimentoCreateSerializer(serializers.ModelSerializer):
+
+    impedimento = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        queryset=Impedimento.objects.all()
+    )
+
+    class Meta:
+        model = AnexoImpedimento
+        exclude = ('id',)
+
+
+class ImpedimentoSerializer(serializers.ModelSerializer):
+    contrato = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        allow_null=False,
+        allow_empty=False,
+        queryset=Contrato.objects.all()
+    )
+    dias_impedimento = serializers.SerializerMethodField('get_dias_impedimento')
+    vigencia = serializers.SerializerMethodField('get_dias_vigencia')
+
+    def get_dias_impedimento(self, obj):
+        dias_impedimento = (obj.data_final - obj.data_inicial).days + 1
+        return f'{dias_impedimento} dias'
+
+    def get_dias_vigencia(self, obj):
+        hoje = date.today()
+        dias_impedimentos = (obj.data_final - obj.data_inicial).days + 1
+        contrato = obj.contrato
+        data_inicio_contrato = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
+                                else contrato.data_ordem_inicio)
+        if data_inicio_contrato <= hoje <= obj.data_encerramento:
+            if obj.data_inicial <= hoje <= obj.data_final:
+                vigencia = contrato.vigencia - (obj.data_inicial - data_inicio_contrato).days
+            elif hoje > obj.data_final:
+                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days - 1 + dias_impedimentos
+            else:
+                vigencia = contrato.vigencia - (hoje - data_inicio_contrato).days - 1
+        elif hoje < data_inicio_contrato:
+            vigencia = obj.vigencia
+        else:
+            vigencia = 0
+        return vigencia
+
+    class Meta:
+        model = Impedimento
+        exclude = ('id',)
+
+
+class ImpedimentoCreateSerializer(serializers.ModelSerializer):
+    contrato = serializers.SlugRelatedField(
+        slug_field='uuid',
+        required=True,
+        allow_null=False,
+        allow_empty=False,
+        queryset=Contrato.objects.all()
+    )
+    data_encerramento = serializers.DateField(required=False)
+
+    def validate(self, attrs):
+        if attrs['tipo_intercorrencia'] == 'IMPEDIMENTO':
+            validacao_data_inicial_final(attrs)
+        return attrs
+
+    def create(self, validated_data):
+        data_inicial = validated_data.get('data_inicial', None)
+        data_final = validated_data.get('data_final', None)
+        contrato = validated_data.get('contrato')
+        data_inicio_contrato = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
+                                else contrato.data_ordem_inicio)
+        vigencia_contrato = contrato.vigencia
+        data_encerramento_contrato = data_inicio_contrato + timedelta(vigencia_contrato)
+        dias_impedimento = (data_final - data_inicial).days
+        validated_data['data_encerramento'] = data_encerramento_contrato + timedelta(dias_impedimento)
+        validated_data['vigencia'] = vigencia_contrato
+        intercorrencia = Impedimento.objects.create(**validated_data)
+
+        return intercorrencia
+
+    class Meta:
+        model = Impedimento
+        exclude = ('id',)
 
 
 class RescisaoSerializer(serializers.ModelSerializer):
