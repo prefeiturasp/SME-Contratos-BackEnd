@@ -3,6 +3,7 @@ from datetime import date, timedelta
 import environ
 from rest_framework import fields, serializers
 
+from ....core.helpers.update_instance_from_dict import update_instance_from_dict
 from ...models.contrato import Contrato
 from ...models.intercorrencia import AnexoImpedimento, Impedimento, Rescisao, Suspensao
 from ..validations.contrato_validations import validacao_data_inicial_final, validacao_data_rescisao
@@ -42,7 +43,7 @@ class AnexoImpedimentoLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnexoImpedimento
-        fields = ('anexo',)
+        fields = ('uuid', 'anexo',)
 
 
 class AnexoImpedimentoCreateSerializer(serializers.ModelSerializer):
@@ -66,7 +67,6 @@ class ImpedimentoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     dias_impedimento = serializers.SerializerMethodField('get_dias_impedimento')
     vigencia = serializers.SerializerMethodField('get_dias_vigencia')
     anexos_impedimento = serializers.SerializerMethodField('get_anexos_impedimento')
@@ -134,6 +134,23 @@ class ImpedimentoCreateSerializer(serializers.ModelSerializer):
 
         return intercorrencia
 
+    def update(self, instance, validated_data):
+        data_inicial = validated_data.get('data_inicial', None)
+        data_final = validated_data.get('data_final', None)
+        contrato = validated_data.get('contrato')
+        validated_data.pop('data_encerramento')
+        data_inicio_contrato = (contrato.data_assinatura if contrato.referencia_encerramento == 'DATA_ASSINATURA'
+                                else contrato.data_ordem_inicio)
+        vigencia_contrato = contrato.vigencia
+        data_encerramento_contrato = data_inicio_contrato + timedelta(vigencia_contrato)
+        dias_impedimento = (data_final - data_inicial).days
+        instance.data_encerramento = data_encerramento_contrato + timedelta(dias_impedimento)
+        instance.vigencia = vigencia_contrato
+        update_instance_from_dict(instance, validated_data)
+        instance.save()
+
+        return instance
+
     class Meta:
         model = Impedimento
         exclude = ('id',)
@@ -147,14 +164,17 @@ class RescisaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     motivo_rescisao = serializers.SerializerMethodField('get_motivo_rescisao')
 
     def get_motivo_rescisao(self, obj):
-        lista = []
-        for i in obj.motivo_rescisao:
-            lista.append(obj.MOTIVO_RESCISAO_NOMES[i])
-        return lista
+        result, dic = [], {}
+        for motivo in obj.motivo_rescisao:
+            dic = {
+                'id': motivo,
+                'nome': obj.MOTIVO_RESCISAO_NOMES[motivo]
+            }
+            result.append(dic)
+        return result
 
     class Meta:
         model = Rescisao
@@ -196,8 +216,6 @@ class SuspensaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
-    motivo_suspensao = serializers.CharField(source='get_motivo_suspensao_display')
     dias_suspensao = serializers.SerializerMethodField('get_dias_suspensao')
 
     def get_dias_suspensao(self, obj):
@@ -231,6 +249,20 @@ class SuspensaoCreateSerializer(serializers.ModelSerializer):
         intercorrencia = Suspensao.objects.create(**validated_data)
 
         return intercorrencia
+
+    def update(self, instance, validated_data):
+        acrescentar_dias = validated_data.get('acrescentar_dias', False)
+        data_inicial = validated_data.get('data_inicial', None)
+        data_final = validated_data.get('data_final', None)
+        validated_data.pop('data_encerramento')
+        data_encerramento_contrato = validated_data.get('contrato').data_encerramento
+        dias = (data_final - data_inicial).days
+        if data_encerramento_contrato:
+            instance.data_encerramento = (data_encerramento_contrato + timedelta(dias + 1) if acrescentar_dias
+                                          else data_encerramento_contrato)
+        update_instance_from_dict(instance, validated_data)
+        instance.save()
+        return instance
 
     class Meta:
         model = Suspensao
