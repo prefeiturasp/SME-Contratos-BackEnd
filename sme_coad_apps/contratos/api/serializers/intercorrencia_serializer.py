@@ -42,7 +42,7 @@ class AnexoImpedimentoLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AnexoImpedimento
-        fields = ('anexo',)
+        fields = ('uuid', 'anexo',)
 
 
 class AnexoImpedimentoCreateSerializer(serializers.ModelSerializer):
@@ -66,7 +66,6 @@ class ImpedimentoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     dias_impedimento = serializers.SerializerMethodField('get_dias_impedimento')
     vigencia = serializers.SerializerMethodField('get_dias_vigencia')
     anexos_impedimento = serializers.SerializerMethodField('get_anexos_impedimento')
@@ -147,14 +146,17 @@ class RescisaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
     motivo_rescisao = serializers.SerializerMethodField('get_motivo_rescisao')
 
     def get_motivo_rescisao(self, obj):
-        lista = []
-        for i in obj.motivo_rescisao:
-            lista.append(obj.MOTIVO_RESCISAO_NOMES[i])
-        return lista
+        result, dic = [], {}
+        for motivo in obj.motivo_rescisao:
+            dic = {
+                'id': motivo,
+                'nome': obj.MOTIVO_RESCISAO_NOMES[motivo]
+            }
+            result.append(dic)
+        return result
 
     class Meta:
         model = Rescisao
@@ -196,8 +198,6 @@ class SuspensaoSerializer(serializers.ModelSerializer):
         allow_empty=False,
         queryset=Contrato.objects.all()
     )
-    tipo_intercorrencia = serializers.CharField(source='get_tipo_intercorrencia_display')
-    motivo_suspensao = serializers.CharField(source='get_motivo_suspensao_display')
     dias_suspensao = serializers.SerializerMethodField('get_dias_suspensao')
 
     def get_dias_suspensao(self, obj):
