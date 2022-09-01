@@ -14,7 +14,7 @@ def test_intercorrencia_serializer_impedimento(impedimento):
     serializer = ImpedimentoSerializer(impedimento)
     assert serializer.data is not None
     assert serializer.data['contrato']
-    assert serializer.data['tipo_intercorrencia'] == 'Impedimento'
+    assert serializer.data['tipo_intercorrencia'] == 'IMPEDIMENTO'
     assert serializer.data['data_inicial']
     assert serializer.data['data_final']
     assert serializer.data['descricao_impedimento']
@@ -46,7 +46,7 @@ def test_intercorrencia_serializer_rescisao(rescisao):
     serializer = RescisaoSerializer(rescisao)
     assert serializer.data is not None
     assert serializer.data['contrato']
-    assert serializer.data['tipo_intercorrencia'] == 'Rescisão'
+    assert serializer.data['tipo_intercorrencia'] == 'RESCISAO'
     assert serializer.data['data_rescisao']
     assert serializer.data['motivo_rescisao']
 
@@ -77,7 +77,7 @@ def test_intercorrencia_serializer_suspensao(suspensao):
     serializer = SuspensaoSerializer(suspensao)
     assert serializer.data is not None
     assert serializer.data['contrato']
-    assert serializer.data['tipo_intercorrencia'] == 'Suspensão'
+    assert serializer.data['tipo_intercorrencia'] == 'SUSPENSAO'
     assert serializer.data['data_inicial']
     assert serializer.data['data_final']
     assert serializer.data['acrescentar_dias']
