@@ -23,9 +23,11 @@ def test_get_ata_filters(authencticated_client, empresa):
             {
                 'uuid': str(empresa.uuid),
                 'nome': empresa.nome,
+                'razao_social': empresa.razao_social,
                 'id': empresa.id,
                 'cnpj': '21.256.564/0001-60',
                 'situacao': 'Ativa',
+                'tipo_fornecedor': 'Convencional',
                 'tipo_servico': 'Fornecedor'
             }
         ]

@@ -89,6 +89,7 @@ class EmpresaCreateSerializer(serializers.ModelSerializer):
 
 class EmpresaLookUpSerializer(serializers.ModelSerializer):
     situacao = serializers.CharField(source='get_situacao_display')
+    tipo_fornecedor = serializers.CharField(source='get_tipo_fornecedor_display')
     tipo_servico = serializers.CharField(source='get_tipo_servico_display')
     cnpj = serializers.SerializerMethodField('get_cnpj')
 
@@ -97,4 +98,4 @@ class EmpresaLookUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Empresa
-        fields = ('nome', 'uuid', 'id', 'cnpj', 'situacao', 'tipo_servico')
+        fields = ('nome', 'razao_social', 'uuid', 'id', 'cnpj', 'situacao', 'tipo_fornecedor', 'tipo_servico')
