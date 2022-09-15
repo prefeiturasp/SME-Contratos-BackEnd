@@ -158,11 +158,7 @@ class ProdutoFilter(filters.FilterSet):
         field_name='grupo_alimentar',
         lookup_expr='exact',
     )
-    durabilidade = filters.CharFilter(
-        field_name='durabilidade',
-        lookup_expr='exact',
-    )
-    armazenabilidade = filters.CharFilter(
-        field_name='armazenabilidade',
+    tipo_programa = filters.CharFilter(
+        field_name='tipo_programa',
         lookup_expr='exact',
     )

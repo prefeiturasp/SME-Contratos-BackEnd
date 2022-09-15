@@ -29,22 +29,16 @@ class Produto(ModeloBase):
         (CATEGORIA_ALIMENTO, 'Alimento'),
         (CATEGORIA_OUTROS, 'Outro(s)'),
     )
-    # Durabilidade do produto Choice
-    DURABILIDADE_PERECIVEL = 'PERECIVEL'
-    DURABILIDADE_NAO_PERECIVEL = 'NAO_PERECIVEL'
 
-    DURABILIDADE_CHOICES = (
-        (DURABILIDADE_PERECIVEL, 'Perecível'),
-        (DURABILIDADE_NAO_PERECIVEL, 'Não perecível'),
-    )
-    # Armazenabilidade do produto Choice
-    ARMAZENABILIDADE_ARMAZENAVEL = 'ARMAZENAVEL'
-    ARMAZENABILIDADE_NAO_ARMAZENAVEL = 'NAO_ARMAZENAVEL'
+    # Tipo de Programa do produto Choice
+    TIPO_PROGRAMA_ALIMENTACAO_ESCOLAR = 'ALIMENTACAO_ESCOLAR'
+    TIPO_PROGRAMA_LEVE_LEITE = 'LEVE_LEITE'
 
-    ARMAZENABILIDADE_CHOICES = (
-        (ARMAZENABILIDADE_ARMAZENAVEL, 'Armazenável'),
-        (ARMAZENABILIDADE_NAO_ARMAZENAVEL, 'Não armazenável'),
+    TIPO_PROGRAMA_CHOICES = (
+        (TIPO_PROGRAMA_ALIMENTACAO_ESCOLAR, 'Alimentação Escolar'),
+        (TIPO_PROGRAMA_LEVE_LEITE, 'Leve Leite'),
     )
+
     # Grupo alimentar Choice
     GRUPO_ALIMENTAR_CONGELADOS = 'CONGELADOS_E_RESFRIADOS'
     GRUPO_ALIMENTAR_FLVO = 'FLVO'
@@ -72,9 +66,7 @@ class Produto(ModeloBase):
     categoria = models.CharField(choices=CATEGORIA_CHOICES, max_length=25, blank=True, default=CATEGORIA_ALIMENTO)
     situacao = models.CharField(choices=SITUACAO_CHOICES, max_length=25, default=SITUACAO_ATIVO)
     grupo_alimentar = models.CharField(choices=GRUPO_ALIMENTAR_CHOICES, max_length=25, blank=True, default='')
-    durabilidade = models.CharField(choices=DURABILIDADE_CHOICES, max_length=25, blank=True, default='')
-    armazenabilidade = models.CharField(
-        choices=ARMAZENABILIDADE_CHOICES, max_length=25, default=ARMAZENABILIDADE_ARMAZENAVEL)
+    tipo_programa = models.CharField(choices=TIPO_PROGRAMA_CHOICES, max_length=25, blank=True, default='')
     unidade_medida = models.ForeignKey(UnidadeDeMedida, on_delete=models.PROTECT, related_name='produtos')
 
     def __str__(self):

@@ -48,9 +48,8 @@ def test_produto_lookup_serializer(produto):
         'uuid',
         'nome',
         'categoria',
-        'durabilidade',
         'grupo_alimentar',
-        'armazenabilidade'
+        'tipo_programa'
     ]
     assert produto_serializer.data['nome'] == 'PRODUTO TESTE'
 
