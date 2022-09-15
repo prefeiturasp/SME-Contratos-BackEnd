@@ -119,6 +119,10 @@ class EmpresaFilter(filters.FilterSet):
         field_name='nome',
         lookup_expr='icontains',
     )
+    razao_social = filters.CharFilter(
+        field_name='razao_social',
+        lookup_expr='icontains',
+    )
     cnpj_empresa = filters.CharFilter(
         field_name='cnpj',
         lookup_expr='exact',
