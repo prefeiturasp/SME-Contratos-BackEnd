@@ -141,8 +141,7 @@ def produto():
                       categoria=Produto.CATEGORIA_ALIMENTO,
                       situacao=Produto.SITUACAO_ATIVO,
                       grupo_alimentar=Produto.GRUPO_ALIMENTAR_SECOS,
-                      durabilidade=Produto.DURABILIDADE_NAO_PERECIVEL,
-                      armazenabilidade=Produto.ARMAZENABILIDADE_ARMAZENAVEL
+                      tipo_programa=Produto.TIPO_PROGRAMA_LEVE_LEITE
                       )
 
 

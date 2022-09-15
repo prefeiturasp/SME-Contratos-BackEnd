@@ -305,7 +305,7 @@ class UnidadeDeMedidaAdmin(admin.ModelAdmin):
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
     list_display = ('nome', 'situacao', 'categoria', 'grupo_alimentar', 'unidade_medida', 'criado_em')
-    list_filter = ('situacao', 'categoria', 'grupo_alimentar', 'unidade_medida', 'durabilidade', 'armazenabilidade')
+    list_filter = ('situacao', 'categoria', 'grupo_alimentar', 'unidade_medida')
     ordering = ('nome',)
     search_fields = ('nome',)
 
