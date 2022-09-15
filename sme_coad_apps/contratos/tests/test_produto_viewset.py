@@ -9,8 +9,7 @@ def test_get_produto_filters(authencticated_client, produto):
     rota = f"""/produtos/?nome={produto.nome}
                     &situacao=ATIVO
                     &categoria=ALIMENTO
-                    &durabilidade=NAO_PERECIVEL
-                    &armazenabilidade=ARMAZENAVEL
+                    &tipo_programa=LEVE_LEITE
                     &grupo_alimentar=SECOS"""
 
     url = rota.replace('\n', '')
@@ -26,9 +25,8 @@ def test_get_produto_filters(authencticated_client, produto):
                 'nome': produto.nome,
                 'id': produto.id,
                 'categoria': 'Alimento',
-                'durabilidade': 'Não perecível',
                 'grupo_alimentar': 'Secos',
-                'armazenabilidade': 'Armazenável'
+                'tipo_programa': 'Leve Leite'
             }
         ]
     }

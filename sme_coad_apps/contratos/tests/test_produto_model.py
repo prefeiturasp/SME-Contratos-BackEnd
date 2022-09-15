@@ -21,8 +21,7 @@ def test_instance_model_produto():
     assert isinstance(model.categoria, str)
     assert isinstance(model.situacao, str)
     assert isinstance(model.grupo_alimentar, str)
-    assert isinstance(model.durabilidade, str)
-    assert isinstance(model.armazenabilidade, str)
+    assert isinstance(model.tipo_programa, str)
     assert isinstance(model.unidade_medida, UnidadeDeMedida)
     assert model.historico
 

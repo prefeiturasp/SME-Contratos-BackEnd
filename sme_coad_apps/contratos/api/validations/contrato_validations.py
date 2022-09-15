@@ -14,12 +14,6 @@ CONGELADOS = Produto.GRUPO_ALIMENTAR_CONGELADOS
 FLVO = Produto.GRUPO_ALIMENTAR_FLVO
 PAES_E_BOLO = Produto.GRUPO_ALIMENTAR_PAES_E_BOLO
 SECOS = Produto.GRUPO_ALIMENTAR_SECOS
-# Armazenabilidades
-ARMAZENAVEL = Produto.ARMAZENABILIDADE_ARMAZENAVEL
-NAO_ARMAZENAVEL = Produto.ARMAZENABILIDADE_NAO_ARMAZENAVEL
-# Durabilidades
-PERECIVEL = Produto.DURABILIDADE_PERECIVEL
-NAO_PERECIVEL = Produto.DURABILIDADE_NAO_PERECIVEL
 
 
 def nao_pode_repetir_o_gestor(gestores):
@@ -50,24 +44,12 @@ def tipo_fornecimento(tipo_servico):
                                                      f'serviço seja {Empresa.ARMAZEM_DISTRIBUIDOR}.'})
 
 
-def produto_validation(categoria, grupo_alimentar, durabilidade, armazenabilidade):
-    msg = 'Durabilidade ou armazenabilidade invalida para o grupo alimentar escolhido.'
+def produto_validation(categoria, grupo_alimentar, tipo_programa):
     if categoria == OUTROS:
-        if durabilidade or grupo_alimentar:
+        if tipo_programa or grupo_alimentar:
             raise serializers.ValidationError({
-                'detail': f'Não é permitido informar durabilidade ou grupo alimentar quando a categoria é {OUTROS}'})
-    if categoria == ALIMENTO:
-        if grupo_alimentar == SECOS:
-            if durabilidade != NAO_PERECIVEL or armazenabilidade != ARMAZENAVEL:
-                raise serializers.ValidationError({'detail': msg})
-
-        if grupo_alimentar == CONGELADOS:
-            if durabilidade != PERECIVEL or armazenabilidade != ARMAZENAVEL:
-                raise serializers.ValidationError({'detail': msg})
-
-        if grupo_alimentar == FLVO or grupo_alimentar == PAES_E_BOLO:
-            if durabilidade != PERECIVEL or armazenabilidade != NAO_ARMAZENAVEL:
-                raise serializers.ValidationError({'detail': msg})
+                'detail': f'Não é permitido informar tipo de programa ou grupo alimentar '
+                          f'quando a categoria é {OUTROS}'})
 
 
 def campo_nao_pode_ser_nulo(valor, mensagem='Não pode ser nulo'):

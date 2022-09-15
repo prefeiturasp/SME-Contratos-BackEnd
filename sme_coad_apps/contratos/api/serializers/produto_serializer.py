@@ -15,8 +15,7 @@ class ProdutoSerializer(serializers.ModelSerializer):
     categoria = serializers.SerializerMethodField()
     situacao = serializers.SerializerMethodField()
     grupo_alimentar = serializers.SerializerMethodField()
-    durabilidade = serializers.SerializerMethodField()
-    armazenabilidade = serializers.SerializerMethodField()
+    tipo_programa = serializers.SerializerMethodField()
     unidade_medida = UnidadeDeMedidaSerializer()
 
     def get_categoria(self, obj):
@@ -37,16 +36,10 @@ class ProdutoSerializer(serializers.ModelSerializer):
             'nome': obj.get_grupo_alimentar_display()
         }
 
-    def get_durabilidade(self, obj):
+    def get_tipo_programa(self, obj):
         return {
-            'id': obj.durabilidade,
-            'nome': obj.get_durabilidade_display()
-        }
-
-    def get_armazenabilidade(self, obj):
-        return {
-            'id': obj.armazenabilidade,
-            'nome': obj.get_armazenabilidade_display()
+            'id': obj.tipo_programa,
+            'nome': obj.get_tipo_programa_display()
         }
 
     class Meta:
@@ -66,15 +59,13 @@ class ProdutoCreateSerializer(serializers.ModelSerializer):
     categoria = serializers.ChoiceField(required=True, choices=Produto.CATEGORIA_CHOICES)
     situacao = serializers.ChoiceField(required=True, choices=Produto.SITUACAO_CHOICES)
     grupo_alimentar = serializers.ChoiceField(required=False, allow_blank=True, choices=Produto.GRUPO_ALIMENTAR_CHOICES)
-    durabilidade = serializers.ChoiceField(required=False, allow_blank=True, choices=Produto.DURABILIDADE_CHOICES)
-    armazenabilidade = serializers.ChoiceField(required=True, choices=Produto.ARMAZENABILIDADE_CHOICES)
+    tipo_programa = serializers.ChoiceField(required=False, allow_blank=True, choices=Produto.TIPO_PROGRAMA_CHOICES)
 
     def validate(self, attrs):
         categoria = attrs.get('categoria')
         grupo_alimentar = attrs.get('grupo_alimentar')
-        durabilidade = attrs.get('durabilidade')
-        armazenabilidade = attrs.get('armazenabilidade')
-        produto_validation(categoria, grupo_alimentar, durabilidade, armazenabilidade)
+        tipo_programa = attrs.get('tipo_programa')
+        produto_validation(categoria, grupo_alimentar, tipo_programa)
 
         return attrs
 
@@ -86,12 +77,11 @@ class ProdutoCreateSerializer(serializers.ModelSerializer):
 class ProdutoLookUpSerializer(serializers.ModelSerializer):
     categoria = serializers.CharField(source='get_categoria_display')
     grupo_alimentar = serializers.CharField(source='get_grupo_alimentar_display')
-    durabilidade = serializers.CharField(source='get_durabilidade_display')
-    armazenabilidade = serializers.CharField(source='get_armazenabilidade_display')
+    tipo_programa = serializers.CharField(source='get_tipo_programa_display')
 
     class Meta:
         model = Produto
-        fields = ('id', 'uuid', 'nome', 'categoria', 'durabilidade', 'grupo_alimentar', 'armazenabilidade')
+        fields = ('id', 'uuid', 'nome', 'categoria', 'grupo_alimentar', 'tipo_programa')
 
 
 class ProdutoSimplesSerializer(serializers.ModelSerializer):
