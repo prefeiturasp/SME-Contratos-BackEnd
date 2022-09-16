@@ -46,9 +46,9 @@ class Produto(ModeloBase):
     GRUPO_ALIMENTAR_SECOS = 'SECOS'
 
     GRUPO_ALIMENTAR_NOMES = {
-        GRUPO_ALIMENTAR_CONGELADOS: 'Congelados e resfriados',
+        GRUPO_ALIMENTAR_CONGELADOS: 'Congelados e Resfriados',
         GRUPO_ALIMENTAR_FLVO: 'FLVO',
-        GRUPO_ALIMENTAR_PAES_E_BOLO: 'Pães e bolos',
+        GRUPO_ALIMENTAR_PAES_E_BOLO: 'Pães e Bolos',
         GRUPO_ALIMENTAR_SECOS: 'Secos',
 
     }
