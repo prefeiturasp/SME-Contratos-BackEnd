@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from sme_coad_apps.contratos.models import ContratoUnidade
@@ -12,6 +13,8 @@ from ..serializers.contrato_serializer import (
     ContratoCreateSerializer,
     ContratoLookUpSerializer,
     ContratoSerializer,
+    ContratoSigpaeLookUpSerializer,
+    ContratoSigpaeSerializer,
     ContratoSimplesSerializer
 )
 from ..utils.pagination import ContratoPagination
@@ -58,3 +61,17 @@ class ContratoViewSet(ComHistoricoViewSet):
             AnexoContrato.objects.filter(contrato=contrato).delete()
             return Response(data={'detail': f'Contrato {contrato.termo_contrato} cancelado', 'status': 200})
         return Response(data=['Este contrato não pode ser cancelado'], status=status.HTTP_403_FORBIDDEN)
+
+
+class ContratoSigpaeViewSet(viewsets.ReadOnlyModelViewSet):
+    lookup_field = 'uuid'
+    permission_classes = (IsAuthenticated,)
+    queryset = Contrato.objects.all()
+    serializer_class = ContratoSigpaeSerializer
+    pagination_class = ContratoPagination
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ContratoFilter
+
+    @action(detail=False, url_path='termos-de-contratos')
+    def lista_termos_de_contratos(self, _):
+        return Response(ContratoSigpaeLookUpSerializer(self.queryset.order_by('-criado_em'), many=True).data)

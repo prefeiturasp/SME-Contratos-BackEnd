@@ -85,6 +85,7 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "django_celery_results",
     "rest_framework_swagger",
+    "rest_framework.authtoken",
     "des",
     "auditlog",
     "django_filters",
@@ -314,6 +315,7 @@ REST_FRAMEWORK = {
         # TODO Rever esta CONFIG
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 
