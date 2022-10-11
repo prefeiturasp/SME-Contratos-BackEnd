@@ -8,7 +8,7 @@ from ..utils.utils import base64ToFile
 from ..validations.contrato_validations import data_encerramento
 from .edital_serializer import EditalSimplesSerializer
 from .empresa_serializer import EmpresaSerializer
-from .produto_ata_serializer import ProdutoAtaSerializer, ProdutoAtaSerializerCreate
+from .produto_ata_serializer import ProdutoAtaSerializer, ProdutoAtaSerializerCreate, ProdutoAtaSigpaeSerializer
 
 
 class AtaSerializer(serializers.ModelSerializer):
@@ -125,3 +125,11 @@ class AtaLookUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ata
         fields = ('uuid', 'numero', 'nome_empresa', 'status', 'data_encerramento', 'objeto')
+
+
+class AtaSigpaeSerializer(serializers.ModelSerializer):
+    produtos = ProdutoAtaSigpaeSerializer(many=True)
+
+    class Meta:
+        model = Ata
+        fields = ('numero', 'produtos',)

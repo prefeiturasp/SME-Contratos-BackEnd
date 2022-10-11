@@ -9,7 +9,7 @@ from ....users.api.serializers.usuario_serializer import UsuarioLookUpSerializer
 from ....users.models import User
 from ...api.serializers.aditamento_serializer import AditamentoLookUpSerializer
 from ...api.serializers.edital_serializer import EditalSimplesSerializer
-from ...api.serializers.empresa_serializer import EmpresaSerializer
+from ...api.serializers.empresa_serializer import EmpresaLookUpSerializer, EmpresaSerializer
 from ...api.serializers.intercorrencia_serializer import ImpedimentoSerializer, RescisaoSerializer, SuspensaoSerializer
 from ...api.serializers.objeto_serializer import ObjetoLookupSerializer
 from ...models import Ata, Contrato, Empresa, FiscalLote, Lote
@@ -17,9 +17,13 @@ from ...models.contrato import GestorContrato
 from ...models.edital import Edital
 from ...models.objeto import Objeto
 from ..validations.contrato_validations import nao_pode_repetir_o_gestor
-from .ata_serializer import AtaLookUpSerializer
+from .ata_serializer import AtaLookUpSerializer, AtaSigpaeSerializer
 from .contrato_unidade_serializer import ContratoUnidadeSerializer
-from .dotacao_valor_serializer import DotacaoValorCreatorSerializer, DotacaoValorSerializer
+from .dotacao_valor_serializer import (
+    DotacaoValorCreatorSerializer,
+    DotacaoValorSerializer,
+    DotacaoValorSigpaeSerializer
+)
 
 user_model = get_user_model()
 
@@ -323,3 +327,21 @@ class ContratoSimplesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contrato
         fields = ('uuid', 'nome_empresa', 'termo_contrato', 'situacao', 'objeto', 'data_encerramento')
+
+
+class ContratoSigpaeSerializer(serializers.ModelSerializer):
+    empresa_contratada = EmpresaLookUpSerializer()
+    dotacoes = DotacaoValorSigpaeSerializer(many=True)
+    ata = AtaSigpaeSerializer()
+
+    class Meta:
+        model = Contrato
+        fields = ('uuid', 'termo_contrato', 'processo', 'empresa_contratada', 'situacao', 'dotacoes', 'ata',
+                  'data_encerramento')
+
+
+class ContratoSigpaeLookUpSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Contrato
+        fields = ('uuid', 'termo_contrato')
