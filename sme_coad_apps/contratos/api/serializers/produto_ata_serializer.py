@@ -42,3 +42,13 @@ class ProdutoAtaSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = ProdutosAta
         fields = ('id', 'uuid', 'produto', 'quantidade_total', 'valor_unitario', 'valor_total', 'ata', 'anexo')
+
+
+class ProdutoAtaSigpaeSerializer(serializers.ModelSerializer):
+    uuid = serializers.CharField(source='produto.uuid')
+    nome_produto = serializers.CharField(source='produto.nome')
+    unidade_medida = serializers.CharField(source='produto.unidade_medida')
+
+    class Meta:
+        model = ProdutosAta
+        fields = ('uuid', 'nome_produto', 'unidade_medida', 'quantidade_total', 'valor_unitario', 'valor_total')

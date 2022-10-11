@@ -100,3 +100,13 @@ class DotacaoOrcamentariaCreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = DotacaoOrcamentaria
         fields = '__all__'
+
+
+class DotacaoValorSigpaeSerializer(serializers.ModelSerializer):
+    uuid = serializers.CharField(source='dotacao_orcamentaria.uuid')
+    numero_dotacao = serializers.CharField(source='dotacao_orcamentaria.numero_dotacao')
+    empenhos = EmpenhoLookUpSerializer(many=True, required=False)
+
+    class Meta:
+        model = DotacaoValor
+        fields = ('uuid', 'numero_dotacao', 'valor', 'empenhos')
