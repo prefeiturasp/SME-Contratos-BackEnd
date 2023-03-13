@@ -1,2 +1,8 @@
-.env
-sme_coad_apps/media
+CONTRIBUTORS.txt
+Dockerfile
+env_sample
+Jenkinsfile
+LICENSE
+README.md
+README.rst
+setup.cfg
