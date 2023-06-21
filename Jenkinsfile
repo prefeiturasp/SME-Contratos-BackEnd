@@ -6,7 +6,7 @@ pipeline {
     }
   
     agent {
-      node { label 'python-36-coad' }
+      node { label 'AGENT-NODES' }
     }
 
     options {
@@ -22,7 +22,7 @@ pipeline {
         }
       
         stage('AnaliseCodigo') {
-	        when { branch 'homolog' }
+            when { branch 'homolog' }
           steps {
               withSonarQubeEnv('sonarqube-local'){
                 sh 'echo "[ INFO ] Iniciando analise Sonar..." && sonar-scanner \
@@ -52,7 +52,7 @@ pipeline {
             }
           }
         }
-	    
+        
         stage('Deploy'){
             when { anyOf {  branch 'master'; branch 'main'; branch 'develop'; branch 'release'; branch 'homolog';  } }        
             steps {
@@ -61,22 +61,14 @@ pipeline {
                         sendTelegram("🤩 [Deploy ${env.branchname}] Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nMe aprove! \nLog: \n${env.BUILD_URL}")
                         timeout(time: 24, unit: "HOURS") {
                             input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: 'kelwy_oliveira, rodolpho_azeredo, diogo_santos'
-                        }
+                        }                        
                         withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
+                            sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')
                             sh('cp $config '+"$home"+'/.kube/config')
                             sh 'kubectl rollout restart deployment/celery-beat-safi -n sme-safi'
                             sh 'kubectl rollout restart deployment/celery-safi -n sme-safi'
                             sh 'kubectl rollout restart deployment/safi-backend -n sme-safi'
-                            sh('rm -f '+"$home"+'/.kube/config')
-                        }
-                    }
-                    else{
-                        withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
-                            sh('cp $config '+"$home"+'/.kube/config')
-                            sh 'kubectl rollout restart deployment/celery-beat-safi -n sme-safi'
-                            sh 'kubectl rollout restart deployment/celery-safi -n sme-safi'
-                            sh 'kubectl rollout restart deployment/safi-backend -n sme-safi'
-                            sh('rm -f '+"$home"+'/.kube/config')
+                            sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')
                         }
                     }
                 }
@@ -85,6 +77,7 @@ pipeline {
     }
 
   post {
+    always { sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')}
     success { sendTelegram("🚀 Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nStatus: Success \nLog: \n${env.BUILD_URL}console") }
     unstable { sendTelegram("💣 Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nStatus: Unstable \nLog: \n${env.BUILD_URL}console") }
     failure { sendTelegram("💥 Job Name: ${JOB_NAME} \nBuild: ${BUILD_DISPLAY_NAME} \nStatus: Failure \nLog: \n${env.BUILD_URL}console") }
